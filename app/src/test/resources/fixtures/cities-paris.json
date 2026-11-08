@@ -1,0 +1,131 @@
+[
+ {
+  "Version": 1,
+  "Key": "623",
+  "Type": "City",
+  "Rank": 10,
+  "LocalizedName": "Paris",
+  "EnglishName": "Paris",
+  "PrimaryPostalCode": "",
+  "Region": {
+   "ID": "NAM",
+   "LocalizedName": "North America",
+   "EnglishName": "North America"
+  },
+  "Country": {
+   "ID": "FR",
+   "LocalizedName": "France",
+   "EnglishName": "France"
+  },
+  "AdministrativeArea": {
+   "ID": "IDF",
+   "LocalizedName": "\u00cele-de-France",
+   "EnglishName": "\u00cele-de-France",
+   "Level": 1,
+   "LocalizedType": "State",
+   "EnglishType": "State",
+   "CountryID": "FR"
+  },
+  "TimeZone": {
+   "Code": "EST",
+   "Name": "Europe/Paris",
+   "GmtOffset": -5.0,
+   "IsDaylightSaving": false,
+   "NextOffsetChange": null
+  },
+  "GeoPosition": {
+   "Latitude": 41.0,
+   "Longitude": -73.9,
+   "Elevation": {}
+  },
+  "IsAlias": false,
+  "SupplementalAdminAreas": [],
+  "DataSets": []
+ },
+ {
+  "Version": 1,
+  "Key": "351525",
+  "Type": "City",
+  "Rank": 65,
+  "LocalizedName": "Paris",
+  "EnglishName": "Paris",
+  "PrimaryPostalCode": "",
+  "Region": {
+   "ID": "NAM",
+   "LocalizedName": "North America",
+   "EnglishName": "North America"
+  },
+  "Country": {
+   "ID": "US",
+   "LocalizedName": "United States",
+   "EnglishName": "United States"
+  },
+  "AdministrativeArea": {
+   "ID": "TX",
+   "LocalizedName": "Texas",
+   "EnglishName": "Texas",
+   "Level": 1,
+   "LocalizedType": "State",
+   "EnglishType": "State",
+   "CountryID": "US"
+  },
+  "TimeZone": {
+   "Code": "EST",
+   "Name": "America/Chicago",
+   "GmtOffset": -5.0,
+   "IsDaylightSaving": false,
+   "NextOffsetChange": null
+  },
+  "GeoPosition": {
+   "Latitude": 41.0,
+   "Longitude": -73.9,
+   "Elevation": {}
+  },
+  "IsAlias": false,
+  "SupplementalAdminAreas": [],
+  "DataSets": []
+ },
+ {
+  "Version": 1,
+  "Key": "623",
+  "Type": "City",
+  "Rank": 10,
+  "LocalizedName": "Paris",
+  "EnglishName": "Paris",
+  "PrimaryPostalCode": "",
+  "Region": {
+   "ID": "NAM",
+   "LocalizedName": "North America",
+   "EnglishName": "North America"
+  },
+  "Country": {
+   "ID": "FR",
+   "LocalizedName": "France",
+   "EnglishName": "France"
+  },
+  "AdministrativeArea": {
+   "ID": "IDF",
+   "LocalizedName": "\u00cele-de-France",
+   "EnglishName": "\u00cele-de-France",
+   "Level": 1,
+   "LocalizedType": "State",
+   "EnglishType": "State",
+   "CountryID": "FR"
+  },
+  "TimeZone": {
+   "Code": "EST",
+   "Name": "Europe/Paris",
+   "GmtOffset": -5.0,
+   "IsDaylightSaving": false,
+   "NextOffsetChange": null
+  },
+  "GeoPosition": {
+   "Latitude": 41.0,
+   "Longitude": -73.9,
+   "Elevation": {}
+  },
+  "IsAlias": false,
+  "SupplementalAdminAreas": [],
+  "DataSets": []
+ }
+]

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Fluent UI System Icons (Microsoft, MIT), ic_fluent_weather_sunny_24_filled. See FLUENT-ICONS-LICENSE.txt.
+     White, except the sun (#FFC83D). Moved 0.00, 0.00 so its ink is centered (optical centering). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24">
+    <group android:translateX="0.0" android:translateY="0.0">
+        <path android:fillColor="#FFFFC83D" android:pathData="M 12,2 c 0.41,0 0.75,0.34 0.75,0.75 l 0,1.5 a 0.75,0.75 0 0,1 -1.5,0 l 0,-1.5 c 0,-0.41 0.34,-0.75 0.75,-0.75 M 17,12 a 5,5 0 0,1 -10,0 a 5,5 0 0,1 10,0 M 21.25,12.75 a 0.75,0.75 0 0,0 0,-1.5 l -1.5,0 a 0.75,0.75 0 0,0 0,1.5 z M 12,19 c 0.41,0 0.75,0.34 0.75,0.75 l 0,1.5 a 0.75,0.75 0 0,1 -1.5,0 l 0,-1.5 c 0,-0.41 0.34,-0.75 0.75,-0.75 M 4.25,12.75 a 0.75,0.75 0 0,0 0,-1.5 l -1.5,0 a 0.75,0.75 0 0,0 0,1.5 z M 4.22,4.22 c 0.3,-0.3 0.77,-0.3 1.06,0 l 1.5,1.5 a 0.75,0.75 0 0,1 -1.06,1.06 l -1.5,-1.5 a 0.75,0.75 0 0,1 0,-1.06 M 5.28,19.78 a 0.75,0.75 0 1,1 -1.06,-1.06 l 1.5,-1.5 a 0.75,0.75 0 1,1 1.06,1.06 z M 19.78,4.22 a 0.75,0.75 0 0,0 -1.06,0 l -1.5,1.5 a 0.75,0.75 0 0,0 1.06,1.06 l 1.5,-1.5 c 0.3,-0.3 0.3,-0.77 0,-1.06 M 18.72,19.78 a 0.75,0.75 0 1,0 1.06,-1.06 l -1.5,-1.5 a 0.75,0.75 0 1,0 -1.06,1.06 z" />
+    </group>
+</vector>

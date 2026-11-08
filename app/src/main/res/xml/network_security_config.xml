@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  WX-2.3: the app can reach dataservice.accuweather.com only (AccuNet).
+  - No plain HTTP anywhere.
+  - Every other host: no trusted certificates at all, so any HTTPS connection to it fails.
+  CI's network check (.github/scripts/check-network.sh) fails the build if this changes.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors />
+    </base-config>
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="false">dataservice.accuweather.com</domain>
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </domain-config>
+</network-security-config>

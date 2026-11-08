@@ -1,0 +1,10 @@
+# Every permission the app may declare. CI fails on anything else (no location, ever: WX-2.4).
+# WX-2.3: AccuWeather only (AccuNet; HTTPS).
+android.permission.INTERNET
+# WorkManager (WX-2.5's four daily updates): keeps the CPU awake during an update, re-plans
+# updates after a reboot, and waits for a network.
+android.permission.WAKE_LOCK
+android.permission.RECEIVE_BOOT_COMPLETED
+android.permission.ACCESS_NETWORK_STATE
+# Added by AndroidX core for its own receivers; protects nothing outside the app.
+io.github.wotworth.weather.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION

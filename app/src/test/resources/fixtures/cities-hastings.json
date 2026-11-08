@@ -1,0 +1,45 @@
+[
+ {
+  "Version": 1,
+  "Key": "2100339",
+  "Type": "City",
+  "Rank": 55,
+  "LocalizedName": "Hastings-on-Hudson",
+  "EnglishName": "Hastings-on-Hudson",
+  "PrimaryPostalCode": "",
+  "Region": {
+   "ID": "NAM",
+   "LocalizedName": "North America",
+   "EnglishName": "North America"
+  },
+  "Country": {
+   "ID": "US",
+   "LocalizedName": "United States",
+   "EnglishName": "United States"
+  },
+  "AdministrativeArea": {
+   "ID": "NY",
+   "LocalizedName": "New York",
+   "EnglishName": "New York",
+   "Level": 1,
+   "LocalizedType": "State",
+   "EnglishType": "State",
+   "CountryID": "US"
+  },
+  "TimeZone": {
+   "Code": "EST",
+   "Name": "America/New_York",
+   "GmtOffset": -5.0,
+   "IsDaylightSaving": false,
+   "NextOffsetChange": null
+  },
+  "GeoPosition": {
+   "Latitude": 41.0,
+   "Longitude": -73.9,
+   "Elevation": {}
+  },
+  "IsAlias": false,
+  "SupplementalAdminAreas": [],
+  "DataSets": []
+ }
+]

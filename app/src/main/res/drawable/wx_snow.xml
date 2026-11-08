@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Fluent UI System Icons (Microsoft, MIT), ic_fluent_weather_snow_24_filled. See FLUENT-ICONS-LICENSE.txt.
+     White, except the sun (#FFC83D). Moved 0.00, 0.18 so its ink is centered (optical centering). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24">
+    <group android:translateX="0.0" android:translateY="0.179">
+        <path android:fillColor="#FFFFFFFF" android:pathData="M 9.75,18.15 a 0.75,0.75 0 0,1 0,1.5 a 0.75,0.75 0 0,1 0,-1.5 M 14.25,18.15 a 0.75,0.75 0 0,1 0,1.5 a 0.75,0.75 0 0,1 0,-1.5 M 7.5,17.15 a 0.75,0.75 0 0,1 0,1.5 a 0.75,0.75 0 0,1 0,-1.5 M 12,17.15 a 0.75,0.75 0 0,1 0,1.5 a 0.75,0.75 0 0,1 0,-1.5 M 16.5,17.15 a 0.75,0.75 0 0,1 0,1.5 a 0.75,0.75 0 0,1 0,-1.5 M 12,4 c 3.17,0 4.97,2.1 5.23,4.63 l 0.08,0 a 3.69,3.69 0 1,1 0,7.37 L 6.69,16 a 3.69,3.69 0 1,1 0,-7.37 l 0.08,0 A 4.95,4.95 0 0,1 12,4" />
+    </group>
+</vector>

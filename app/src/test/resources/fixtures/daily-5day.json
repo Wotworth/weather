@@ -1,0 +1,683 @@
+{
+ "Headline": {
+  "EffectiveDate": "2026-11-09T07:00:00-05:00",
+  "EffectiveEpochDate": 0,
+  "Severity": 4,
+  "Text": "Rain Tuesday",
+  "Category": "rain",
+  "EndDate": null,
+  "EndEpochDate": null,
+  "MobileLink": "",
+  "Link": ""
+ },
+ "DailyForecasts": [
+  {
+   "Date": "2026-11-08T07:00:00-05:00",
+   "EpochDate": 0,
+   "Sun": {
+    "Rise": "2026-11-08T06:40:00-05:00",
+    "EpochRise": 0,
+    "Set": "2026-11-08T16:40:00-05:00",
+    "EpochSet": 0
+   },
+   "Temperature": {
+    "Maximum": {
+     "Value": 15.6,
+     "Unit": "C",
+     "UnitType": 17
+    },
+    "Minimum": {
+     "Value": 4.4,
+     "Unit": "C",
+     "UnitType": 17
+    }
+   },
+   "HoursOfSun": 8.5,
+   "Day": {
+    "Icon": 1,
+    "IconPhrase": "Sunny",
+    "HasPrecipitation": false,
+    "ShortPhrase": "Sunny",
+    "LongPhrase": "Sunny",
+    "PrecipitationProbability": 2,
+    "ThunderstormProbability": 0,
+    "RainProbability": 2,
+    "SnowProbability": 0,
+    "IceProbability": 0,
+    "Wind": {
+     "Speed": {
+      "Value": 11.1,
+      "Unit": "km/h",
+      "UnitType": 7
+     },
+     "Direction": {
+      "Degrees": 270,
+      "Localized": "W",
+      "English": "W"
+     }
+    },
+    "TotalLiquid": {
+     "Value": 0.0,
+     "Unit": "mm",
+     "UnitType": 3
+    },
+    "Rain": {
+     "Value": 0.0,
+     "Unit": "mm",
+     "UnitType": 3
+    },
+    "Snow": {
+     "Value": 0.0,
+     "Unit": "cm",
+     "UnitType": 4
+    },
+    "Ice": {
+     "Value": 0.0,
+     "Unit": "mm",
+     "UnitType": 3
+    },
+    "HoursOfPrecipitation": 0.0,
+    "HoursOfRain": 0.0,
+    "CloudCover": 5,
+    "RelativeHumidity": {
+     "Minimum": 35,
+     "Maximum": 55,
+     "Average": 45
+    }
+   },
+   "Night": {
+    "Icon": 33,
+    "IconPhrase": "Clear",
+    "HasPrecipitation": false,
+    "ShortPhrase": "Clear",
+    "LongPhrase": "Clear",
+    "PrecipitationProbability": 1,
+    "ThunderstormProbability": 0,
+    "RainProbability": 1,
+    "SnowProbability": 0,
+    "IceProbability": 0,
+    "Wind": {
+     "Speed": {
+      "Value": 11.1,
+      "Unit": "km/h",
+      "UnitType": 7
+     },
+     "Direction": {
+      "Degrees": 270,
+      "Localized": "W",
+      "English": "W"
+     }
+    },
+    "TotalLiquid": {
+     "Value": 0.0,
+     "Unit": "mm",
+     "UnitType": 3
+    },
+    "Rain": {
+     "Value": 0.0,
+     "Unit": "mm",
+     "UnitType": 3
+    },
+    "Snow": {
+     "Value": 0.0,
+     "Unit": "cm",
+     "UnitType": 4
+    },
+    "Ice": {
+     "Value": 0.0,
+     "Unit": "mm",
+     "UnitType": 3
+    },
+    "HoursOfPrecipitation": 0.0,
+    "HoursOfRain": 0.0,
+    "CloudCover": 0,
+    "RelativeHumidity": {
+     "Minimum": 50,
+     "Maximum": 70,
+     "Average": 60
+    }
+   },
+   "Sources": [
+    "AccuWeather"
+   ],
+   "MobileLink": "http://www.accuweather.com/en/us/hastings-on-hudson-ny/10706/daily-weather-forecast/2100339?day=1",
+   "Link": "http://www.accuweather.com/"
+  },
+  {
+   "Date": "2026-11-09T07:00:00-05:00",
+   "EpochDate": 0,
+   "Sun": {
+    "Rise": "2026-11-09T06:40:00-05:00",
+    "EpochRise": 0,
+    "Set": "2026-11-09T16:40:00-05:00",
+    "EpochSet": 0
+   },
+   "Temperature": {
+    "Maximum": {
+     "Value": 12.8,
+     "Unit": "C",
+     "UnitType": 17
+    },
+    "Minimum": {
+     "Value": 6.1,
+     "Unit": "C",
+     "UnitType": 17
+    }
+   },
+   "HoursOfSun": 5.0,
+   "Day": {
+    "Icon": 3,
+    "IconPhrase": "Partly sunny",
+    "HasPrecipitation": false,
+    "ShortPhrase": "Partly sunny",
+    "LongPhrase": "Partly sunny",
+    "PrecipitationProbability": 10,
+    "ThunderstormProbability": 0,
+    "RainProbability": 10,
+    "SnowProbability": 0,
+    "IceProbability": 0,
+    "Wind": {
+     "Speed": {
+      "Value": 11.1,
+      "Unit": "km/h",
+      "UnitType": 7
+     },
+     "Direction": {
+      "Degrees": 270,
+      "Localized": "W",
+      "English": "W"
+     }
+    },
+    "TotalLiquid": {
+     "Value": 0.0,
+     "Unit": "mm",
+     "UnitType": 3
+    },
+    "Rain": {
+     "Value": 0.0,
+     "Unit": "mm",
+     "UnitType": 3
+    },
+    "Snow": {
+     "Value": 0.0,
+     "Unit": "cm",
+     "UnitType": 4
+    },
+    "Ice": {
+     "Value": 0.0,
+     "Unit": "mm",
+     "UnitType": 3
+    },
+    "HoursOfPrecipitation": 0.0,
+    "HoursOfRain": 0.0,
+    "CloudCover": 45,
+    "RelativeHumidity": {
+     "Minimum": 45,
+     "Maximum": 65,
+     "Average": 55
+    }
+   },
+   "Night": {
+    "Icon": 35,
+    "IconPhrase": "Partly cloudy",
+    "HasPrecipitation": false,
+    "ShortPhrase": "Partly cloudy",
+    "LongPhrase": "Partly cloudy",
+    "PrecipitationProbability": 15,
+    "ThunderstormProbability": 0,
+    "RainProbability": 15,
+    "SnowProbability": 0,
+    "IceProbability": 0,
+    "Wind": {
+     "Speed": {
+      "Value": 11.1,
+      "Unit": "km/h",
+      "UnitType": 7
+     },
+     "Direction": {
+      "Degrees": 270,
+      "Localized": "W",
+      "English": "W"
+     }
+    },
+    "TotalLiquid": {
+     "Value": 0.0,
+     "Unit": "mm",
+     "UnitType": 3
+    },
+    "Rain": {
+     "Value": 0.0,
+     "Unit": "mm",
+     "UnitType": 3
+    },
+    "Snow": {
+     "Value": 0.0,
+     "Unit": "cm",
+     "UnitType": 4
+    },
+    "Ice": {
+     "Value": 0.0,
+     "Unit": "mm",
+     "UnitType": 3
+    },
+    "HoursOfPrecipitation": 0.0,
+    "HoursOfRain": 0.0,
+    "CloudCover": 50,
+    "RelativeHumidity": {
+     "Minimum": 60,
+     "Maximum": 80,
+     "Average": 70
+    }
+   },
+   "Sources": [
+    "AccuWeather"
+   ],
+   "MobileLink": "http://www.accuweather.com/en/us/hastings-on-hudson-ny/10706/daily-weather-forecast/2100339?day=1",
+   "Link": "http://www.accuweather.com/"
+  },
+  {
+   "Date": "2026-11-10T07:00:00-05:00",
+   "EpochDate": 0,
+   "Sun": {
+    "Rise": "2026-11-10T06:40:00-05:00",
+    "EpochRise": 0,
+    "Set": "2026-11-10T16:40:00-05:00",
+    "EpochSet": 0
+   },
+   "Temperature": {
+    "Maximum": {
+     "Value": 9.4,
+     "Unit": "C",
+     "UnitType": 17
+    },
+    "Minimum": {
+     "Value": 6.7,
+     "Unit": "C",
+     "UnitType": 17
+    }
+   },
+   "HoursOfSun": 1.5,
+   "Day": {
+    "Icon": 7,
+    "IconPhrase": "Cloudy",
+    "HasPrecipitation": true,
+    "ShortPhrase": "Cloudy",
+    "LongPhrase": "Cloudy",
+    "PrecipitationProbability": 25,
+    "ThunderstormProbability": 0,
+    "RainProbability": 25,
+    "SnowProbability": 0,
+    "IceProbability": 0,
+    "Wind": {
+     "Speed": {
+      "Value": 11.1,
+      "Unit": "km/h",
+      "UnitType": 7
+     },
+     "Direction": {
+      "Degrees": 270,
+      "Localized": "W",
+      "English": "W"
+     }
+    },
+    "TotalLiquid": {
+     "Value": 0.3,
+     "Unit": "mm",
+     "UnitType": 3
+    },
+    "Rain": {
+     "Value": 0.3,
+     "Unit": "mm",
+     "UnitType": 3
+    },
+    "Snow": {
+     "Value": 0.0,
+     "Unit": "cm",
+     "UnitType": 4
+    },
+    "Ice": {
+     "Value": 0.0,
+     "Unit": "mm",
+     "UnitType": 3
+    },
+    "HoursOfPrecipitation": 0.0,
+    "HoursOfRain": 0.0,
+    "CloudCover": 95,
+    "RelativeHumidity": {
+     "Minimum": 60,
+     "Maximum": 80,
+     "Average": 70
+    }
+   },
+   "Night": {
+    "Icon": 7,
+    "IconPhrase": "Cloudy",
+    "HasPrecipitation": false,
+    "ShortPhrase": "Cloudy",
+    "LongPhrase": "Cloudy",
+    "PrecipitationProbability": 20,
+    "ThunderstormProbability": 0,
+    "RainProbability": 20,
+    "SnowProbability": 0,
+    "IceProbability": 0,
+    "Wind": {
+     "Speed": {
+      "Value": 11.1,
+      "Unit": "km/h",
+      "UnitType": 7
+     },
+     "Direction": {
+      "Degrees": 270,
+      "Localized": "W",
+      "English": "W"
+     }
+    },
+    "TotalLiquid": {
+     "Value": 0.0,
+     "Unit": "mm",
+     "UnitType": 3
+    },
+    "Rain": {
+     "Value": 0.0,
+     "Unit": "mm",
+     "UnitType": 3
+    },
+    "Snow": {
+     "Value": 0.0,
+     "Unit": "cm",
+     "UnitType": 4
+    },
+    "Ice": {
+     "Value": 0.0,
+     "Unit": "mm",
+     "UnitType": 3
+    },
+    "HoursOfPrecipitation": 0.0,
+    "HoursOfRain": 0.0,
+    "CloudCover": 90,
+    "RelativeHumidity": {
+     "Minimum": 70,
+     "Maximum": 90,
+     "Average": 80
+    }
+   },
+   "Sources": [
+    "AccuWeather"
+   ],
+   "MobileLink": "http://www.accuweather.com/en/us/hastings-on-hudson-ny/10706/daily-weather-forecast/2100339?day=1",
+   "Link": "http://www.accuweather.com/"
+  },
+  {
+   "Date": "2026-11-11T07:00:00-05:00",
+   "EpochDate": 0,
+   "Sun": {
+    "Rise": "2026-11-11T06:40:00-05:00",
+    "EpochRise": 0,
+    "Set": "2026-11-11T16:40:00-05:00",
+    "EpochSet": 0
+   },
+   "Temperature": {
+    "Maximum": {
+     "Value": 8.3,
+     "Unit": "C",
+     "UnitType": 17
+    },
+    "Minimum": {
+     "Value": 3.9,
+     "Unit": "C",
+     "UnitType": 17
+    }
+   },
+   "HoursOfSun": 0.0,
+   "Day": {
+    "Icon": 18,
+    "IconPhrase": "Rain",
+    "HasPrecipitation": true,
+    "ShortPhrase": "Rain",
+    "LongPhrase": "Rain",
+    "PrecipitationType": "Rain",
+    "PrecipitationIntensity": "Moderate",
+    "PrecipitationProbability": 80,
+    "ThunderstormProbability": 0,
+    "RainProbability": 80,
+    "SnowProbability": 0,
+    "IceProbability": 0,
+    "Wind": {
+     "Speed": {
+      "Value": 11.1,
+      "Unit": "km/h",
+      "UnitType": 7
+     },
+     "Direction": {
+      "Degrees": 270,
+      "Localized": "W",
+      "English": "W"
+     }
+    },
+    "TotalLiquid": {
+     "Value": 9.4,
+     "Unit": "mm",
+     "UnitType": 3
+    },
+    "Rain": {
+     "Value": 9.4,
+     "Unit": "mm",
+     "UnitType": 3
+    },
+    "Snow": {
+     "Value": 0.0,
+     "Unit": "cm",
+     "UnitType": 4
+    },
+    "Ice": {
+     "Value": 0.0,
+     "Unit": "mm",
+     "UnitType": 3
+    },
+    "HoursOfPrecipitation": 0.0,
+    "HoursOfRain": 0.0,
+    "CloudCover": 100,
+    "RelativeHumidity": {
+     "Minimum": 80,
+     "Maximum": 100,
+     "Average": 90
+    }
+   },
+   "Night": {
+    "Icon": 12,
+    "IconPhrase": "Showers",
+    "HasPrecipitation": true,
+    "ShortPhrase": "Showers",
+    "LongPhrase": "Showers",
+    "PrecipitationType": "Rain",
+    "PrecipitationIntensity": "Moderate",
+    "PrecipitationProbability": 60,
+    "ThunderstormProbability": 0,
+    "RainProbability": 60,
+    "SnowProbability": 0,
+    "IceProbability": 0,
+    "Wind": {
+     "Speed": {
+      "Value": 11.1,
+      "Unit": "km/h",
+      "UnitType": 7
+     },
+     "Direction": {
+      "Degrees": 270,
+      "Localized": "W",
+      "English": "W"
+     }
+    },
+    "TotalLiquid": {
+     "Value": 2.8,
+     "Unit": "mm",
+     "UnitType": 3
+    },
+    "Rain": {
+     "Value": 2.8,
+     "Unit": "mm",
+     "UnitType": 3
+    },
+    "Snow": {
+     "Value": 0.0,
+     "Unit": "cm",
+     "UnitType": 4
+    },
+    "Ice": {
+     "Value": 0.0,
+     "Unit": "mm",
+     "UnitType": 3
+    },
+    "HoursOfPrecipitation": 0.0,
+    "HoursOfRain": 0.0,
+    "CloudCover": 100,
+    "RelativeHumidity": {
+     "Minimum": 85,
+     "Maximum": 105,
+     "Average": 95
+    }
+   },
+   "Sources": [
+    "AccuWeather"
+   ],
+   "MobileLink": "http://www.accuweather.com/en/us/hastings-on-hudson-ny/10706/daily-weather-forecast/2100339?day=1",
+   "Link": "http://www.accuweather.com/"
+  },
+  {
+   "Date": "2026-11-12T07:00:00-05:00",
+   "EpochDate": 0,
+   "Sun": {
+    "Rise": "2026-11-12T06:40:00-05:00",
+    "EpochRise": 0,
+    "Set": "2026-11-12T16:40:00-05:00",
+    "EpochSet": 0
+   },
+   "Temperature": {
+    "Maximum": {
+     "Value": -0.6,
+     "Unit": "C",
+     "UnitType": 17
+    },
+    "Minimum": {
+     "Value": -6.1,
+     "Unit": "C",
+     "UnitType": 17
+    }
+   },
+   "HoursOfSun": 0.4,
+   "Day": {
+    "Icon": 22,
+    "IconPhrase": "Snow",
+    "HasPrecipitation": true,
+    "ShortPhrase": "Snow",
+    "LongPhrase": "Snow",
+    "PrecipitationType": "Snow",
+    "PrecipitationIntensity": "Moderate",
+    "PrecipitationProbability": 70,
+    "ThunderstormProbability": 0,
+    "RainProbability": 70,
+    "SnowProbability": 0,
+    "IceProbability": 0,
+    "Wind": {
+     "Speed": {
+      "Value": 11.1,
+      "Unit": "km/h",
+      "UnitType": 7
+     },
+     "Direction": {
+      "Degrees": 270,
+      "Localized": "W",
+      "English": "W"
+     }
+    },
+    "TotalLiquid": {
+     "Value": 6.1,
+     "Unit": "mm",
+     "UnitType": 3
+    },
+    "Rain": {
+     "Value": 0,
+     "Unit": "mm",
+     "UnitType": 3
+    },
+    "Snow": {
+     "Value": 7.4,
+     "Unit": "cm",
+     "UnitType": 4
+    },
+    "Ice": {
+     "Value": 0.0,
+     "Unit": "mm",
+     "UnitType": 3
+    },
+    "HoursOfPrecipitation": 0.0,
+    "HoursOfRain": 0.0,
+    "CloudCover": 100,
+    "RelativeHumidity": {
+     "Minimum": 75,
+     "Maximum": 95,
+     "Average": 85
+    }
+   },
+   "Night": {
+    "Icon": 19,
+    "IconPhrase": "Flurries",
+    "HasPrecipitation": true,
+    "ShortPhrase": "Flurries",
+    "LongPhrase": "Flurries",
+    "PrecipitationType": "Snow",
+    "PrecipitationIntensity": "Moderate",
+    "PrecipitationProbability": 40,
+    "ThunderstormProbability": 0,
+    "RainProbability": 40,
+    "SnowProbability": 0,
+    "IceProbability": 0,
+    "Wind": {
+     "Speed": {
+      "Value": 11.1,
+      "Unit": "km/h",
+      "UnitType": 7
+     },
+     "Direction": {
+      "Degrees": 270,
+      "Localized": "W",
+      "English": "W"
+     }
+    },
+    "TotalLiquid": {
+     "Value": 1.9,
+     "Unit": "mm",
+     "UnitType": 3
+    },
+    "Rain": {
+     "Value": 0,
+     "Unit": "mm",
+     "UnitType": 3
+    },
+    "Snow": {
+     "Value": 1.6,
+     "Unit": "cm",
+     "UnitType": 4
+    },
+    "Ice": {
+     "Value": 0.0,
+     "Unit": "mm",
+     "UnitType": 3
+    },
+    "HoursOfPrecipitation": 0.0,
+    "HoursOfRain": 0.0,
+    "CloudCover": 90,
+    "RelativeHumidity": {
+     "Minimum": 70,
+     "Maximum": 90,
+     "Average": 80
+    }
+   },
+   "Sources": [
+    "AccuWeather"
+   ],
+   "MobileLink": "http://www.accuweather.com/en/us/hastings-on-hudson-ny/10706/daily-weather-forecast/2100339?day=1",
+   "Link": "http://www.accuweather.com/"
+  }
+ ]
+}
