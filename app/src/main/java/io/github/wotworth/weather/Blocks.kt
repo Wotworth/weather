@@ -59,8 +59,9 @@ object Blocks {
      * the phrase, and precipitation, humidity and cloud cover.
      */
     fun hero(c: Context, d: Forecast.Day, f: Boolean, title: String? = null): View {
+        val card = Palette.background(c, d.kind, d.date)
         val box = Ui.column(c).apply {
-            background = Palette.background(c, d.kind, d.date)
+            background = card
             val pad = Ui.dp(c, Layout.HERO_PAD)
             setPadding(pad, pad, pad, pad)
         }
@@ -76,7 +77,30 @@ object Blocks {
         stats.addView(stat(c, "HUMIDITY", Shown.pct(d.humidity)), Ui.weight())
         stats.addView(stat(c, "CLOUD COVER", Shown.pct(d.cloud)), Ui.weight())
         box.addView(stats)
+        // WX-6.12: bold motifs never sit behind text: the card fades any that would.
+        box.addOnLayoutChangeListener { v, _, _, _, _, _, _, _, _ -> card.avoid = textRects(v as android.view.ViewGroup) }
         return box
+    }
+
+    /** The glyph extents of every text line and the bounds of every icon in [root], in its own coordinates. */
+    fun textRects(root: android.view.ViewGroup): List<android.graphics.RectF> {
+        val out = ArrayList<android.graphics.RectF>()
+        fun walk(v: View, dx: Float, dy: Float) {
+            val x = dx + v.left; val y = dy + v.top
+            when (v) {
+                is android.widget.TextView -> v.layout?.let { l ->
+                    for (i in 0 until l.lineCount) {
+                        if (l.getLineEnd(i) == l.getLineStart(i)) continue
+                        val px = x + v.totalPaddingLeft; val py = y + v.totalPaddingTop
+                        out += android.graphics.RectF(px + l.getLineLeft(i), py + l.getLineTop(i), px + l.getLineRight(i), py + l.getLineBottom(i))
+                    }
+                }
+                is android.widget.ImageView -> out += android.graphics.RectF(x, y, x + v.width, y + v.height)
+                is android.view.ViewGroup -> for (k in 0 until v.childCount) walk(v.getChildAt(k), x, y)
+            }
+        }
+        for (k in 0 until root.childCount) walk(root.getChildAt(k), 0f, 0f)
+        return out
     }
 
     /** High and low as one line: the low smaller and dimmer, on the same baseline. */

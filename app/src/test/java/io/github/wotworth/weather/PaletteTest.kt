@@ -12,6 +12,9 @@ class PaletteTest {
     private fun lin(c: Int): Double { val v = c / 255.0; return if (v <= 0.04045) v / 12.92 else ((v + 0.055) / 1.055).pow(2.4) }
     private fun lum(c: Int) = 0.2126 * lin((c shr 16) and 0xFF) + 0.7152 * lin((c shr 8) and 0xFF) + 0.0722 * lin(c and 0xFF)
     private fun contrast(a: Int, b: Int) = (max(lum(a), lum(b)) + 0.05) / (min(lum(a), lum(b)) + 0.05)
+    /** The top block's secondary text opacity (WeatherTokens.Colors.LOW). */
+    private val LOW = ((WeatherTokens.Colors.LOW ushr 24) and 0xFF) / 255.0
+
     private fun mix(a: Int, b: Int, t: Double): Int {
         fun ch(s: Int) = Math.round(((a shr s) and 0xFF) + (((b shr s) and 0xFF) - ((a shr s) and 0xFF)) * t).toInt()
         return (0xFF shl 24) or (ch(16) shl 16) or (ch(8) shl 8) or ch(0)
@@ -22,7 +25,7 @@ class PaletteTest {
             val t = i / 200.0 * 2
             val bg = if (t <= 1) mix(s[0], s[1], t) else mix(s[1], s[2], t - 1)
             assertTrue("$k white", contrast(WeatherTokens.Colors.PRIMARY, bg) >= 4.5)
-            assertTrue("$k low", contrast(mix(bg, WeatherTokens.Colors.PRIMARY, 0.75), bg) >= 4.5)
+            assertTrue("$k low", contrast(mix(bg, WeatherTokens.Colors.PRIMARY, LOW), bg) >= 4.5)
         }
     }
 
@@ -34,14 +37,14 @@ class PaletteTest {
             val t = i / 200.0 * 2
             val bg = mix(if (t <= 1) mix(s[0], s[1], t) else mix(s[1], s[2], t - 1), glow, WeatherTokens.Festive.GLOW_ALPHA.toDouble())
             assertTrue("festive white", contrast(WeatherTokens.Colors.PRIMARY, bg) >= 4.5)
-            assertTrue("festive low", contrast(mix(bg, WeatherTokens.Colors.PRIMARY, 0.75), bg) >= 4.5)
+            assertTrue("festive low", contrast(mix(bg, WeatherTokens.Colors.PRIMARY, LOW), bg) >= 4.5)
             // White text over a snowflake in the glow.
             val flakeOnGlow = mix(bg, 0xFFFFFFFF.toInt(), WeatherTokens.Festive.SNOWFLAKE_MAX_ALPHA.toDouble())
             assertTrue("festive white on a snowflake", contrast(WeatherTokens.Colors.PRIMARY, flakeOnGlow) >= 4.5)
             // 75% white text over a snowflake outside the glow.
             val plain = if (t <= 1) mix(s[0], s[1], t) else mix(s[1], s[2], t - 1)
             val flake = mix(plain, 0xFFFFFFFF.toInt(), WeatherTokens.Festive.SNOWFLAKE_MAX_ALPHA.toDouble())
-            assertTrue("festive low on a snowflake", contrast(mix(flake, WeatherTokens.Colors.PRIMARY, 0.75), flake) >= 4.5)
+            assertTrue("festive low on a snowflake", contrast(mix(flake, WeatherTokens.Colors.PRIMARY, LOW), flake) >= 4.5)
         }
         assertTrue(WeatherTokens.Festive.SNOWFLAKES.all { it[4] <= WeatherTokens.Festive.SNOWFLAKE_MAX_ALPHA })
     }
@@ -54,7 +57,8 @@ class PaletteTest {
         for (season in Season.values()) for (kind in Forecast.Kind.values()) {
             val look = CardLook.of(kind, season)
             val s = look.stops
-            val tints = look.motifs.filter { !it.feature }.map { it.tint to it.alpha }.distinct()
+            // Behind text, a motif is at most FAINT_ALPHA (the card fades it; HeroTest checks that).
+            val tints = look.motifs.map { it.tint to minOf(it.alpha, WeatherTokens.Seasons.FAINT_ALPHA) }.distinct()
             for (i in 0..100) {
                 val t = i / 100.0 * (s.size - 1)
                 val seg = minOf(t.toInt(), s.size - 2)
@@ -62,18 +66,16 @@ class PaletteTest {
                 val glowed = mix(plain, look.glow, look.glowAlpha.toDouble())
                 val name = "$season $kind"
                 check(contrast(white, glowed) >= 4.5, "$name white")
-                check(contrast(mix(glowed, white, 0.75), glowed) >= 4.5, "$name low")
+                check(contrast(mix(glowed, white, LOW), glowed) >= 4.5, "$name low")
                 for ((tint, a) in tints) {
                     val onGlow = mix(glowed, tint, a.toDouble())
                     check(contrast(white, onGlow) >= 4.5, "$name white on a motif")
                     val onPlain = mix(plain, tint, a.toDouble())
-                    check(contrast(mix(onPlain, white, 0.75), onPlain) >= 4.5, "$name low on a motif")
+                    check(contrast(mix(onPlain, white, LOW), onPlain) >= 4.5, "$name low on a motif")
                 }
             }
         }
         assertTrue("contrast below 4.5:1: $bad", bad.isEmpty())
-        // Bolder motifs only where no text sits.
-        assertTrue(WeatherTokens.Festive.SNOWFLAKES.filter { it[0] >= WeatherTokens.Seasons.EDGE_X }.all { it[0] - it[2] / 2 / 412f * 1f > 0.84f })
     }
 
     @Test fun seasonsByMonth() {

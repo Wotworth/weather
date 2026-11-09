@@ -11,8 +11,8 @@
 - 9 Nov (Chris): 0 stays 0 in the rounding; night hours show the Fluent moon and partly cloudy night icons; the launcher's tile uses the same rounding (wp-launcher main, not released). Real AccuWeather replies recorded as fixtures (3 calls with Chris's key).
 - 9 Nov, round 2 (Chris's feedback): shrink-to-fit town and temperature, capitalised names, cloud cover labelled everywhere, a day page on tap (daytime/overnight + hours), updates every 30 minutes, condition backgrounds image. Spec WX-2.5, 2.6, 6.6–6.8.
 - 9 Nov, round 3: refresh icon turns, pull to refresh, festive snow block with Fluent snowflakes (WX-6.9 to 6.11).
-- 9 Nov, round 4: seasonal cards, 20 designs (WX-6.12); snow festive all year (Q6).
-- In the session: 55 unit and screenshot tests pass; signed release builds; permission, network and host checks pass and reject their test cases.
+- 9 Nov, round 4: seasonal cards, 20 designs (WX-6.12), second pass bolder; snow festive all year (Q6).
+- In the session: 57 unit and screenshot tests pass; signed release builds; permission, network and host checks pass and reject their test cases.
 
 ## Next
 

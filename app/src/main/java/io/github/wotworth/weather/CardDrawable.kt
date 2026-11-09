@@ -9,6 +9,8 @@ import android.graphics.PixelFormat
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.RadialGradient
+import android.graphics.Rect
+import android.graphics.RectF
 import android.graphics.Shader
 import android.graphics.drawable.Drawable
 import io.github.wotworth.weather.WeatherTokens.Festive
@@ -27,6 +29,29 @@ class CardDrawable(private val c: Context, private val look: CardLook) : Drawabl
     private val glow = Paint(Paint.ANTI_ALIAS_FLAG)
     private val dot = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0xFFFFFFFF.toInt() }
     private val icons = HashMap<Int, Drawable?>()
+
+    /** Where the card's text and icon are (in the card's own coordinates): motifs there are faded. */
+    var avoid: List<RectF> = emptyList()
+        set(v) { field = v; invalidateSelf() }
+
+    /** Where a motif is drawn (its square, turned or not, inside [b]). */
+    fun motifRect(m: CardLook.Motif, b: Rect = bounds): RectF {
+        val half = m.sizeDp * density / 2 * Seasons.ICON_FILL
+        val cx = b.left + m.x * b.width(); val cy = b.top + m.y * b.height()
+        // The turned square's own bounding box.
+        val t = Math.toRadians(m.turn.toDouble())
+        val r = (half * (Math.abs(Math.cos(t)) + Math.abs(Math.sin(t)))).toFloat()
+        return RectF(cx - r, cy - r, cx + r, cy + r)
+    }
+
+    /** The opacity a motif is drawn at: [WeatherTokens.Seasons.FAINT_ALPHA] at most behind text. */
+    fun alphaOf(m: CardLook.Motif, b: Rect = bounds): Float {
+        if (!m.avoidText) return m.alpha
+        val r = motifRect(m, b)
+        val margin = Seasons.TEXT_MARGIN_DP * density
+        val behind = avoid.any { RectF.intersects(RectF(it.left - margin, it.top - margin, it.right + margin, it.bottom + margin), r) }
+        return if (behind) minOf(m.alpha, Seasons.FAINT_ALPHA) else m.alpha
+    }
 
     /** Dots as (x, y) shares of the block, radius in dp and opacity: the same every time. */
     private val dots = Random(Festive.FLAKE_SEED).let { r ->
@@ -63,7 +88,9 @@ class CardDrawable(private val c: Context, private val look: CardLook) : Drawabl
             canvas.save()
             canvas.rotate(m.turn, cx, cy)
             d.colorFilter = PorterDuffColorFilter(m.tint or 0xFF000000.toInt(), PorterDuff.Mode.SRC_IN)
-            d.alpha = Math.round(m.alpha * 255)
+            val a = alphaOf(m, b)
+            if (a <= 0f) { canvas.restore(); continue }
+            d.alpha = Math.round(a * 255)
             d.setBounds((cx - half).toInt(), (cy - half).toInt(), (cx + half).toInt(), (cy + half).toInt())
             d.draw(canvas)
             canvas.restore()

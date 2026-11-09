@@ -27,10 +27,8 @@ data class CardLook(
     val motifs: List<Motif>,
     val dots: Boolean,
 ) {
-    data class Motif(val res: Int, val tint: Int, val alpha: Float, val x: Float, val y: Float, val sizeDp: Float, val turn: Float) {
-        /** At the right edge, clear of text (WeatherTokens.Seasons.EDGE_X). */
-        val feature get() = x >= WeatherTokens.Seasons.EDGE_X
-    }
+    /** [avoidText]: left out where it would sit behind text (the festive snow's faint flakes are not). */
+    data class Motif(val res: Int, val tint: Int, val alpha: Float, val x: Float, val y: Float, val sizeDp: Float, val turn: Float, val avoidText: Boolean = true)
 
     companion object {
         private fun mix(a: Int, b: Int, t: Float): Int {
@@ -43,29 +41,26 @@ data class CardLook(
 
         fun of(kind: Forecast.Kind, season: Season): CardLook {
             val S = WeatherTokens.Seasons
-            val places = WeatherTokens.Festive.SNOWFLAKES
             if (kind == Forecast.Kind.SNOW) {
                 val F = WeatherTokens.Festive
                 return CardLook(Palette.FESTIVE_SNOW, F.GLOW, F.GLOW_ALPHA, S.CORNER_BR,
-                    places.map { Motif(R.drawable.festive_snowflake, 0xFFFFFFFF.toInt(), it[4], it[0], it[1], it[2], it[3]) }, dots = true)
+                    F.SNOWFLAKES.map { Motif(R.drawable.festive_snowflake, 0xFFFFFFFF.toInt(), it[4], it[0], it[1], it[2], it[3], avoidText = false) }, dots = true)
             }
             val st = S.STYLE.getValue(season)
-            val k = S.KIND.getValue(kind)
-            val stops = Palette.STOPS.getValue(kind).map { mix(mix(it, st.tint, st.tintShare * k.tintFactor), 0xFF000000.toInt(), st.deepen) }.toIntArray()
-            val n = Math.round(st.count * k.motifFactor)
+            val k = S.TONE.getValue(kind)
+            val stops = st.stops.map { mix(mix(it, k.toward, k.share), 0xFF000000.toInt(), k.darken) }.toIntArray()
+            val n = minOf(Math.round(st.count * k.motifFactor), S.PLACES.size)
             val motifs = ArrayList<Motif>()
-            for (i in 0 until minOf(n, places.size)) {
-                val p = places[i]
-                val edge = p[0] >= S.EDGE_X
-                motifs += Motif(st.icons[i % st.icons.size], st.tints[i % st.tints.size], if (edge) st.alpha * S.FEATURE_BOOST else st.alpha,
-                    p[0], p[1], minOf(if (edge) p[2] else p[2] * st.sizeScale, st.maxSizeDp), p[3] * st.turnScale)
+            for (i in 0 until n) {
+                val p = S.PLACES[i]
+                motifs += Motif(st.icons[i % st.icons.size], st.tints[i % st.tints.size], st.alpha,
+                    p[0], p[1], minOf(p[2] * st.sizeScale, st.maxSizeDp), p[3] * st.turnScale)
             }
             if (kind == Forecast.Kind.RAIN) for (i in 0 until S.DROPS) {
-                val p = places[places.size - 1 - i]
-                // Drops fall straight: placed beside the season's motif, unturned.
-                motifs += Motif(R.drawable.season_drop, S.DROP_TINT, S.DROP_ALPHA, (p[0] + 0.06f).coerceAtMost(0.98f), p[1], S.DROP_DP, 0f)
+                val p = S.PLACES[S.PLACES.size - 1 - i]
+                motifs += Motif(R.drawable.season_drop, S.DROP_TINT, S.DROP_ALPHA, (p[0] + 0.05f).coerceAtMost(0.98f), (p[1] + 0.08f).coerceAtMost(0.97f), S.DROP_DP, 0f)
             }
-            return CardLook(stops, st.glow, st.glowAlpha * k.glowFactor, st.corner, motifs, dots = season == Season.WINTER)
+            return CardLook(stops, st.glow, st.glowAlpha * k.glowFactor, st.corner, motifs, st.dots)
         }
     }
 }

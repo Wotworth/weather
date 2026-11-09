@@ -10,8 +10,8 @@ object WeatherTokens {
         const val BACKGROUND = 0xFF000000.toInt()
         const val PRIMARY = 0xFFFFFFFF.toInt()
         const val SECONDARY = 0x99FFFFFF.toInt()
-        /** On the top block: the tile's lows, 75% white (WeatherDesign.LOW_ALPHA). */
-        const val LOW = 0xBFFFFFFF.toInt()
+        /** On the top block: lows and labels, 85% white (Chris, 9 Nov: brighter seasonal cards; was the tile's 75%). */
+        const val LOW = 0xD9FFFFFF.toInt()
         const val DISABLED = 0x66FFFFFF.toInt()
         /** The application bar and prompts (Windows Phone dark chrome). */
         const val APP_BAR = 0xFF1F1F1F.toInt()
@@ -143,10 +143,10 @@ object WeatherTokens {
     }
 
     /**
-     * WX-6.12 (Chris, 9 Nov): each season's version of the cards. [Style.tint] pulls the tile's
-     * gradient toward the season's colour; the glow is the season's light from one corner; the
-     * motifs are a few faint Fluent icons at the snowflakes' places (Festive.SNOWFLAKES), first
-     * [Style.count] of them. [KIND] tones each down for its condition. Snow keeps the festive look.
+     * WX-6.12 (Chris, 9 Nov, second pass: "lean more into the differences"): each season's cards.
+     * [Style.stops] is the sunny card; [TONE] turns it into the other conditions. Motifs are Fluent
+     * icons (and spring's eggs) at [PLACES], bold, and left out wherever they would sit behind text
+     * ([FAINT_ALPHA]). Snow keeps the festive look (WX-6.11, Q6).
      */
     object Seasons {
         const val CORNER_TL = 0
@@ -155,55 +155,73 @@ object WeatherTokens {
         const val CORNER_BL = 3
 
         class Style(
-            val tint: Int, val tintShare: Float,
-            /** Then darkened toward black by this share, so text keeps 4.5:1 under the glow. */
-            val deepen: Float,
+            val stops: IntArray,
             val glow: Int, val glowAlpha: Float, val corner: Int,
             val icons: IntArray, val tints: IntArray, val alpha: Float, val count: Int,
             val sizeScale: Float, val maxSizeDp: Float, val turnScale: Float,
+            val dots: Boolean,
         )
 
-        class Tone(val tintFactor: Float, val glowFactor: Float, val motifFactor: Float)
+        /** How a condition changes the sunny card: mix toward [toward] by [share], darken by [darken]. */
+        class Tone(val toward: Int, val share: Float, val darken: Float, val glowFactor: Float, val motifFactor: Float)
 
         val STYLE: Map<Season, Style> = mapOf(
-            // Winter: steel navy, a pale cool low sun from the top-left, snowflakes and a light snowfall.
-            Season.WINTER to Style(0xFF1B3550.toInt(), 0.55f, 0.12f, 0xFFDDEBFF.toInt(), 0.14f, CORNER_TL,
-                intArrayOf(R.drawable.festive_snowflake), intArrayOf(0xFFFFFFFF.toInt()), 0.10f, 7, 1f, 64f, 1f),
-            // Spring, slightly Easter: fresh green, blossom-pink light, pastel eggs and clover.
-            Season.SPRING to Style(0xFF1F5C4A.toInt(), 0.60f, 0.22f, 0xFFF7C6D9.toInt(), 0.14f, CORNER_TR,
-                intArrayOf(R.drawable.season_egg, R.drawable.season_clover, R.drawable.season_egg),
-                intArrayOf(0xFFF7B6C8.toInt(), 0xFFB8E6C9.toInt(), 0xFFCDB8F0.toInt(), 0xFFF5E3A3.toInt()), 0.14f, 8, 0.7f, 44f, 0.4f),
-            // Summer: deep azure, a strong golden high sun from the top-right, a few sparkles.
-            Season.SUMMER to Style(0xFF0058A8.toInt(), 0.45f, 0.26f, 0xFFFFC145.toInt(), 0.24f, CORNER_TR,
-                intArrayOf(R.drawable.season_sparkle), intArrayOf(0xFFFFD978.toInt()), 0.13f, 6, 0.7f, 48f, 0.3f),
-            // Fall: burnt umber, amber light from the bottom-right, falling leaves in rust, gold and red.
-            Season.FALL to Style(0xFF5A2A12.toInt(), 0.60f, 0.12f, 0xFFF08A3C.toInt(), 0.22f, CORNER_BR,
+            // Winter: crisp ice blue, cool pale light from the top-left, white snowflakes and snowfall.
+            Season.WINTER to Style(intArrayOf(0xFF15304F.toInt(), 0xFF1B4066.toInt(), 0xFF24507A.toInt()),
+                0xFFE6F2FF.toInt(), 0.10f, CORNER_TL,
+                intArrayOf(R.drawable.festive_snowflake), intArrayOf(0xFFFFFFFF.toInt()), 0.35f, 14, 1f, 64f, 1f, dots = true),
+            // Spring, Easter: violet to rose, butter-yellow light, pastel eggs in five colours, clover.
+            Season.SPRING to Style(intArrayOf(0xFF5C3590.toInt(), 0xFF7A3584.toInt(), 0xFF8E3A6C.toInt()),
+                0xFFFFE08A.toInt(), 0.12f, CORNER_TR,
+                intArrayOf(R.drawable.season_egg, R.drawable.season_egg, R.drawable.season_clover, R.drawable.season_egg),
+                intArrayOf(0xFFFFB3CF.toInt(), 0xFFB5F0CF.toInt(), 0xFFFFE699.toInt(), 0xFFB9D9FF.toInt(), 0xFFE0C2FF.toInt()),
+                0.75f, 16, 0.9f, 48f, 0.35f, dots = false),
+            // Summer: deep summer green, a strong golden sun from the top-right, gold sparkles.
+            Season.SUMMER to Style(intArrayOf(0xFF0F4D2A.toInt(), 0xFF165C33.toInt(), 0xFF186445.toInt()),
+                0xFFFFC94A.toInt(), 0.15f, CORNER_TR,
+                intArrayOf(R.drawable.season_sparkle, R.drawable.season_leaf_two), intArrayOf(0xFFFFD978.toInt(), 0xFF7FD48A.toInt()),
+                0.5f, 12, 0.85f, 48f, 0.5f, dots = false),
+            // Fall: burnt orange to russet, amber light, a fall of leaves in orange, red, gold and brown.
+            Season.FALL to Style(intArrayOf(0xFF7C330C.toInt(), 0xFF8C3610.toInt(), 0xFF6E2513.toInt()),
+                0xFFFFB347.toInt(), 0.13f, CORNER_BR,
                 intArrayOf(R.drawable.season_leaf_one, R.drawable.season_leaf_two, R.drawable.season_leaf_three),
-                intArrayOf(0xFFE07A3A.toInt(), 0xFFD9A441.toInt(), 0xFFB5532E.toInt()), 0.18f, 9, 0.75f, 64f, 1f),
+                intArrayOf(0xFFFFC24D.toInt(), 0xFFC0392B.toInt(), 0xFF5A2A0E.toInt(), 0xFFFFE2A8.toInt(), 0xFFFF8A3D.toInt()),
+                0.7f, 18, 1f, 64f, 1f, dots = false),
         )
 
-        /** Sun shows the season's light fully; cloud and rain mute it and thin the motifs. */
-        val KIND: Map<Forecast.Kind, Tone> = mapOf(
-            Forecast.Kind.SUNNY to Tone(1f, 1f, 1f),
-            Forecast.Kind.PARTLY_CLOUDY to Tone(1f, 0.7f, 1f),
-            Forecast.Kind.CLOUDY to Tone(0.7f, 0.3f, 0.7f),
-            Forecast.Kind.RAIN to Tone(0.8f, 0.3f, 0.7f),
-            Forecast.Kind.SNOW to Tone(1f, 1f, 1f),
+        val TONE: Map<Forecast.Kind, Tone> = mapOf(
+            Forecast.Kind.SUNNY to Tone(0xFF000000.toInt(), 0f, 0f, 1f, 1f),
+            Forecast.Kind.PARTLY_CLOUDY to Tone(0xFF3A4A5A.toInt(), 0.15f, 0f, 0.7f, 1f),
+            Forecast.Kind.CLOUDY to Tone(0xFF4A5260.toInt(), 0.45f, 0.08f, 0.3f, 0.75f),
+            Forecast.Kind.RAIN to Tone(0xFF22405E.toInt(), 0.40f, 0.10f, 0.3f, 0.75f),
+            Forecast.Kind.SNOW to Tone(0xFF000000.toInt(), 0f, 0f, 1f, 1f),
         )
 
-        /**
-         * Motifs at the right edge (x at least [EDGE_X]: the top-right and bottom-right corners,
-         * where no text sits) are [FEATURE_BOOST] times as opaque and full size, so the season reads
-         * at a glance. PaletteTest checks text over every other motif.
-         */
-        const val EDGE_X = 0.9f
-        const val FEATURE_BOOST = 2.2f
+        /** Motif places: x and y as shares of the card, size in dp, turn in degrees (a cascade from the top-right). */
+        val PLACES = arrayOf(
+            floatArrayOf(0.93f, 0.14f, 60f, 12f), floatArrayOf(0.78f, 0.05f, 26f, -20f),
+            floatArrayOf(0.58f, 0.03f, 18f, 35f), floatArrayOf(0.97f, 0.42f, 30f, -35f),
+            floatArrayOf(0.88f, 0.62f, 36f, 20f), floatArrayOf(0.97f, 0.93f, 26f, -15f),
+            floatArrayOf(0.40f, 0.03f, 16f, -10f), floatArrayOf(0.62f, 0.64f, 26f, 40f),
+            floatArrayOf(0.22f, 0.04f, 20f, 25f), floatArrayOf(0.80f, 0.97f, 18f, 30f),
+            floatArrayOf(0.45f, 0.66f, 20f, -25f), floatArrayOf(0.04f, 0.06f, 22f, -40f),
+            floatArrayOf(0.62f, 0.98f, 16f, -30f), floatArrayOf(0.30f, 0.98f, 18f, 55f),
+            floatArrayOf(0.75f, 0.62f, 16f, 10f), floatArrayOf(0.12f, 0.98f, 16f, 10f),
+            floatArrayOf(0.02f, 0.40f, 20f, -20f), floatArrayOf(0.50f, 0.50f, 14f, 15f),
+        )
 
-        /** Rain in any season adds a few faint pale raindrops. */
-        const val DROPS = 4
+        /** A motif that would sit behind text is left out (Chris, 9 Nov: faint ones looked messy). */
+        const val FAINT_ALPHA = 0f
+        /** A Fluent icon's shape fills about this share of its square (the rest is padding). */
+        const val ICON_FILL = 0.85f
+        /** Text is kept this clear of bold motifs. */
+        const val TEXT_MARGIN_DP = 3f
+
+        /** Rain in any season adds pale raindrops. */
+        const val DROPS = 6
         const val DROP_TINT = 0xFFBFD8F0.toInt()
-        const val DROP_ALPHA = 0.14f
-        const val DROP_DP = 14f
+        const val DROP_ALPHA = 0.4f
+        const val DROP_DP = 16f
     }
 
     object Data {
