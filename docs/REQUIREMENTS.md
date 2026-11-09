@@ -127,7 +127,7 @@ digit. Focus should be simplicity."
 | WX-6.8 | MUST (Chris, 9 Nov): cloud cover is shown wherever precipitation is (top block, each hour, each day, each half day), and every percentage is labelled ("precip 25%", "cloud 30%", "humidity 60%"). WX-6.2's rounding applies. |
 | WX-6.9 | MUST (Chris, 9 Nov): pressing refresh turns the refresh icon until the update comes back (or 30 s without a network), finishing its turn, so the press visibly registered. |
 | WX-6.10 | MUST (Chris, 9 Nov): pulling the forecast page down from the top and letting go refreshes, as WX-6.9. A small "PULL TO REFRESH" / "RELEASE TO REFRESH" hint shows behind the page; no Material spinner. |
-| WX-6.11 | MUST (Chris, 9 Nov): the app's snow block is "a little Christmas festive", sophisticated and slight: evergreen-to-midnight gradient, a faint warm glow from one corner, a light still snowfall. No cartoon shapes. Text keeps 4.5:1 contrast. The tile's snow gradient is unchanged. Open question Q6 (all year or only the season). |
+| WX-6.11 | MUST (Chris, 9 Nov): the app's snow block is "a little Christmas festive", sophisticated and slight: evergreen-to-midnight gradient, a faint warm glow from one corner, a light still snowfall, and a few faint Fluent snowflakes (Chris, 9 Nov: "use snowflakes"). No cartoon shapes. Text keeps 4.5:1 contrast. The tile's snow gradient is unchanged. Open question Q6 (all year or only the season). |
 
 ## 7. Launcher side (the wp-launcher session does this, not you)
 

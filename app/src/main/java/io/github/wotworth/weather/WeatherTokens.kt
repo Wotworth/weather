@@ -113,12 +113,27 @@ object WeatherTokens {
         /** The glow fades out over this share of the block's longer side. */
         const val GLOW_RADIUS = 0.75f
         /** Still snowfall: this many soft dots, sizes and opacities in these ranges. */
-        const val FLAKES = 34
+        const val FLAKES = 26
         const val FLAKE_SEED = 1225
         const val FLAKE_MIN_DP = 0.8f
         const val FLAKE_MAX_DP = 2.2f
         const val FLAKE_MIN_ALPHA = 0.12f
         const val FLAKE_MAX_ALPHA = 0.45f
+        /**
+         * Fluent snowflakes (Chris, 9 Nov: "use snowflakes"), placed by hand: x and y as shares of
+         * the block, size in dp, turn in degrees, opacity. The first is large and runs off the
+         * top-right edge.
+         */
+        val SNOWFLAKES = arrayOf(
+            floatArrayOf(0.94f, 0.10f, 64f, 12f, 0.13f),
+            floatArrayOf(0.50f, 0.62f, 34f, -14f, 0.11f),
+            floatArrayOf(0.62f, 0.07f, 18f, 28f, 0.14f),
+            floatArrayOf(0.82f, 0.58f, 26f, 6f, 0.12f),
+            floatArrayOf(0.285f, 0.86f, 16f, 38f, 0.11f),
+            floatArrayOf(0.97f, 0.88f, 14f, -22f, 0.14f),
+        )
+        /** The most opaque snowflake (for the contrast test). */
+        const val SNOWFLAKE_MAX_ALPHA = 0.14f
     }
 
     object Data {

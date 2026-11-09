@@ -22,7 +22,7 @@ object Palette {
 
     /** A day's block background: the tile's gradient, or the festive snow. */
     fun background(c: android.content.Context, k: Forecast.Kind): android.graphics.drawable.Drawable =
-        if (k == Forecast.Kind.SNOW) SnowDrawable(c.resources.displayMetrics.density)
+        if (k == Forecast.Kind.SNOW) SnowDrawable(c.resources.displayMetrics.density, c.getDrawable(R.drawable.festive_snowflake)?.mutate())
         else android.graphics.drawable.GradientDrawable(android.graphics.drawable.GradientDrawable.Orientation.TL_BR, STOPS.getValue(k))
 
     /** No forecast yet: the cloudy stops. */

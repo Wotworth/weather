@@ -34,7 +34,15 @@ class PaletteTest {
             val bg = mix(if (t <= 1) mix(s[0], s[1], t) else mix(s[1], s[2], t - 1), glow, WeatherTokens.Festive.GLOW_ALPHA.toDouble())
             assertTrue("festive white", contrast(WeatherTokens.Colors.PRIMARY, bg) >= 4.5)
             assertTrue("festive low", contrast(mix(bg, WeatherTokens.Colors.PRIMARY, 0.75), bg) >= 4.5)
+            // White text over a snowflake in the glow.
+            val flakeOnGlow = mix(bg, 0xFFFFFFFF.toInt(), WeatherTokens.Festive.SNOWFLAKE_MAX_ALPHA.toDouble())
+            assertTrue("festive white on a snowflake", contrast(WeatherTokens.Colors.PRIMARY, flakeOnGlow) >= 4.5)
+            // 75% white text over a snowflake outside the glow.
+            val plain = if (t <= 1) mix(s[0], s[1], t) else mix(s[1], s[2], t - 1)
+            val flake = mix(plain, 0xFFFFFFFF.toInt(), WeatherTokens.Festive.SNOWFLAKE_MAX_ALPHA.toDouble())
+            assertTrue("festive low on a snowflake", contrast(mix(flake, WeatherTokens.Colors.PRIMARY, 0.75), flake) >= 4.5)
         }
+        assertTrue(WeatherTokens.Festive.SNOWFLAKES.all { it[4] <= WeatherTokens.Festive.SNOWFLAKE_MAX_ALPHA })
     }
 
     @Test fun accentTextReadsOnBlack() {

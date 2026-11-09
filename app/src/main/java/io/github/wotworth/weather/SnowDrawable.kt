@@ -14,9 +14,9 @@ import kotlin.random.Random
 /**
  * WX-6.11 (Chris, 9 Nov): the snow block, "a little Christmas festive" but sophisticated: an
  * evergreen-to-midnight gradient, a faint warm glow from one corner like candlelight through a
- * window, and a light, still snowfall of soft dots. Text contrast is checked in PaletteTest.
+ * window, a light, still snowfall of soft dots, and a few faint Fluent snowflakes. Text contrast is checked in PaletteTest.
  */
-class SnowDrawable(private val density: Float) : Drawable() {
+class SnowDrawable(private val density: Float, private val snowflake: Drawable?) : Drawable() {
     private val base = Paint(Paint.ANTI_ALIAS_FLAG)
     private val glow = Paint(Paint.ANTI_ALIAS_FLAG)
     private val flake = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0xFFFFFFFF.toInt() }
@@ -45,6 +45,20 @@ class SnowDrawable(private val density: Float) : Drawable() {
             flake.alpha = Math.round(f[3] * 255)
             canvas.drawCircle(b.left + f[0] * w, b.top + f[1] * h, f[2] * density, flake)
         }
+        val sf = snowflake ?: return
+        canvas.save()
+        canvas.clipRect(b)
+        for (f in Festive.SNOWFLAKES) {
+            val half = f[2] * density / 2
+            val cx = b.left + f[0] * w; val cy = b.top + f[1] * h
+            canvas.save()
+            canvas.rotate(f[3], cx, cy)
+            sf.setBounds((cx - half).toInt(), (cy - half).toInt(), (cx + half).toInt(), (cy + half).toInt())
+            sf.alpha = Math.round(f[4] * 255)
+            sf.draw(canvas)
+            canvas.restore()
+        }
+        canvas.restore()
     }
 
     override fun setAlpha(alpha: Int) {}
