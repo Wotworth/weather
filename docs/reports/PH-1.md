@@ -56,3 +56,13 @@ Chris accepted round 2 except for these:
 CI: 50 unit and screenshot tests (refresh, pull, and the festive snow's text contrast among them).
 
 ![](ph-1/backgrounds.png)
+
+## Round 4: seasonal cards (9 Nov)
+
+Every card has a version per season (WX-6.12), by the day's date. Columns: winter, spring, summer, fall. Rows: sunny, partly cloudy, cloudy, rain, snow (snow stays festive all year).
+
+![](ph-1/seasons.png)
+
+Full size: [winter](ph-1/season-winter.png), [spring](ph-1/season-spring.png), [summer](ph-1/season-summer.png), [fall](ph-1/season-fall.png).
+
+CI: 55 unit and screenshot tests, including text contrast on all 20 cards.

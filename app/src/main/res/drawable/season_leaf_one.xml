@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Fluent UI System Icons (Microsoft, MIT), ic_fluent_leaf_one_24_filled, from @fluentui/svg-icons 1.1.345. See FLUENT-ICONS-LICENSE.txt.
+     White; tinted in code. WX-6.12: seasonal decoration on the top block only (not a condition icon). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24">
+    <path android:fillColor="#FFFFFFFF" android:pathData="M11.04 3.05c.68-.45 1.6-.38 2.2.22l3.7 3.71a7 7 0 0 1-4.19 11.91v2.36a.75.75 0 1 1-1.5 0v-2.36A7 7 0 0 1 7.05 7l3.71-3.72q.13-.12.28-.22M12 11a.75.75 0 0 0-.75.75v5.63q.75.1 1.5 0v-5.63A.75.75 0 0 0 12 11" />
+</vector>

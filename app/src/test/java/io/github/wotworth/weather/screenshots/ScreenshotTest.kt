@@ -14,6 +14,7 @@ import io.github.wotworth.weather.Forecast
 import io.github.wotworth.weather.Fixtures
 import io.github.wotworth.weather.MainActivity
 import io.github.wotworth.weather.MemorySecret
+import io.github.wotworth.weather.Season
 import io.github.wotworth.weather.SettingsActivity
 import io.github.wotworth.weather.Ui
 import io.github.wotworth.weather.WeatherTokens
@@ -115,21 +116,27 @@ class ScreenshotTest {
         a.window.decorView.captureRoboImage("build/outputs/roborazzi/$name.png")
     }
 
-    /** Chris, 9 Nov: each condition's background (the tile's gradients), in °F. */
-    @Test @Config(qualifiers = "w412dp-h1500dp-xxhdpi")
-    fun backgrounds() {
+    /** WX-6.12 (Chris, 9 Nov): each condition's card in each season, in °F. */
+    private fun season(season: Season, date: LocalDate) {
         val a = Robolectric.buildActivity(Activity::class.java).setup().get()
         val col = Ui.column(a).apply { setBackgroundColor(WeatherTokens.Colors.BACKGROUND); setPadding(Ui.dp(a, 16f), Ui.dp(a, 16f), Ui.dp(a, 16f), 0) }
         val names = mapOf(Forecast.Kind.SUNNY to "Sunny", Forecast.Kind.PARTLY_CLOUDY to "Partly cloudy", Forecast.Kind.CLOUDY to "Cloudy", Forecast.Kind.RAIN to "Rain", Forecast.Kind.SNOW to "Snow")
+        val temps = mapOf(Season.WINTER to (2.0 to -6.0), Season.SPRING to (16.0 to 6.0), Season.SUMMER to (30.0 to 21.0), Season.FALL to (14.0 to 5.0))
+        val (hi, lo) = temps.getValue(season)
         names.forEach { (k, n) ->
-            val d = Forecast.Day(LocalDate.now(), k, 12.0, 4.0, chance = 40, humidity = 60, cloud = 50, phrase = n)
+            val d = Forecast.Day(date, k, if (k == Forecast.Kind.SNOW) -1.0 else hi, if (k == Forecast.Kind.SNOW) -7.0 else lo, chance = 40, humidity = 60, cloud = 50, phrase = "$n · ${season.name.lowercase().replaceFirstChar { it.uppercase() }}")
             col.addView(Blocks.hero(a, d, true), Ui.fill())
             col.addView(Ui.gap(a, 12f))
         }
         a.setContentView(col)
         Shadows.shadowOf(Looper.getMainLooper()).idle()
-        a.window.decorView.captureRoboImage("build/outputs/roborazzi/backgrounds.png")
+        a.window.decorView.captureRoboImage("build/outputs/roborazzi/season-${season.name.lowercase()}.png")
     }
+
+    @Test @Config(qualifiers = "w412dp-h1500dp-xxhdpi") fun seasonWinter() = season(Season.WINTER, LocalDate.of(2026, 12, 20))
+    @Test @Config(qualifiers = "w412dp-h1500dp-xxhdpi") fun seasonSpring() = season(Season.SPRING, LocalDate.of(2027, 4, 5))
+    @Test @Config(qualifiers = "w412dp-h1500dp-xxhdpi") fun seasonSummer() = season(Season.SUMMER, LocalDate.of(2027, 7, 15))
+    @Test @Config(qualifiers = "w412dp-h1500dp-xxhdpi") fun seasonFall() = season(Season.FALL, LocalDate.of(2026, 10, 20))
 
     @Test fun settings() { withForecast(); shoot("settings", SettingsActivity::class.java) }
 }

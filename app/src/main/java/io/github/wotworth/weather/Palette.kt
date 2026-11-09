@@ -16,14 +16,13 @@ object Palette {
     )
     /**
      * WX-6.11 (Chris, 9 Nov): the app's snow block, festive and sophisticated. Evergreen to midnight
-     * blue, under the warm glow and snowfall of [SnowDrawable]. The tile keeps [STOPS].
+     * blue, under the warm glow and snowfall of [CardDrawable]. The tile keeps [STOPS].
      */
     val FESTIVE_SNOW = intArrayOf(0xFF0E2A30.toInt(), 0xFF153744.toInt(), 0xFF1E4457.toInt())
 
-    /** A day's block background: the tile's gradient, or the festive snow. */
-    fun background(c: android.content.Context, k: Forecast.Kind): android.graphics.drawable.Drawable =
-        if (k == Forecast.Kind.SNOW) SnowDrawable(c.resources.displayMetrics.density, c.getDrawable(R.drawable.festive_snowflake)?.mutate())
-        else android.graphics.drawable.GradientDrawable(android.graphics.drawable.GradientDrawable.Orientation.TL_BR, STOPS.getValue(k))
+    /** WX-6.12: a day's block background, for its condition and season. */
+    fun background(c: android.content.Context, k: Forecast.Kind, date: java.time.LocalDate): android.graphics.drawable.Drawable =
+        CardDrawable(c, CardLook.of(k, date))
 
     /** No forecast yet: the cloudy stops. */
     val NONE = STOPS.getValue(Forecast.Kind.CLOUDY)

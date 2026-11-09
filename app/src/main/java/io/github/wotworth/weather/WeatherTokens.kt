@@ -105,7 +105,7 @@ object WeatherTokens {
         const val PULL_BACK_MS = 200L
     }
 
-    /** WX-6.11 (Chris, 9 Nov): the festive snow block (SnowDrawable). */
+    /** WX-6.11 (Chris, 9 Nov): the festive snow block (CardDrawable), in every season. */
     object Festive {
         /** Warm candlelight from the bottom-right corner, at this opacity at its centre. */
         const val GLOW = 0xFFF2A23C.toInt()
@@ -140,6 +140,70 @@ object WeatherTokens {
         )
         /** The most opaque snowflake (for the contrast test). */
         const val SNOWFLAKE_MAX_ALPHA = 0.14f
+    }
+
+    /**
+     * WX-6.12 (Chris, 9 Nov): each season's version of the cards. [Style.tint] pulls the tile's
+     * gradient toward the season's colour; the glow is the season's light from one corner; the
+     * motifs are a few faint Fluent icons at the snowflakes' places (Festive.SNOWFLAKES), first
+     * [Style.count] of them. [KIND] tones each down for its condition. Snow keeps the festive look.
+     */
+    object Seasons {
+        const val CORNER_TL = 0
+        const val CORNER_TR = 1
+        const val CORNER_BR = 2
+        const val CORNER_BL = 3
+
+        class Style(
+            val tint: Int, val tintShare: Float,
+            /** Then darkened toward black by this share, so text keeps 4.5:1 under the glow. */
+            val deepen: Float,
+            val glow: Int, val glowAlpha: Float, val corner: Int,
+            val icons: IntArray, val tints: IntArray, val alpha: Float, val count: Int,
+            val sizeScale: Float, val maxSizeDp: Float, val turnScale: Float,
+        )
+
+        class Tone(val tintFactor: Float, val glowFactor: Float, val motifFactor: Float)
+
+        val STYLE: Map<Season, Style> = mapOf(
+            // Winter: steel navy, a pale cool low sun from the top-left, snowflakes and a light snowfall.
+            Season.WINTER to Style(0xFF1B3550.toInt(), 0.55f, 0.12f, 0xFFDDEBFF.toInt(), 0.14f, CORNER_TL,
+                intArrayOf(R.drawable.festive_snowflake), intArrayOf(0xFFFFFFFF.toInt()), 0.10f, 7, 1f, 64f, 1f),
+            // Spring, slightly Easter: fresh green, blossom-pink light, pastel eggs and clover.
+            Season.SPRING to Style(0xFF1F5C4A.toInt(), 0.60f, 0.22f, 0xFFF7C6D9.toInt(), 0.14f, CORNER_TR,
+                intArrayOf(R.drawable.season_egg, R.drawable.season_clover, R.drawable.season_egg),
+                intArrayOf(0xFFF7B6C8.toInt(), 0xFFB8E6C9.toInt(), 0xFFCDB8F0.toInt(), 0xFFF5E3A3.toInt()), 0.14f, 8, 0.7f, 44f, 0.4f),
+            // Summer: deep azure, a strong golden high sun from the top-right, a few sparkles.
+            Season.SUMMER to Style(0xFF0058A8.toInt(), 0.45f, 0.26f, 0xFFFFC145.toInt(), 0.24f, CORNER_TR,
+                intArrayOf(R.drawable.season_sparkle), intArrayOf(0xFFFFD978.toInt()), 0.13f, 6, 0.7f, 48f, 0.3f),
+            // Fall: burnt umber, amber light from the bottom-right, falling leaves in rust, gold and red.
+            Season.FALL to Style(0xFF5A2A12.toInt(), 0.60f, 0.12f, 0xFFF08A3C.toInt(), 0.22f, CORNER_BR,
+                intArrayOf(R.drawable.season_leaf_one, R.drawable.season_leaf_two, R.drawable.season_leaf_three),
+                intArrayOf(0xFFE07A3A.toInt(), 0xFFD9A441.toInt(), 0xFFB5532E.toInt()), 0.18f, 9, 0.75f, 64f, 1f),
+        )
+
+        /** Sun shows the season's light fully; cloud and rain mute it and thin the motifs. */
+        val KIND: Map<Forecast.Kind, Tone> = mapOf(
+            Forecast.Kind.SUNNY to Tone(1f, 1f, 1f),
+            Forecast.Kind.PARTLY_CLOUDY to Tone(1f, 0.7f, 1f),
+            Forecast.Kind.CLOUDY to Tone(0.7f, 0.3f, 0.7f),
+            Forecast.Kind.RAIN to Tone(0.8f, 0.3f, 0.7f),
+            Forecast.Kind.SNOW to Tone(1f, 1f, 1f),
+        )
+
+        /**
+         * Motifs at the right edge (x at least [EDGE_X]: the top-right and bottom-right corners,
+         * where no text sits) are [FEATURE_BOOST] times as opaque and full size, so the season reads
+         * at a glance. PaletteTest checks text over every other motif.
+         */
+        const val EDGE_X = 0.9f
+        const val FEATURE_BOOST = 2.2f
+
+        /** Rain in any season adds a few faint pale raindrops. */
+        const val DROPS = 4
+        const val DROP_TINT = 0xFFBFD8F0.toInt()
+        const val DROP_ALPHA = 0.14f
+        const val DROP_DP = 14f
     }
 
     object Data {

@@ -1,5 +1,6 @@
 package io.github.wotworth.weather
 
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import kotlin.math.max
@@ -43,6 +44,44 @@ class PaletteTest {
             assertTrue("festive low on a snowflake", contrast(mix(flake, WeatherTokens.Colors.PRIMARY, 0.75), flake) >= 4.5)
         }
         assertTrue(WeatherTokens.Festive.SNOWFLAKES.all { it[4] <= WeatherTokens.Festive.SNOWFLAKE_MAX_ALPHA })
+    }
+
+    /** WX-6.12: every season's card, with its glow at full strength everywhere and under each motif. */
+    @Test fun textReadsOnEverySeasonsCard() {
+        val white = WeatherTokens.Colors.PRIMARY
+        val bad = LinkedHashSet<String>()
+        fun check(ok: Boolean, what: String) { if (!ok) bad += what }
+        for (season in Season.values()) for (kind in Forecast.Kind.values()) {
+            val look = CardLook.of(kind, season)
+            val s = look.stops
+            val tints = look.motifs.filter { !it.feature }.map { it.tint to it.alpha }.distinct()
+            for (i in 0..100) {
+                val t = i / 100.0 * (s.size - 1)
+                val seg = minOf(t.toInt(), s.size - 2)
+                val plain = mix(s[seg], s[seg + 1], t - seg)
+                val glowed = mix(plain, look.glow, look.glowAlpha.toDouble())
+                val name = "$season $kind"
+                check(contrast(white, glowed) >= 4.5, "$name white")
+                check(contrast(mix(glowed, white, 0.75), glowed) >= 4.5, "$name low")
+                for ((tint, a) in tints) {
+                    val onGlow = mix(glowed, tint, a.toDouble())
+                    check(contrast(white, onGlow) >= 4.5, "$name white on a motif")
+                    val onPlain = mix(plain, tint, a.toDouble())
+                    check(contrast(mix(onPlain, white, 0.75), onPlain) >= 4.5, "$name low on a motif")
+                }
+            }
+        }
+        assertTrue("contrast below 4.5:1: $bad", bad.isEmpty())
+        // Bolder motifs only where no text sits.
+        assertTrue(WeatherTokens.Festive.SNOWFLAKES.filter { it[0] >= WeatherTokens.Seasons.EDGE_X }.all { it[0] - it[2] / 2 / 412f * 1f > 0.84f })
+    }
+
+    @Test fun seasonsByMonth() {
+        assertEquals(Season.WINTER, Season.of(java.time.LocalDate.of(2026, 12, 1)))
+        assertEquals(Season.WINTER, Season.of(java.time.LocalDate.of(2027, 2, 28)))
+        assertEquals(Season.SPRING, Season.of(java.time.LocalDate.of(2027, 3, 1)))
+        assertEquals(Season.SUMMER, Season.of(java.time.LocalDate.of(2027, 8, 31)))
+        assertEquals(Season.FALL, Season.of(java.time.LocalDate.of(2026, 11, 9)))
     }
 
     @Test fun accentTextReadsOnBlack() {

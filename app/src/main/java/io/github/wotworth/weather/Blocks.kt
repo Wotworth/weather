@@ -60,7 +60,7 @@ object Blocks {
      */
     fun hero(c: Context, d: Forecast.Day, f: Boolean, title: String? = null): View {
         val box = Ui.column(c).apply {
-            background = Palette.background(c, d.kind)
+            background = Palette.background(c, d.kind, d.date)
             val pad = Ui.dp(c, Layout.HERO_PAD)
             setPadding(pad, pad, pad, pad)
         }

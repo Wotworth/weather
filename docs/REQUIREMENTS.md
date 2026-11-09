@@ -128,6 +128,7 @@ digit. Focus should be simplicity."
 | WX-6.9 | MUST (Chris, 9 Nov): pressing refresh turns the refresh icon until the update comes back (or 30 s without a network), finishing its turn, so the press visibly registered. |
 | WX-6.10 | MUST (Chris, 9 Nov): pulling the forecast page down from the top and letting go refreshes, as WX-6.9. A small "PULL TO REFRESH" / "RELEASE TO REFRESH" hint shows behind the page; no Material spinner. |
 | WX-6.11 | MUST (Chris, 9 Nov): the app's snow block is "a little Christmas festive", sophisticated and slight: evergreen-to-midnight gradient, a faint warm glow from one corner, a light still snowfall, and a few faint Fluent snowflakes (Chris, 9 Nov: "use snowflakes"). No cartoon shapes. Text keeps 4.5:1 contrast. The tile's snow gradient is unchanged. All year (Chris, 9 Nov, Q6). |
+| WX-6.12 | MUST (Chris, 9 Nov): every card has a version per season, by the day's date (winter Dec–Feb, spring Mar–May, summer Jun–Aug, fall Sep–Nov): winter steel navy, a pale low sun, snowflakes and light snowfall; spring fresh green, blossom-pink light, pastel eggs and clover (slightly Easter); summer deep azure, a strong golden sun, sparkles; fall burnt umber, amber light, falling leaves. Sun shows the season's light fully; cloud and rain mute it; rain adds faint raindrops. Snow stays festive in every season (WX-6.11, Q6). Same restraint and 4.5:1 text contrast as WX-6.11. |
 
 ## 7. Launcher side (the wp-launcher session does this, not you)
 
