@@ -1,6 +1,6 @@
 # Status
 
-**Phase:** PH-1 (spec v1.0, 8 Nov): built; waiting for the signing secrets, then Chris's test on the phone. Report: docs/reports/PH-1.md.
+**Phase:** PH-1 (spec v1.0): released as v0.1.4 (9 Nov, tag ph-1); waiting for Chris's test on the phone. Report: docs/reports/PH-1.md.
 
 ## Done
 
@@ -15,7 +15,8 @@
 
 - 9 Nov: Chris has the signing secrets as a file (sent in chat, never committed). Q1 answered: 500 calls a day; the app stops at 450.
 
-- Chris saves the three signing secrets and runs the workflow (steps in PH-1.md), then tests on the phone.
+- Chris tests v0.1.4 on the phone (steps in PH-1.md). Secrets saved by Chris on 9 Nov; the release's key fingerprint matches docs/LAUNCHER-CHANGES.md.
+- Launcher: the tile rounding change is on wp-launcher main (2c5c3e7), not released; waiting for Chris's go-ahead.
 - The launcher session reads docs/LAUNCHER-CHANGES.md and builds its side.
 
 ## Open questions
