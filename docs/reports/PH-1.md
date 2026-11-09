@@ -91,3 +91,9 @@ Partly cloudy keeps the blue sky and full sunlight, with gold sparkles and a few
 | Forecast discussion | Night cards |
 |---|---|
 | ![](ph-1/discussion.png) | ![](ph-1/seasons-night.png) |
+
+## Round 10: seasonal snow, rounded discussion, night stars (9 Nov)
+
+- Snow cards follow the season: winter festive, spring, summer and fall their own sky greyed for snow (bottom rows of both sheets).
+- The discussion's measurements are rounded like the rest of the app (WX-10.4); times, dates and codes stay.
+- Night stars are small five-pointed stars, unlike the sunny sparkles.

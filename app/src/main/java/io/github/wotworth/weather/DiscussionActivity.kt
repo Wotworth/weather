@@ -80,8 +80,9 @@ class DiscussionActivity : Activity() {
                     if (sec.sub) Font.Semibold else Font.Semilight, if (sec.sub) Colors.PRIMARY else Colors.SECONDARY).apply {
                     setPadding(0, Ui.dp(this@DiscussionActivity, if (sec.sub) 14f else Layout.SECTION_TOP), 0, Ui.dp(this@DiscussionActivity, 4f))
                 })
-                sec.note?.let { body(it, Colors.SECONDARY) }
-                sec.paragraphs.forEach { body(it, Colors.PRIMARY, Type.DISCUSSION_BODY) }
+                // WX-6.2: measurements rounded like every number in the app (Nws.roundNumbers).
+                sec.note?.let { body(Nws.roundNumbers(it), Colors.SECONDARY) }
+                sec.paragraphs.forEach { body(Nws.roundNumbers(it), Colors.PRIMARY, Type.DISCUSSION_BODY) }
             }
         }
     }

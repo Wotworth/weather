@@ -46,8 +46,8 @@ data class CardLook(
         fun of(kind: Forecast.Kind, season: Season, night: Boolean = false): CardLook {
             val S = WeatherTokens.Seasons
             val st = S.STYLE.getValue(season)
-            if (kind == Forecast.Kind.SNOW) {
-                // Snow: the festive card, snowflakes, and the season's scene under snow.
+            if (kind == Forecast.Kind.SNOW && season == Season.WINTER) {
+                // Winter snow: the festive Christmas card, snowflakes, snowy pines (WX-6.11).
                 val F = WeatherTokens.Festive
                 return CardLook(Palette.FESTIVE_SNOW, F.GLOW, F.GLOW_ALPHA, S.CORNER_BR,
                     F.SNOWFLAKES.map { Motif(R.drawable.festive_snowflake, 0xFFFFFFFF.toInt(), it[4], it[0], it[1], it[2], it[3], avoidText = false) },
@@ -58,6 +58,15 @@ data class CardLook(
             // At night the condition greys the sky by half as much (it is already dark).
             val share = if (night) k.share * 0.5f else k.share
             val stops = base.map { mix(mix(it, k.toward, share), 0xFF000000.toInt(), k.darken) }.toIntArray()
+            if (kind == Forecast.Kind.SNOW) {
+                // Snow in spring, summer or fall (Chris, 9 Nov): the season's own sky, snowing, with
+                // its scene under a coat of snow.
+                val F = WeatherTokens.Festive
+                return CardLook(stops, if (night) S.MOONLIGHT else st.glow, (if (night) S.MOONLIGHT_ALPHA else st.glowAlpha) * k.glowFactor,
+                    if (night) S.CORNER_TR else st.corner,
+                    F.SNOWFLAKES.map { Motif(R.drawable.festive_snowflake, 0xFFFFFFFF.toInt(), it[4], it[0], it[1], it[2], it[3], avoidText = false) },
+                    dots = true, scene = st.snowScene, sceneDp = st.sceneDp, night = night)
+            }
             val w = (if (night) S.NIGHT_WEATHER else S.WEATHER).getValue(kind)
             val motifs = (0 until minOf(w.count, S.PLACES.size)).map { i ->
                 val p = S.PLACES[i]

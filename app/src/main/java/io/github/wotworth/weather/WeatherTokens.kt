@@ -191,7 +191,9 @@ object WeatherTokens {
             Forecast.Kind.PARTLY_CLOUDY to Tone(0xFF3A4A5A.toInt(), 0.05f, 0f, 1f),
             Forecast.Kind.CLOUDY to Tone(0xFF4A5260.toInt(), 0.45f, 0.08f, 0.3f),
             Forecast.Kind.RAIN to Tone(0xFF22405E.toInt(), 0.40f, 0.10f, 0.3f),
-            Forecast.Kind.SNOW to Tone(0xFF000000.toInt(), 0f, 0f, 1f),
+            // Snow outside winter (Chris, 9 Nov: each season its own snow): the season's sky, greyed
+            // and softened toward a snowy blue-grey. Winter snow is the festive card (WX-6.11).
+            Forecast.Kind.SNOW to Tone(0xFF5A6E85.toInt(), 0.40f, 0.24f, 0.4f),
         )
 
         /**
@@ -227,11 +229,12 @@ object WeatherTokens {
         const val MOONLIGHT = 0xFFDDE8FF.toInt()
         const val MOONLIGHT_ALPHA = 0.12f
 
-        /** At night: clear skies show stars (soft dots and white twinkles); clouds are dimmer. */
+        /** At night: clear skies show stars (a fine starfield and small five-pointed stars); clouds are dimmer. */
         val NIGHT_WEATHER: Map<Forecast.Kind, Weather> = mapOf(
-            Forecast.Kind.SUNNY to Weather(intArrayOf(R.drawable.season_sparkle), intArrayOf(0xFFFFFFFF.toInt()), 0.7f, 7, 0.55f, 26f, 0.3f),
-            Forecast.Kind.PARTLY_CLOUDY to Weather(intArrayOf(R.drawable.season_sparkle, R.drawable.season_cloud, R.drawable.season_sparkle),
-                intArrayOf(0xFFFFFFFF.toInt(), 0xFF9FB3CC.toInt(), 0xFFFFFFFF.toInt()), 0.6f, 10, 0.7f, 44f, 0.2f),
+            // Stars (Chris, 9 Nov: unlike the sunny cards' gold sparkles): small pale five-pointed stars.
+            Forecast.Kind.SUNNY to Weather(intArrayOf(R.drawable.season_star), intArrayOf(0xFFEAF0FF.toInt()), 0.75f, 10, 0.4f, 18f, 0.5f),
+            Forecast.Kind.PARTLY_CLOUDY to Weather(intArrayOf(R.drawable.season_star, R.drawable.season_cloud, R.drawable.season_star),
+                intArrayOf(0xFFEAF0FF.toInt(), 0xFF9FB3CC.toInt(), 0xFFEAF0FF.toInt()), 0.65f, 10, 0.55f, 40f, 0.3f),
             Forecast.Kind.CLOUDY to Weather(intArrayOf(R.drawable.season_cloud), intArrayOf(0xFF9FB3CC.toInt()), 0.3f, 10, 1.2f, 64f, 0f),
             Forecast.Kind.RAIN to Weather(intArrayOf(R.drawable.season_drop), intArrayOf(0xFF9FC4E8.toInt()), 0.5f, 18, 0.6f, 22f, 0f),
         )

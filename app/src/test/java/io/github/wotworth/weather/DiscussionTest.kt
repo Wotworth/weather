@@ -90,4 +90,21 @@ class DiscussionTest {
         assertEquals("New York NY", Nws.office(text))
         assertTrue(secs.none { it.paragraphs.any { p -> p.contains("&&") || p.contains("$$") } })
     }
+
+    /** WX-6.2 in the discussion (Chris, 9 Nov): measurements rounded; times, dates, codes and points kept. */
+    @Test fun numbersRoundedLikeTheRestOfTheApp() {
+        assertEquals("highs in the upper 60s, winds 10-15 mph with gusts 25-30 mph.",
+            Nws.roundNumbers("highs in the upper 60s, winds 12-17 mph with gusts 26-29 mph."))
+        assertEquals("a 35% chance, 1-3 inches, lows near 45, 0 degrees", Nws.roundNumbers("a 33% chance, 1-2 inches, lows near 44, 0.4 degrees"))
+        assertEquals("seas 3 ft, 1000 mb, -5F", Nws.roundNumbers("seas 2.6 ft, 1002 mb, -4.6F"))
+        // Kept as written: clock times, dates, years, numbered points, codes, addresses.
+        for (kept in listOf("655 AM EST Mon Nov 9 2026", "through 12Z Tuesday", "/12Z", "1) A series", "Key Message 2",
+            "ANZ331-335-338-340-345.", "FXUS61 KOKX", "I-95 corridor", "https:/www.weather.gov/zny/n90", "around 18z.", "at 6:55 tonight")) {
+            assertEquals(kept, Nws.roundNumbers(kept))
+        }
+        // The real discussion: every remaining measurement follows the rule.
+        val text = Nws.parseProduct(Fixtures.read("real-nws-afd-okx.json"))!!.text
+        val shown = Nws.sections(text).flatMap { it.paragraphs }.joinToString(" ") { Nws.roundNumbers(it) }
+        assertTrue(shown.contains("10-15"))
+    }
 }
