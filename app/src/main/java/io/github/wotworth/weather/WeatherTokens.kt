@@ -53,6 +53,10 @@ object WeatherTokens {
         const val BUTTON = 15f
         const val INPUT = 16f
         const val CHOICE = 22f
+        /** WX-10: the forecast discussion's headings and text. */
+        const val DISCUSSION_HEAD = 22f
+        const val DISCUSSION_SUBHEAD = 17f
+        const val DISCUSSION_BODY = 16f
     }
 
     object Layout {
@@ -210,6 +214,38 @@ object WeatherTokens {
             Forecast.Kind.RAIN to Weather(intArrayOf(R.drawable.season_drop), intArrayOf(0xFFBFE0FF.toInt()), 0.55f, 18, 0.6f, 22f, 0f),
         )
 
+        /**
+         * Night versions (Chris, 9 Nov): today's card after dark. Each season's night sky (the clear
+         * card); the condition's [TONE] applies on top. Moonlight from the top-right.
+         */
+        val NIGHT: Map<Season, IntArray> = mapOf(
+            Season.WINTER to intArrayOf(0xFF0A1830.toInt(), 0xFF0E2142.toInt(), 0xFF142B50.toInt()),
+            Season.SPRING to intArrayOf(0xFF1A1845.toInt(), 0xFF2A1A52.toInt(), 0xFF3D1A48.toInt()),
+            Season.SUMMER to intArrayOf(0xFF0A1C47.toInt(), 0xFF0C2660.toInt(), 0xFF0E2F6A.toInt()),
+            Season.FALL to intArrayOf(0xFF0E1A36.toInt(), 0xFF1A1F3C.toInt(), 0xFF33201A.toInt()),
+        )
+        const val MOONLIGHT = 0xFFDDE8FF.toInt()
+        const val MOONLIGHT_ALPHA = 0.12f
+
+        /** At night: clear skies show stars (soft dots and white twinkles); clouds are dimmer. */
+        val NIGHT_WEATHER: Map<Forecast.Kind, Weather> = mapOf(
+            Forecast.Kind.SUNNY to Weather(intArrayOf(R.drawable.season_sparkle), intArrayOf(0xFFFFFFFF.toInt()), 0.7f, 7, 0.55f, 26f, 0.3f),
+            Forecast.Kind.PARTLY_CLOUDY to Weather(intArrayOf(R.drawable.season_sparkle, R.drawable.season_cloud, R.drawable.season_sparkle),
+                intArrayOf(0xFFFFFFFF.toInt(), 0xFF9FB3CC.toInt(), 0xFFFFFFFF.toInt()), 0.6f, 10, 0.7f, 44f, 0.2f),
+            Forecast.Kind.CLOUDY to Weather(intArrayOf(R.drawable.season_cloud), intArrayOf(0xFF9FB3CC.toInt()), 0.3f, 10, 1.2f, 64f, 0f),
+            Forecast.Kind.RAIN to Weather(intArrayOf(R.drawable.season_drop), intArrayOf(0xFF9FC4E8.toInt()), 0.5f, 18, 0.6f, 22f, 0f),
+        )
+        /** Which night skies show the starfield of soft dots. */
+        val STARRY = setOf(Forecast.Kind.SUNNY, Forecast.Kind.PARTLY_CLOUDY)
+        const val STARS = 46
+        const val STAR_SEED = 1977
+        const val STAR_MIN_DP = 0.5f
+        const val STAR_MAX_DP = 1.4f
+        const val STAR_MIN_ALPHA = 0.3f
+        const val STAR_MAX_ALPHA = 0.95f
+        /** The corner scene at night: its colours multiplied by this (dimmer, moonlit blue). */
+        const val NIGHT_SCENE_TINT = 0xFF8090B0.toInt()
+
         /** Places across the card: x and y as shares of the card, size in dp, turn in degrees. */
         val PLACES = arrayOf(
             floatArrayOf(0.93f, 0.14f, 60f, 12f), floatArrayOf(0.78f, 0.05f, 26f, -20f),
@@ -255,6 +291,8 @@ object WeatherTokens {
          * 96 (every 30 minutes) plus refreshes.
          */
         const val DAILY_CALL_CAP = 450
+        /** WX-10: the forecast discussion is fetched again on opening its page if older than this. */
+        const val DISCUSSION_FRESH_MS = 30 * 60_000L
         const val TIMEOUT_MS = 15_000
         const val MAX_REPLY_BYTES = 512 * 1024
         /** Errors shown in settings are cut to this length. */

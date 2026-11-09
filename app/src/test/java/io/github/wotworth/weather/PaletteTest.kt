@@ -54,8 +54,8 @@ class PaletteTest {
         val white = WeatherTokens.Colors.PRIMARY
         val bad = LinkedHashSet<String>()
         fun check(ok: Boolean, what: String) { if (!ok) bad += what }
-        for (season in Season.values()) for (kind in Forecast.Kind.values()) {
-            val look = CardLook.of(kind, season)
+        for (night in listOf(false, true)) for (season in Season.values()) for (kind in Forecast.Kind.values()) {
+            val look = CardLook.of(kind, season, night)
             val s = look.stops
             // Behind text, a motif is at most FAINT_ALPHA (the card fades it; HeroTest checks that).
             val tints = look.motifs.filter { it.tint != 0 }.map { it.tint to minOf(it.alpha, WeatherTokens.Seasons.FAINT_ALPHA) }.distinct()
@@ -64,7 +64,7 @@ class PaletteTest {
                 val seg = minOf(t.toInt(), s.size - 2)
                 val plain = mix(s[seg], s[seg + 1], t - seg)
                 val glowed = mix(plain, look.glow, look.glowAlpha.toDouble())
-                val name = "$season $kind"
+                val name = "$season $kind${if (night) " night" else ""}"
                 check(contrast(white, glowed) >= 4.5, "$name white")
                 check(contrast(mix(glowed, white, LOW), glowed) >= 4.5, "$name low")
                 for ((tint, a) in tints) {

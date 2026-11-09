@@ -28,6 +28,8 @@ data class CardLook(
     val dots: Boolean,
     /** The bottom-right scene: drawable and full width in dp (0: none). */
     val scene: Int = 0, val sceneDp: Float = 0f,
+    /** Night (Chris, 9 Nov): a starfield of soft dots, and the scene dimmed to moonlight. */
+    val stars: Boolean = false, val night: Boolean = false,
 ) {
     /** [avoidText]: left out where it would sit behind text (the festive snow's faint flakes are not). */
     data class Motif(val res: Int, val tint: Int, val alpha: Float, val x: Float, val y: Float, val sizeDp: Float, val turn: Float, val avoidText: Boolean = true)
@@ -39,9 +41,9 @@ data class CardLook(
         }
 
         /** The look of a [kind] card on [date]. Snow is festive in every season (Chris, 9 Nov, Q6). */
-        fun of(kind: Forecast.Kind, date: LocalDate): CardLook = of(kind, Season.of(date))
+        fun of(kind: Forecast.Kind, date: LocalDate, night: Boolean = false): CardLook = of(kind, Season.of(date), night)
 
-        fun of(kind: Forecast.Kind, season: Season): CardLook {
+        fun of(kind: Forecast.Kind, season: Season, night: Boolean = false): CardLook {
             val S = WeatherTokens.Seasons
             val st = S.STYLE.getValue(season)
             if (kind == Forecast.Kind.SNOW) {
@@ -49,17 +51,22 @@ data class CardLook(
                 val F = WeatherTokens.Festive
                 return CardLook(Palette.FESTIVE_SNOW, F.GLOW, F.GLOW_ALPHA, S.CORNER_BR,
                     F.SNOWFLAKES.map { Motif(R.drawable.festive_snowflake, 0xFFFFFFFF.toInt(), it[4], it[0], it[1], it[2], it[3], avoidText = false) },
-                    dots = true, scene = st.snowScene, sceneDp = st.sceneDp)
+                    dots = true, scene = st.snowScene, sceneDp = st.sceneDp, night = night)
             }
             val k = S.TONE.getValue(kind)
-            val stops = st.stops.map { mix(mix(it, k.toward, k.share), 0xFF000000.toInt(), k.darken) }.toIntArray()
-            val w = S.WEATHER.getValue(kind)
+            val base = if (night) S.NIGHT.getValue(season) else st.stops
+            // At night the condition greys the sky by half as much (it is already dark).
+            val share = if (night) k.share * 0.5f else k.share
+            val stops = base.map { mix(mix(it, k.toward, share), 0xFF000000.toInt(), k.darken) }.toIntArray()
+            val w = (if (night) S.NIGHT_WEATHER else S.WEATHER).getValue(kind)
             val motifs = (0 until minOf(w.count, S.PLACES.size)).map { i ->
                 val p = S.PLACES[i]
                 Motif(w.icons[i % w.icons.size], w.tints[i % w.tints.size], w.alpha,
                     p[0], p[1], minOf(p[2] * w.sizeScale, w.maxSizeDp), p[3] * w.turnScale)
             }
-            return CardLook(stops, st.glow, st.glowAlpha * k.glowFactor, st.corner, motifs, dots = false, scene = st.scene, sceneDp = st.sceneDp)
+            return if (night) CardLook(stops, S.MOONLIGHT, S.MOONLIGHT_ALPHA * k.glowFactor, S.CORNER_TR, motifs, dots = false,
+                scene = st.scene, sceneDp = st.sceneDp, stars = kind in S.STARRY, night = true)
+            else CardLook(stops, st.glow, st.glowAlpha * k.glowFactor, st.corner, motifs, dots = false, scene = st.scene, sceneDp = st.sceneDp)
         }
     }
 }

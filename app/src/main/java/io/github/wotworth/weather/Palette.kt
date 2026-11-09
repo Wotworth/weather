@@ -21,8 +21,8 @@ object Palette {
     val FESTIVE_SNOW = intArrayOf(0xFF0E2A30.toInt(), 0xFF153744.toInt(), 0xFF1E4457.toInt())
 
     /** WX-6.12: a day's block background, for its condition and season. */
-    fun background(c: android.content.Context, k: Forecast.Kind, date: java.time.LocalDate): CardDrawable =
-        CardDrawable(c, CardLook.of(k, date))
+    fun background(c: android.content.Context, k: Forecast.Kind, date: java.time.LocalDate, night: Boolean = false): CardDrawable =
+        CardDrawable(c, CardLook.of(k, date, night))
 
     /** No forecast yet: the cloudy stops. */
     val NONE = STOPS.getValue(Forecast.Kind.CLOUDY)

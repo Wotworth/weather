@@ -21,10 +21,10 @@ class HeroTest {
     private fun check() {
         val a = Robolectric.buildActivity(Activity::class.java).setup().get()
         val bad = ArrayList<String>()
-        for ((season, date) in dates) for (kind in Forecast.Kind.values()) for (title in listOf(null, "Tuesday")) {
+        for ((season, date) in dates) for (kind in Forecast.Kind.values()) for (title in listOf(null, "Tuesday")) for (night in listOf(false, true)) {
             val phrase = if (title == null) "Sunny" else "Breezy at times with decreasing clouds and a shower late"
             val d = Forecast.Day(date, kind, 31.0, 22.0, 40, 60, 50, phrase)
-            val box = Blocks.hero(a, d, true, title) as ViewGroup
+            val box = Blocks.hero(a, d, true, title, night) as ViewGroup
             val w = (412 * a.resources.displayMetrics.density).toInt() - 2 * Ui.dp(a, 16f)
             box.measure(View.MeasureSpec.makeMeasureSpec(w, View.MeasureSpec.EXACTLY), View.MeasureSpec.UNSPECIFIED)
             box.layout(0, 0, box.measuredWidth, box.measuredHeight)
@@ -35,7 +35,7 @@ class HeroTest {
             val full = CardLook.of(kind, date).sceneDp * a.resources.displayMetrics.density
             val sr = card.sceneRect()
             if (sr == null || sr.width() < full * 0.99f) bad += "$season $kind $title: corner scene not at full size"
-            for (m in CardLook.of(kind, date).motifs) {
+            for (m in CardLook.of(kind, date, night).motifs) {
                 if (!m.avoidText || card.alphaOf(m) <= WeatherTokens.Seasons.FAINT_ALPHA) continue
                 val r = card.motifRect(m)
                 if (text.any { RectF.intersects(it, r) }) bad += "$season $kind $title: motif at ${m.x},${m.y} behind text"

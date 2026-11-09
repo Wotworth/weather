@@ -114,6 +114,8 @@ object Forecast {
     data class Place(
         val name: String, val admin: String, val adminId: String, val country: String, val countryCode: String,
         val key: String?, val zone: String? = null,
+        /** WX-10: the town's coordinates (AccuWeather's GeoPosition) and its weather.gov office ("OKX"). */
+        val lat: Double? = null, val lon: Double? = null, val office: String? = null,
     ) {
         val isUs get() = countryCode.equals("US", ignoreCase = true)
 

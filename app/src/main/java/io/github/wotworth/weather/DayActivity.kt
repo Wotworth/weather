@@ -64,7 +64,7 @@ class DayActivity : Activity() {
             content.addView(Ui.text(this, "This day isn't in the forecast any more.", WeatherTokens.Type.BODY, color = Colors.SECONDARY))
             return
         }
-        content.addView(Blocks.hero(this, d, f), Ui.fill())
+        content.addView(Blocks.hero(this, d, f, night = date == today && Blocks.isNight(s.hours, System.currentTimeMillis())), Ui.fill())
         if (d.day != null || d.night != null) {
             content.addView(Ui.section(this, "day and night"))
             d.day?.let { content.addView(Blocks.partRow(this, "Daytime", it, night = false), Ui.fill()) }

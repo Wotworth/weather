@@ -151,7 +151,8 @@ class MainActivity : Activity() {
 
         val first = days.firstOrNull()
         when {
-            first != null -> content.addView(Ui.pressable(Blocks.hero(this, first, f, if (first.date == today) null else Blocks.dayName(first.date, today)), { openDay(first.date) }), Ui.fill())
+            first != null -> content.addView(Ui.pressable(Blocks.hero(this, first, f, if (first.date == today) null else Blocks.dayName(first.date, today),
+                night = first.date == today && Blocks.isNight(s.hours, now)), { openDay(first.date) }), Ui.fill())
             !hasKey -> content.addView(empty("Add your AccuWeather key in settings to see the forecast.", "settings") { openSettings() })
             else -> content.addView(empty(if (s.error == null) "Getting the forecast…" else "No forecast yet: ${s.error}", "refresh") { refresh() })
         }
@@ -166,6 +167,12 @@ class MainActivity : Activity() {
         if (days.isNotEmpty()) {
             content.addView(Ui.section(this, "next ${days.size} days"))
             days.forEach { d -> content.addView(Blocks.dayRow(this, d, f, today) { openDay(d.date) }, Ui.fill()) }
+        }
+
+        // WX-10: the National Weather Service's forecast discussion (US towns).
+        if (hasKey && place.isUs) {
+            content.addView(Ui.gap(this, Layout.FOOTER_TOP))
+            content.addView(Ui.button(this, "forecast discussion") { startActivity(Intent(this, DiscussionActivity::class.java)) }, Ui.wrap())
         }
 
         if (hasKey && s.fetchedAt > 0) content.addView(Blocks.footer(this, s))

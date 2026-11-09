@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# WX-2.3: the app may reach dataservice.accuweather.com only.
+# WX-2.3: the app may reach dataservice.accuweather.com and api.weather.gov only (Chris, 9 Nov).
 # Checks the merged release manifest uses the network security config and allows no cleartext,
-# and that the config trusts no certificates except for exactly that one domain.
+# and that the config trusts no certificates except for exactly those two domains.
 # Usage: check-network.sh <merged AndroidManifest.xml> <network_security_config.xml>
 set -euo pipefail
 manifest="${1:?manifest}"; nsc="${2:?network security config}"
@@ -21,11 +21,11 @@ if len(ta) != 1 or list(ta[0]): fail("base-config must have one empty trust-anch
 if root.findall("debug-overrides"): fail("no debug-overrides allowed")
 doms = root.findall("domain-config")
 names = [(d.text or "").strip() for dc in doms for d in dc.findall("domain")]
-if names != ["dataservice.accuweather.com"]: fail("the only domain must be dataservice.accuweather.com, found %s" % names)
+if sorted(names) != ["api.weather.gov", "dataservice.accuweather.com"]: fail("the only domains must be dataservice.accuweather.com and api.weather.gov, found %s" % names)
 for dc in doms:
     if dc.get("cleartextTrafficPermitted") != "false": fail("domain-config must forbid cleartext")
     if dc.findall("domain-config"): fail("no nested domain-config")
     for d in dc.findall("domain"):
         if d.get("includeSubdomains") not in (None, "false"): fail("subdomains must not be included")
-print("PASS: HTTPS only, and only dataservice.accuweather.com is trusted")
+print("PASS: HTTPS only, and only dataservice.accuweather.com and api.weather.gov are trusted")
 PY

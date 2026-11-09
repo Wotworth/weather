@@ -88,6 +88,15 @@ class CardDrawable(private val c: Context, private val look: CardLook) : Drawabl
         }
     }
 
+    /** Stars: (x, y) shares, radius in dp, opacity; the same every night. */
+    private val stars = Random(Seasons.STAR_SEED).let { r ->
+        List(Seasons.STARS) {
+            floatArrayOf(r.nextFloat(), r.nextFloat() * 0.85f,
+                Seasons.STAR_MIN_DP + r.nextFloat() * (Seasons.STAR_MAX_DP - Seasons.STAR_MIN_DP),
+                Seasons.STAR_MIN_ALPHA + r.nextFloat() * (Seasons.STAR_MAX_ALPHA - Seasons.STAR_MIN_ALPHA))
+        }
+    }
+
     override fun draw(canvas: Canvas) {
         val b = bounds
         val w = b.width().toFloat(); val h = b.height().toFloat()
@@ -101,10 +110,18 @@ class CardDrawable(private val c: Context, private val look: CardLook) : Drawabl
             glow.shader = RadialGradient(gx, gy, maxOf(w, h) * Festive.GLOW_RADIUS, intArrayOf(gc, gc and 0xFFFFFF), null, Shader.TileMode.CLAMP)
             canvas.drawRect(b, glow)
         }
-        if (look.dots) for (f in dots) {
-            dot.alpha = Math.round(f[3] * 255)
-            canvas.drawCircle(b.left + f[0] * w, b.top + f[1] * h, f[2] * density, dot)
+        // Snowfall and stars: soft dots, left out behind text (they'd read as stray punctuation).
+        val margin = Seasons.TEXT_MARGIN_DP * density
+        fun dots(list: List<FloatArray>) {
+            for (f in list) {
+                val x = b.left + f[0] * w; val y = b.top + f[1] * h; val r = f[2] * density
+                if (avoid.any { x + r > it.left - margin && x - r < it.right + margin && y + r > it.top - margin && y - r < it.bottom + margin }) continue
+                dot.alpha = Math.round(f[3] * 255)
+                canvas.drawCircle(x, y, r, dot)
+            }
         }
+        if (look.dots) dots(dots)
+        if (look.stars) dots(stars)
         canvas.save()
         canvas.clipRect(b)
         for (m in look.motifs) {
@@ -136,7 +153,8 @@ class CardDrawable(private val c: Context, private val look: CardLook) : Drawabl
         sceneRect(b)?.let { r ->
             icons[look.scene]?.let { d ->
                 d.alpha = 255
-                d.colorFilter = null
+                // At night the scene is dimmed to moonlight.
+                d.colorFilter = if (look.night) android.graphics.LightingColorFilter(Seasons.NIGHT_SCENE_TINT, 0) else null
                 d.setBounds(r.left.toInt(), r.top.toInt(), r.right.toInt(), r.bottom.toInt())
                 d.draw(canvas)
             }

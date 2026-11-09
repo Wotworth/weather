@@ -60,6 +60,26 @@ class Store(private val p: SharedPreferences) {
         get() = p.getString("hour_error", null)
         set(v) { p.edit().putString("hour_error", v?.take(WeatherTokens.Data.ERROR_CHARS)).apply() }
 
+    /** WX-10: the last forecast discussion (its text, id, issue time as ISO text), when fetched, and its error. */
+    var discussion: String?
+        get() = p.getString("afd_text", null)
+        set(v) { p.edit().putString("afd_text", v).apply() }
+    var discussionId: String?
+        get() = p.getString("afd_id", null)
+        set(v) { p.edit().putString("afd_id", v).apply() }
+    var discussionIssued: String?
+        get() = p.getString("afd_issued", null)
+        set(v) { p.edit().putString("afd_issued", v).apply() }
+    var discussionOffice: String?
+        get() = p.getString("afd_office", null)
+        set(v) { p.edit().putString("afd_office", v).apply() }
+    var discussionAt: Long
+        get() = p.getLong("afd_at", 0L)
+        set(v) { p.edit().putLong("afd_at", v).apply() }
+    var discussionError: String?
+        get() = p.getString("afd_error", null)
+        set(v) { p.edit().putString("afd_error", v?.take(WeatherTokens.Data.ERROR_CHARS)).apply() }
+
     /** WX-2.7: calls on the phone's date [today]. */
     fun callsOn(today: LocalDate): Int = if (p.getString("calls_date", null) == today.toString()) p.getInt("calls", 0) else 0
 
@@ -78,12 +98,16 @@ class Store(private val p: SharedPreferences) {
     companion object {
         fun encodePlace(pl: Forecast.Place): JSONObject = JSONObject().put("name", pl.name).put("admin", pl.admin).put("adminId", pl.adminId)
             .put("country", pl.country).put("cc", pl.countryCode).put("key", pl.key ?: JSONObject.NULL).put("zone", pl.zone ?: JSONObject.NULL)
+            .put("lat", pl.lat ?: JSONObject.NULL).put("lon", pl.lon ?: JSONObject.NULL).put("office", pl.office ?: JSONObject.NULL)
 
         fun decodePlace(s: String?): Forecast.Place? = try {
             val o = JSONObject(s ?: return null)
             Forecast.Place(o.getString("name"), o.optString("admin"), o.optString("adminId"), o.optString("country"), o.optString("cc"),
                 if (o.isNull("key")) null else o.getString("key").takeIf { Accu.validKey(it) },
-                if (o.isNull("zone")) null else o.optString("zone").ifBlank { null })
+                if (o.isNull("zone")) null else o.optString("zone").ifBlank { null },
+                if (o.isNull("lat")) null else o.optDouble("lat").takeIf { !it.isNaN() },
+                if (o.isNull("lon")) null else o.optDouble("lon").takeIf { !it.isNaN() },
+                if (o.isNull("office")) null else o.optString("office").takeIf { Nws.validOffice(it) })
                 .takeIf { it.name.isNotBlank() }
         } catch (e: Exception) { null }
 

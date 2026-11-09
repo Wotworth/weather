@@ -117,26 +117,41 @@ class ScreenshotTest {
     }
 
     /** WX-6.12 (Chris, 9 Nov): each condition's card in each season, in °F. */
-    private fun season(season: Season, date: LocalDate) {
+    private fun season(season: Season, date: LocalDate, night: Boolean = false) {
         val a = Robolectric.buildActivity(Activity::class.java).setup().get()
         val col = Ui.column(a).apply { setBackgroundColor(WeatherTokens.Colors.BACKGROUND); setPadding(Ui.dp(a, 16f), Ui.dp(a, 16f), Ui.dp(a, 16f), 0) }
         val names = mapOf(Forecast.Kind.SUNNY to "Sunny", Forecast.Kind.PARTLY_CLOUDY to "Partly cloudy", Forecast.Kind.CLOUDY to "Cloudy", Forecast.Kind.RAIN to "Rain", Forecast.Kind.SNOW to "Snow")
         val temps = mapOf(Season.WINTER to (2.0 to -6.0), Season.SPRING to (16.0 to 6.0), Season.SUMMER to (30.0 to 21.0), Season.FALL to (14.0 to 5.0))
         val (hi, lo) = temps.getValue(season)
         names.forEach { (k, n) ->
-            val d = Forecast.Day(date, k, if (k == Forecast.Kind.SNOW) -1.0 else hi, if (k == Forecast.Kind.SNOW) -7.0 else lo, chance = 40, humidity = 60, cloud = 50, phrase = "$n · ${season.name.lowercase().replaceFirstChar { it.uppercase() }}")
-            col.addView(Blocks.hero(a, d, true), Ui.fill())
+            val d = Forecast.Day(date, k, if (k == Forecast.Kind.SNOW) -1.0 else hi, if (k == Forecast.Kind.SNOW) -7.0 else lo, chance = 40, humidity = 60, cloud = 50, phrase = "${if (night) mapOf(Forecast.Kind.SUNNY to "Clear", Forecast.Kind.PARTLY_CLOUDY to "Partly cloudy").getOrDefault(k, n) else n} · ${season.name.lowercase().replaceFirstChar { it.uppercase() }}${if (night) " night" else ""}")
+            col.addView(Blocks.hero(a, d, true, night = night), Ui.fill())
             col.addView(Ui.gap(a, 12f))
         }
         a.setContentView(col)
         Shadows.shadowOf(Looper.getMainLooper()).idle()
-        a.window.decorView.captureRoboImage("build/outputs/roborazzi/season-${season.name.lowercase()}.png")
+        a.window.decorView.captureRoboImage("build/outputs/roborazzi/season-${season.name.lowercase()}${if (night) "-night" else ""}.png")
     }
 
     @Test @Config(qualifiers = "w412dp-h1500dp-xxhdpi") fun seasonWinter() = season(Season.WINTER, LocalDate.of(2026, 12, 20))
     @Test @Config(qualifiers = "w412dp-h1500dp-xxhdpi") fun seasonSpring() = season(Season.SPRING, LocalDate.of(2027, 4, 5))
     @Test @Config(qualifiers = "w412dp-h1500dp-xxhdpi") fun seasonSummer() = season(Season.SUMMER, LocalDate.of(2027, 7, 15))
     @Test @Config(qualifiers = "w412dp-h1500dp-xxhdpi") fun seasonFall() = season(Season.FALL, LocalDate.of(2026, 10, 20))
+    @Test @Config(qualifiers = "w412dp-h1500dp-xxhdpi") fun seasonWinterNight() = season(Season.WINTER, LocalDate.of(2026, 12, 20), night = true)
+    @Test @Config(qualifiers = "w412dp-h1500dp-xxhdpi") fun seasonSpringNight() = season(Season.SPRING, LocalDate.of(2027, 4, 5), night = true)
+    @Test @Config(qualifiers = "w412dp-h1500dp-xxhdpi") fun seasonSummerNight() = season(Season.SUMMER, LocalDate.of(2027, 7, 15), night = true)
+    @Test @Config(qualifiers = "w412dp-h1500dp-xxhdpi") fun seasonFallNight() = season(Season.FALL, LocalDate.of(2026, 10, 20), night = true)
+
+    /** WX-10: the forecast discussion page (the real reply of 9 Nov). */
+    @Test fun discussion() {
+        withForecast()
+        val s = app.store
+        s.place = s.place.copy(office = "OKX")
+        val prod = io.github.wotworth.weather.Nws.parseProduct(Fixtures.read("real-nws-afd-okx.json"))!!
+        s.discussion = prod.text; s.discussionId = prod.id; s.discussionIssued = prod.issued.toString(); s.discussionOffice = "OKX"
+        s.discussionAt = System.currentTimeMillis(); s.discussionError = null
+        shoot("discussion", io.github.wotworth.weather.DiscussionActivity::class.java)
+    }
 
     @Test fun settings() { withForecast(); shoot("settings", SettingsActivity::class.java) }
 }

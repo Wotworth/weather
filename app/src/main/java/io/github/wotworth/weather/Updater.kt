@@ -51,6 +51,38 @@ class Updater(private val store: Store, private val apiKey: () -> String?, priva
         store.hoursAt = now
     }
 
+    /**
+     * WX-10: the forecast discussion for the town's weather.gov office. The town's coordinates come
+     * from AccuWeather's city search (one call, once per town, if not already kept); the office from
+     * weather.gov (once per town); then the newest discussion. True if a discussion is stored.
+     */
+    fun discussion(now: Long, today: LocalDate, nws: (String) -> String = NwsNet::get): Boolean = try {
+        var p = located(today)
+        if (!p.isUs) throw IllegalStateException("forecast discussions are for US towns only")
+        if (p.lat == null || p.lon == null) {
+            val match = Accu.parseCities(call(Accu.searchUrl(p.name), today)).firstOrNull { it.key == p.key }
+                ?: throw IllegalStateException("town's position not found")
+            p = p.copy(lat = match.lat, lon = match.lon)
+            store.place = p
+        }
+        if (p.office == null) {
+            val office = Nws.parseOffice(nws(Nws.pointsUrl(p.lat!!, p.lon!!))) ?: throw IllegalStateException("weather.gov: no office for this town")
+            p = p.copy(office = office)
+            store.place = p
+        }
+        val id = Nws.parseLatestId(nws(Nws.listUrl(p.office!!))) ?: throw IllegalStateException("weather.gov: no discussion found")
+        if (id != store.discussionId || store.discussionOffice != p.office) {
+            val prod = Nws.parseProduct(nws(Nws.productUrl(id))) ?: throw IllegalStateException("weather.gov: reply unreadable")
+            store.discussion = prod.text
+            store.discussionId = prod.id
+            store.discussionIssued = prod.issued.toString()
+            store.discussionOffice = p.office
+        }
+        store.discussionAt = now
+        store.discussionError = null
+        true
+    } catch (e: Exception) { store.discussionError = describe(e); false }
+
     /** City search from settings: the matches, or an error message. */
     fun search(text: String, today: LocalDate): Pair<List<Forecast.Place>, String?> = try {
         if (!Accu.validSearch(text)) emptyList<Forecast.Place>() to "use letters, spaces, . ' and - only"
@@ -74,6 +106,7 @@ class Updater(private val store: Store, private val apiKey: () -> String?, priva
                 in 500..599 -> "AccuWeather server error (${e.code})"
                 else -> "AccuWeather error (${e.code})"
             }
+            is NwsNet.HttpError -> "weather.gov error (${e.code})"
             is LimitReached -> "the app's limit of ${WeatherTokens.Data.DAILY_CALL_CAP} calls today was reached"
             is java.net.UnknownHostException, is java.net.ConnectException, is java.net.SocketTimeoutException -> "no connection"
             is java.io.IOException -> "network: ${e.javaClass.simpleName}"

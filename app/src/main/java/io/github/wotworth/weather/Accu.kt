@@ -43,7 +43,7 @@ object Accu {
 
     // ------------------------------------------------------------------ replies
 
-    /** City search matches: Key, LocalizedName, AdministrativeArea, Country, TimeZone. */
+    /** City search matches: Key, LocalizedName, AdministrativeArea, Country, TimeZone, GeoPosition. */
     fun parseCities(json: String): List<Forecast.Place> {
         val a = try { JSONArray(json) } catch (e: Exception) { return emptyList() }
         val out = ArrayList<Forecast.Place>()
@@ -58,6 +58,7 @@ object Accu {
                 name, admin?.optString("LocalizedName")?.trim().orEmpty(), admin?.optString("ID")?.trim().orEmpty(),
                 country?.optString("LocalizedName")?.trim().orEmpty(), country?.optString("ID")?.trim()?.uppercase(Locale.ROOT).orEmpty(),
                 key, o.optJSONObject("TimeZone")?.optString("Name")?.takeIf { it.isNotBlank() },
+                o.num("GeoPosition", "Latitude")?.takeIf { it in -90.0..90.0 }, o.num("GeoPosition", "Longitude")?.takeIf { it in -180.0..180.0 },
             )
             if (out.none { it.key == p.key }) out += p
         }

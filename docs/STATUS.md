@@ -16,7 +16,8 @@
 - 9 Nov, round 6: weather-only decorations, maple leaves, snow-coated scenes, brighter spring.
 - 9 Nov, round 7: blue skies on sunny cards, season horizons.
 - 9 Nov, round 8: sunnier partly cloudy; snow fitted to the corner scenes.
-- In the session: 57 unit and screenshot tests pass; signed release builds; permission, network and host checks pass and reject their test cases.
+- 9 Nov, round 9: forecast discussion from weather.gov (WX-10, WX-2.3 amended by Chris); night cards (WX-6.14).
+- In the session: 67 unit and screenshot tests pass; signed release builds; permission, network and host checks pass and reject their test cases.
 
 ## Next
 
@@ -27,7 +28,7 @@
 
 ## Open questions
 
-- Forecast discussion (Chris, 9 Nov): needs a second network host (api.weather.gov), against WX-2.3. Asked Chris: allow it (recommended) or not. Not started.
+- Forecast discussion text: shown as written (numbers not rounded). Asked Chris to confirm.
 
 - Q5: hourly forecasts for every day need AccuWeather's "elite" plan (Chris has "starter"). Default: no upgrade; later days show daytime and overnight.
 - More Fluent conditions (thunderstorm, fog, sleet, showers) would need AccuWeather's own icon numbers on the app's screens (WX-3.3). Not done; asked Chris.

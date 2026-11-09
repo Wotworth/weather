@@ -58,8 +58,8 @@ object Blocks {
      * A day's block: the tile's gradient, its icon, high and low on one line that shrinks to fit,
      * the phrase, and precipitation, humidity and cloud cover.
      */
-    fun hero(c: Context, d: Forecast.Day, f: Boolean, title: String? = null): View {
-        val card = Palette.background(c, d.kind, d.date)
+    fun hero(c: Context, d: Forecast.Day, f: Boolean, title: String? = null, night: Boolean = false): View {
+        val card = Palette.background(c, d.kind, d.date, night)
         val box = Ui.column(c).apply {
             background = card
             val pad = Ui.dp(c, Layout.HERO_PAD)
@@ -67,7 +67,7 @@ object Blocks {
         }
         title?.let { box.addView(Ui.text(c, it, Type.HERO_PHRASE, Font.Semilight)) }
         val top = Ui.row(c).apply { gravity = Gravity.CENTER_VERTICAL }
-        top.addView(Ui.icon(c, d.kind.icon, Layout.HERO_ICON).apply { contentDescription = d.kind.words })
+        top.addView(Ui.icon(c, if (night) d.kind.nightIcon else d.kind.icon, Layout.HERO_ICON).apply { contentDescription = if (night) d.kind.nightWords else d.kind.words })
         top.addView(Ui.gap(c, 1f).apply { layoutParams = LinearLayout.LayoutParams(Ui.dp(c, Layout.HERO_ICON_GAP), 1) })
         top.addView(temps(c, d, f), Ui.weight())
         box.addView(top)
@@ -197,6 +197,13 @@ object Blocks {
         addView(Ui.text(c, "AccuWeather · updated $at", Type.FOOTER, color = Colors.SECONDARY))
         s.error?.let { addView(Ui.text(c, "last update failed: $it", Type.FOOTER, color = Colors.SECONDARY).apply { setPadding(0, Ui.dp(c, 4f), 0, 0) }) }
     }
+
+    /**
+     * Night (Chris, 9 Nov): whether it is dark now where the town is, from AccuWeather's IsDaylight
+     * for the current or next hour; false if no hours are kept.
+     */
+    fun isNight(hours: List<Forecast.Hour>, now: Long): Boolean =
+        hours.firstOrNull { it.epochMs + 3_600_000L > now && it.epochMs - 3_600_000L <= now }?.let { !it.daylight } ?: false
 
     /** Hours that fall on [date] where the town is. */
     fun hoursOn(hours: List<Forecast.Hour>, date: LocalDate, zone: ZoneId) =

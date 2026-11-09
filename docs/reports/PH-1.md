@@ -82,3 +82,12 @@ Sunny cards are now a blue sky in every season, fading to the season's horizon c
 ## Round 8: sunnier partly cloudy, snow that rests on the scenes (9 Nov)
 
 Partly cloudy keeps the blue sky and full sunlight, with gold sparkles and a few soft clouds. On snowy days the snow now sits on the eggs, the maple's crown, the cedar's tiers and over the leaf pile. Bottom row of the seasons sheet above.
+
+## Round 9: forecast discussion and night cards (9 Nov)
+
+- Forecast discussion (WX-10): a button on the forecast page opens the National Weather Service's discussion for the town's office (New York NY for Hastings-on-Hudson), from weather.gov, the second and last network host (WX-2.3). CI's network and host checks allow exactly these two.
+- Night cards (WX-6.14): today's card after dark. Columns: winter, spring, summer, fall.
+
+| Forecast discussion | Night cards |
+|---|---|
+| ![](ph-1/discussion.png) | ![](ph-1/seasons-night.png) |
