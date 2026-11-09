@@ -59,6 +59,7 @@ for (tx,ty,rot,k,s) in [(14,40,-16,2,1.45),(46,30,4,0,1.7),(78,40,18,1,1.45),(32
     b+=g(egg_body(k), tx=tx, ty=ty, rot=rot, sx=s, sy=s, px=12, py=15)
 b+=blades(2,32,0,120,90,10,24,'#7CCF5B')
 b+=blades(3,20,0,120,90,6,16,'#A6E37A')
+SPRING_BODY=b
 vec('scene_spring',120,90,b,'WX-6.12 (Chris, 9 Nov): spring corner, decorated Easter eggs in young grass. Drawn for this app.')
 
 # ---------- winter pine scene 120 x 110
@@ -100,7 +101,16 @@ for i,(y,w) in enumerate([(14,6),(22,10),(31,14),(40,17),(50,21),(60,24),(71,27)
     b+=p(f'M{cx-w},{y+3}Q{cx-w*0.5},{y+1} {cx},{y+2}Q{cx+w*0.5},{y+1} {cx+w},{y+3}Q{cx+w*0.5},{y+0.2} {cx},{y+0.6}Q{cx-w*0.5},{y+0.2} {cx-w},{y+3}Z','#4FA36A')
 b+=p('M0,110L0,100C40,96 90,95 130,92L130,110Z','#5DB55F')
 b+=blades(4,34,0,130,110,5,13,'#8BD67A')
+SUMMER_BODY=b
 vec('scene_summer',130,110,b,'WX-6.12 (Chris, 9 Nov): summer corner, a green maple and cedar on grass. Drawn for this app.')
+
+# ---------- maple leaf, 24 x 24, stem at the bottom
+_r=[(12,0.8),(13.4,4.8),(15.6,3.6),(15.0,8.4),(18.2,5.8),(19.0,7.6),(22.6,6.8),(21.2,10.4),(23.2,11.6),(18.4,15.0),(19.2,16.8),(13.6,15.8),(12.7,16.4),(12.7,23.2)]
+MAPLE='M'+' L'.join(f'{x},{y}' for x,y in _r)+' L11.3,23.2 '+' L'.join(f'{24-x:.1f},{y}' for x,y in reversed(_r[1:-1]))+'Z'
+MAPLE_VEINS='M12,22.6L12,6M12,14L17.5,9.5M12,14L6.5,9.5M12,16L18,14.4M12,16L6,14.4'
+def maple(color, vein='#000000'):
+    return p(MAPLE,color)+f'    <path android:strokeColor="{vein}" android:strokeAlpha="0.25" android:strokeWidth="0.6" android:pathData="{MAPLE_VEINS}" />\n'
+vec('season_maple', 24, 24, p(MAPLE,'#FFFFFF'), 'WX-6.13: a maple leaf drawn for this app (Chris, 9 Nov: maple, not Fluent leaves).')
 
 # ---------- fall: leaf pile from Fluent leaves, 120 x 80
 L=[fluent('leaf_one'),fluent('leaf_two'),fluent('leaf_three')]
@@ -109,9 +119,27 @@ r=random.Random(7); b=''
 b+=p('M0,90L0,84C30,80 70,78 120,74L120,90Z','#5A2A0E','0.55')
 spots=[(40,66,2.0),(62,60,2.2),(84,58,2.2),(104,64,2.0),(30,76,1.8),(52,74,2.1),(74,72,2.2),(96,76,2.1),(114,78,1.8),(42,84,1.9),(64,86,2.0),(86,86,2.0),(108,88,1.8),(72,50,1.7),(94,46,1.6)]
 for i,(x,y,s) in enumerate(spots):
-    b+=g(p(L[i%3],cols[i%len(cols)]), tx=x-12, ty=y-12, rot=r.uniform(-80,80), sx=s, sy=s, px=12, py=12)
+    b+=g(maple(cols[i%len(cols)]), tx=x-12, ty=y-12, rot=r.uniform(-60,60), sx=s, sy=s, px=12, py=12)
 # two tumbling above
-b+=g(p(L[0],'#FFE2A8'), tx=40-12, ty=22-12, rot=35, sx=1.6, sy=1.6, px=12, py=12)
-b+=g(p(L[2],'#B71C1C'), tx=92-12, ty=14-12, rot=-25, sx=1.5, sy=1.5, px=12, py=12)
-vec('scene_fall',120,90,b,'WX-6.12 (Chris, 9 Nov): fall corner, a pile of leaves (Fluent UI System Icons leaf_one/two/three, Microsoft, MIT, @fluentui/svg-icons 1.1.345; see FLUENT-ICONS-LICENSE.txt).')
+b+=g(maple('#FFE2A8'), tx=40-12, ty=22-12, rot=35, sx=1.6, sy=1.6, px=12, py=12)
+b+=g(maple('#B71C1C'), tx=92-12, ty=14-12, rot=-25, sx=1.5, sy=1.5, px=12, py=12)
+FALL_BODY=b
+vec('scene_fall',120,90,b,'WX-6.13 (Chris, 9 Nov): fall corner, a pile of maple leaves. Drawn for this app.')
+
+# ---------- snow-coated versions (Chris, 9 Nov: snow in spring, summer or fall)
+def drift(w, h, top, color='#FFFFFF'):
+    return p(f'M0,{h}L0,{top+4}C{w*0.25},{top-1} {w*0.55},{top+2} {w*0.8},{top-2}C{w*0.9},{top-3} {w*0.96},{top-2} {w},{top-3}L{w},{h}Z', color)
+def caps(spots, color='#FFFFFF', alpha='0.95'):
+    return ''.join(p(f'M{x-rx},{y}Q{x},{y-ry*2.4} {x+rx},{y}Q{x+rx*0.5},{y+ry*0.9} {x},{y+ry*0.5}Q{x-rx*0.5},{y+ry*0.9} {x-rx},{y}Z', color, alpha) for (x,y,rx,ry) in spots)
+# spring: caps on the eggs, a drift over the ground
+sp=SPRING_BODY+caps([(31,46,9,3.2),(66,37,10,3.6),(95,46,9,3.2),(47,59,7,2.6),(76,60,7,2.6)])+drift(120,90,82,'#F4F8FF')+drift(120,90,86)
+vec('scene_spring_snow',120,90,sp,'WX-6.13: the spring corner with a light coat of snow. Drawn for this app.')
+# summer: snow on the maple's crown and the cedar's tiers, a drift
+su=SUMMER_BODY+caps([(48,8,9,3),(40,22,9,3),(56,22,9,3),(32,32,10,3),(64,32,10,3),(18,48,8,2.6),(80,44,8,2.6)])
+su+=caps([(100,6,4,2),(100,14,7,2),(100,23,11,2.2),(100,32,14,2.4),(100,42,17,2.4),(100,52,20,2.6),(100,63,23,2.6),(100,75,25,2.6),(100,88,27,2.6)])
+su+=drift(130,110,100,'#F4F8FF')+drift(130,110,104)
+vec('scene_summer_snow',130,110,su,'WX-6.13: the summer corner with a light coat of snow. Drawn for this app.')
+# fall: snow dusting the pile, a drift
+fa=FALL_BODY+caps([(48,58,10,3),(68,52,12,3.4),(90,48,12,3.4),(108,54,10,3),(36,70,8,2.6),(60,66,10,3),(84,66,10,3),(104,68,9,2.6)])+drift(120,90,84,'#F4F8FF')+drift(120,90,88)
+vec('scene_fall_snow',120,90,fa,'WX-6.13: the fall corner with a light coat of snow. Drawn for this app.')
 print('ok')

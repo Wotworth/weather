@@ -70,3 +70,7 @@ CI: 57 unit and screenshot tests, including text contrast on all 20 cards and no
 ## Round 5: corner scenes (9 Nov)
 
 Chris: more festive. Each season's cards get a bottom-right scene (WX-6.13): a snow-covered pine (winter, and the festive snow card), decorated Easter eggs in young grass (spring), a maple and a cedar (summer), a pile of leaves (fall). Spring's scattered eggs are decorated. The seasons sheet above shows them.
+
+## Round 6: weather decorations, maple leaves, snowy scenes (9 Nov)
+
+Decorations across each card now show only the weather (sparkles, clouds, drops, snowflakes); the season shows in the colours and the corner scene. Fall's pile is maple leaves. On snowy days the season's scene has a light coat of snow (bottom row of the seasons sheet). Spring is brighter.

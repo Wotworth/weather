@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Fluent UI System Icons (Microsoft, MIT), ic_fluent_cloud_24_filled, from @fluentui/svg-icons 1.1.345. See FLUENT-ICONS-LICENSE.txt.
+     White; tinted in code. WX-6.12: background decoration for cloudy weather (not a condition icon). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24">
+    <path android:fillColor="#FFFFFFFF" android:pathData="M6.08 9.02a6 6 0 0 1 11.84 0A4.5 4.5 0 0 1 17.5 18h-11a4.5 4.5 0 0 1-.42-8.98" />
+</vector>

@@ -9,3 +9,4 @@ local.properties
 *.keystore
 *.p12
 *.b64
+fluent-icons

@@ -43,27 +43,23 @@ data class CardLook(
 
         fun of(kind: Forecast.Kind, season: Season): CardLook {
             val S = WeatherTokens.Seasons
+            val st = S.STYLE.getValue(season)
             if (kind == Forecast.Kind.SNOW) {
+                // Snow: the festive card, snowflakes, and the season's scene under snow.
                 val F = WeatherTokens.Festive
                 return CardLook(Palette.FESTIVE_SNOW, F.GLOW, F.GLOW_ALPHA, S.CORNER_BR,
-                    F.SNOWFLAKES.map { Motif(R.drawable.festive_snowflake, 0xFFFFFFFF.toInt(), it[4], it[0], it[1], it[2], it[3], avoidText = false) }, dots = true,
-                    scene = R.drawable.scene_winter, sceneDp = S.SNOW_SCENE_DP)
+                    F.SNOWFLAKES.map { Motif(R.drawable.festive_snowflake, 0xFFFFFFFF.toInt(), it[4], it[0], it[1], it[2], it[3], avoidText = false) },
+                    dots = true, scene = st.snowScene, sceneDp = st.sceneDp)
             }
-            val st = S.STYLE.getValue(season)
             val k = S.TONE.getValue(kind)
             val stops = st.stops.map { mix(mix(it, k.toward, k.share), 0xFF000000.toInt(), k.darken) }.toIntArray()
-            val n = minOf(Math.round(st.count * k.motifFactor), S.PLACES.size)
-            val motifs = ArrayList<Motif>()
-            for (i in 0 until n) {
+            val w = S.WEATHER.getValue(kind)
+            val motifs = (0 until minOf(w.count, S.PLACES.size)).map { i ->
                 val p = S.PLACES[i]
-                motifs += Motif(st.icons[i % st.icons.size], st.tints[i % st.tints.size], st.alpha,
-                    p[0], p[1], minOf(p[2] * st.sizeScale, st.maxSizeDp), p[3] * st.turnScale)
+                Motif(w.icons[i % w.icons.size], w.tints[i % w.tints.size], w.alpha,
+                    p[0], p[1], minOf(p[2] * w.sizeScale, w.maxSizeDp), p[3] * w.turnScale)
             }
-            if (kind == Forecast.Kind.RAIN) for (i in 0 until S.DROPS) {
-                val p = S.PLACES[S.PLACES.size - 1 - i]
-                motifs += Motif(R.drawable.season_drop, S.DROP_TINT, S.DROP_ALPHA, (p[0] + 0.05f).coerceAtMost(0.98f), (p[1] + 0.08f).coerceAtMost(0.97f), S.DROP_DP, 0f)
-            }
-            return CardLook(stops, st.glow, st.glowAlpha * k.glowFactor, st.corner, motifs, st.dots, st.scene, st.sceneDp)
+            return CardLook(stops, st.glow, st.glowAlpha * k.glowFactor, st.corner, motifs, dots = false, scene = st.scene, sceneDp = st.sceneDp)
         }
     }
 }
