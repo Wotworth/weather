@@ -61,8 +61,8 @@ unchanged in sections 1–5, 7 and 8) plus Chris's requirements for the app's ow
 | WX-2.2 | MUST: the key is sent only to AccuWeather's API host over HTTPS. Read AccuWeather's current developer documentation to find out whether the key goes in the `apikey` query parameter or in an `Authorization: Bearer` header. Their developer portal changed in 2025; don't rely on memory. |
 | WX-2.3 | MUST: the app's only network host is AccuWeather's API host. All requests go through one class that allows only that host, HTTPS and the listed paths and parameters, and doesn't follow redirects (as the launcher's [`WeatherNet.kt`](https://github.com/Wotworth/wp-launcher/blob/a444997452257f0bfc9b9e339f77a2243a3ac81e/app/src/main/java/io/github/wotworth/wplauncher/WeatherNet.kt) does). No analytics, ads, crash-reporting SDKs or other libraries that use the network. A CI check fails the build if any other host appears in the code or the merged manifest. |
 | WX-2.4 | MUST: no location permission and no live location. The town is chosen by typing its name, using AccuWeather's city search. Only the typed text and the chosen town's location key are sent (as the launcher does now; see its privacy note at the top of [`Weather.kt`](https://github.com/Wotworth/wp-launcher/blob/a444997452257f0bfc9b9e339f77a2243a3ac81e/app/src/main/java/io/github/wotworth/wplauncher/Weather.kt#L11-L24)). The default town is Hastings-on-Hudson, NY. Keep up to 5 recent towns. |
-| WX-2.5 | MUST: the daily forecast is fetched with the 5-day daily endpoint, with `details=true` and `metric=true`, at midnight, 6 AM, noon and 6 PM local time. Those are the launcher's slots: see [`lastSlot`/`nextSlot`/`due`](https://github.com/Wotworth/wp-launcher/blob/a444997452257f0bfc9b9e339f77a2243a3ac81e/app/src/main/java/io/github/wotworth/wplauncher/Weather.kt#L293-L314). It is also fetched when the town changes, and when Chris asks for a refresh. Use WorkManager with a network constraint. |
-| WX-2.6 | SHOULD: hourly data (the hourly endpoint with `details=true`, and current conditions if the screens need them) is fetched when the app is opened, unless the stored copy is under 30 minutes old. It is never fetched in the background unless Chris's screen requirements ask for it. |
+| WX-2.5 | MUST (Chris, 9 Nov: "Shouldn't it be at least once every 30 minutes given I get 500 calls per day?"): the 5-day daily forecast (`details=true`, `metric=true`) and the next 12 hours are fetched together every 30 minutes in the background (2 calls; 96 a day), with WorkManager and a network constraint; also when the town changes, on refresh, and on opening if the last try is over 20 minutes old. Android may delay background work while the phone sleeps. Replaces the launcher's four slots a day. |
+| WX-2.6 | MUST: hourly data comes from the 12-hour endpoint with `details=true`, fetched with each update (WX-2.5). Chris's plan ("core-weather/starter", checked 9 Nov) has no 24-, 72- or 120-hour forecast; AccuWeather names its "elite" plan for those. |
 | WX-2.7 | MUST: stay well under the plan's call limit. Count calls per day on the phone and show "calls today" in settings. Cache the town's location key; never look it up again for a town already chosen. Before building, ask Chris which plan he bought and its limit (open question Q1). |
 | WX-2.8 | MUST: on any failure (no network, bad key, over the limit, unreadable reply), keep the last good forecast and show it, and record the error for the settings page. Never show an empty tile because one update failed. |
 | WX-2.9 | MUST: CI never calls AccuWeather (it costs money and would need the key). Tests use recorded JSON replies committed as test fixtures, with no key in them. |
@@ -122,6 +122,9 @@ digit. Focus should be simplicity."
 | WX-6.3 | MUST: the live tile's five icons (`wx_*`) for conditions, on every screen; at night (AccuWeather's IsDaylight), the Fluent moon for clear hours and the Fluent partly cloudy night icon (Chris, 9 Nov). Fluent UI System Icons, Filled, white. |
 | WX-6.4 | SHOULD: the forecast page shows today (icon, high, low, phrase, chance of rain, humidity, cloud cover), the next 12 hours, and 5 days. |
 | WX-6.5 | SHOULD: settings hold the key, town, units, calls today, the last error, a manual update and the crash log. |
+| WX-6.6 | MUST (Chris, 9 Nov): town, day and month names are capitalised ("Hastings-on-Hudson", "Today", "Mon", "November 10"). The page shows the town's name only, with no state or "…"; the town and the top temperature shrink to fit rather than being cut off at the phone's text size. |
+| WX-6.7 | MUST (Chris, 9 Nov): tapping today's block or a day opens that day: its block, its daytime and overnight halves (phrase, precipitation, cloud cover, humidity), and whichever of the next 12 hours fall on it. Hourly forecasts for later days need AccuWeather's "elite" plan (WX-2.6); open question Q5. |
+| WX-6.8 | MUST (Chris, 9 Nov): cloud cover is shown wherever precipitation is (top block, each hour, each day, each half day), and every percentage is labelled ("precip 25%", "cloud 30%", "humidity 60%"). WX-6.2's rounding applies. |
 
 ## 7. Launcher side (the wp-launcher session does this, not you)
 
@@ -143,7 +146,8 @@ your information, the launcher will:
 | Q1 | Which AccuWeather plan, and its daily or monthly call limit? | Ask; no default |
 | Q2 | May the app use the phone's location to pick the town? | No: town search only, as in the launcher |
 | Q3 | Should the tile also show AccuWeather's severe-weather alerts? | No: the tile stays exactly as it is |
-| Q4 | Hourly data in the background (for a future notification) or only when the app is opened? | Only when opened |
+| Q4 | Hourly data in the background (for a future notification) or only when the app is opened? | Answered 9 Nov: every 30 minutes with the daily forecast (WX-2.5) |
+| Q5 | Hourly forecasts for every day need AccuWeather's "elite" plan. Upgrade, or keep daytime and overnight for later days? | Keep daytime and overnight (no upgrade) |
 
 ## 9. Phases
 

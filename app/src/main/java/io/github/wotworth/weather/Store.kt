@@ -93,7 +93,16 @@ class Store(private val p: SharedPreferences) {
         fun encodeDays(days: List<Forecast.Day>): String = JSONArray(days.map {
             JSONObject().put("date", it.date.toString()).put("kind", it.kind.name).put("high", d(it.highC)).put("low", d(it.lowC))
                 .put("chance", i(it.chance)).put("humidity", i(it.humidity)).put("cloud", i(it.cloud)).put("phrase", it.phrase.orEmpty())
+                .put("dayPart", encodePart(it.day)).put("nightPart", encodePart(it.night))
         }).toString()
+
+        private fun encodePart(x: Forecast.Part?): Any = x?.let {
+            JSONObject().put("kind", it.kind.name).put("phrase", it.phrase.orEmpty()).put("chance", i(it.chance)).put("cloud", i(it.cloud)).put("humidity", i(it.humidity))
+        } ?: JSONObject.NULL
+
+        private fun decodePart(o: JSONObject?): Forecast.Part? = try {
+            o?.let { Forecast.Part(Forecast.Kind.valueOf(it.getString("kind")), it.optString("phrase").ifBlank { null }, it.optString("chance").toIntOrNull(), it.optString("cloud").toIntOrNull(), it.optString("humidity").toIntOrNull()) }
+        } catch (e: Exception) { null }
 
         fun decodeDays(s: String?): List<Forecast.Day> = try {
             val a = JSONArray(s ?: return emptyList())
@@ -102,7 +111,8 @@ class Store(private val p: SharedPreferences) {
                 try {
                     Forecast.Day(LocalDate.parse(o.getString("date")), Forecast.Kind.valueOf(o.getString("kind")),
                         o.optString("high").toDoubleOrNull(), o.optString("low").toDoubleOrNull(), o.optString("chance").toIntOrNull(),
-                        o.optString("humidity").toIntOrNull(), o.optString("cloud").toIntOrNull(), o.optString("phrase").ifBlank { null })
+                        o.optString("humidity").toIntOrNull(), o.optString("cloud").toIntOrNull(), o.optString("phrase").ifBlank { null },
+                        decodePart(o.optJSONObject("dayPart")), decodePart(o.optJSONObject("nightPart")))
                 } catch (e: Exception) { null }
             }
         } catch (e: Exception) { emptyList() }

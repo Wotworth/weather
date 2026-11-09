@@ -41,10 +41,12 @@ object WeatherTokens {
         const val SECTION = 20f
         const val HOUR_TIME = 13f
         const val HOUR_TEMP = 22f
-        const val HOUR_RAIN = 13f
+        const val HOUR_RAIN = 12f
         const val DAY_NAME = 22f
         const val DAY_TEMP = 24f
-        const val DAY_RAIN = 15f
+        const val DAY_RAIN = 14f
+        /** Under the day name: "Nov 10". */
+        const val DAY_DATE = 13f
         const val FOOTER = 13f
         const val PAGE_HEADER = 42f
         const val BODY = 15f
@@ -64,7 +66,12 @@ object WeatherTokens {
         const val STAT_GAP = 14f
         const val SECTION_TOP = 28f
         const val SECTION_BOTTOM = 8f
+        /** Narrowest hour in the strip, and the space after each. */
         const val HOUR_WIDTH = 60f
+        const val HOUR_GAP = 14f
+        /** The day page's hour rows. */
+        const val HOUR_ROW_HEIGHT = 56f
+        const val HOUR_ROW_TIME = 64f
         const val HOUR_ICON = 30f
         const val DAY_ROW_HEIGHT = 60f
         const val DAY_NAME_WIDTH = 92f
@@ -89,14 +96,17 @@ object WeatherTokens {
         const val HOURS = 12
         /** WX-2.4: recent towns kept. */
         const val RECENT_TOWNS = 5
-        /** WX-2.5: daily forecast slots every 6 hours from midnight (the launcher's). */
-        const val EVERY_HOURS = 6
-        /** WX-2.6: hourly data is fetched on opening when the stored copy is older than this. */
-        const val HOURLY_FRESH_MS = 30 * 60_000L
+        /**
+         * WX-2.5 (Chris, 9 Nov): an update (5 days + 12 hours, 2 calls) every this many minutes:
+         * 96 calls a day. Android may delay it while the phone sleeps (Doze).
+         */
+        const val UPDATE_EVERY_MIN = 30L
+        /** No update (background or on opening) within this many minutes of the last try; refresh ignores it. */
+        const val UPDATE_SKIP_MIN = 20L
         /**
          * WX-2.7: the most calls the app makes in a day (the phone's date), whatever happens.
          * Q1 (Chris, 9 Nov): the plan allows 500 calls a day; 50 are left spare. Normal use is
-         * about 4 + one per opening.
+         * 96 (every 30 minutes) plus refreshes.
          */
         const val DAILY_CALL_CAP = 450
         const val TIMEOUT_MS = 15_000

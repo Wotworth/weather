@@ -4,15 +4,16 @@ import android.app.Application
 import android.content.Context
 import android.net.Uri
 import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import java.time.Duration
+import androidx.work.workDataOf
 import java.time.LocalDate
-import java.time.ZonedDateTime
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
@@ -42,44 +43,50 @@ open class App : Application() {
         /** Tests only: a plain in-memory key store (Robolectric has no Android Keystore). */
         @Volatile var testSecret: Secret? = null
 
-        const val WORK = "daily-forecast"
+        /** v0.1.4's four-a-day work; cancelled so it can't run beside the new schedule. */
+        private const val OLD_WORK = "daily-forecast"
+        const val WORK = "update-every-30-min"
+        const val WORK_NOW = "update-now"
+
+        private fun net() = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
 
         /**
-         * WX-2.5: the next daily update, at the next slot (midnight, 6 AM, noon, 6 PM), or [now]
-         * (town changed, refresh, or a slot was missed). WorkManager waits for a network.
+         * WX-2.5 (Chris, 9 Nov): the forecast and the next 12 hours every
+         * [WeatherTokens.Data.UPDATE_EVERY_MIN] minutes, in the background, when there is a network.
+         * [now]: also right away (refresh, town changed). Otherwise right away only if the last try
+         * is older than the period (the app was opened after a missed update).
          */
         fun schedule(context: Context, now: Boolean) {
             val app = context.applicationContext as App
-            val zNow = ZonedDateTime.now()
-            // Due only if nothing was tried since the last slot: a failed try waits for the next
-            // slot (or a refresh), so a bad key can't spend calls each time the app starts.
-            val runNow = now || Updater.due(app.store.attemptAt, zNow)
-            val delay = if (runNow) 0L else Duration.between(zNow, Updater.nextSlot(zNow)).toMillis().coerceAtLeast(0L)
-            val req = OneTimeWorkRequestBuilder<DailyWorker>()
-                .setConstraints(Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build())
-                .setInitialDelay(delay, TimeUnit.MILLISECONDS)
-                .build()
-            WorkManager.getInstance(context).enqueueUniqueWork(WORK, if (runNow) ExistingWorkPolicy.REPLACE else ExistingWorkPolicy.KEEP, req)
+            val wm = WorkManager.getInstance(context)
+            wm.cancelUniqueWork(OLD_WORK)
+            val every = WeatherTokens.Data.UPDATE_EVERY_MIN
+            wm.enqueueUniquePeriodicWork(WORK, ExistingPeriodicWorkPolicy.KEEP,
+                PeriodicWorkRequestBuilder<UpdateWorker>(every, TimeUnit.MINUTES).setConstraints(net()).build())
+            if (now || Updater.due(app.store.attemptAt, System.currentTimeMillis())) {
+                val req = OneTimeWorkRequestBuilder<UpdateWorker>().setConstraints(net())
+                    .setInputData(workDataOf(UpdateWorker.FORCE to now)).build()
+                wm.enqueueUniqueWork(WORK_NOW, ExistingWorkPolicy.REPLACE, req)
+            }
         }
     }
 }
 
-/** WX-2.5: the daily forecast in the background, then the next slot. */
-class DailyWorker(context: Context, params: WorkerParameters) : Worker(context, params) {
+/**
+ * WX-2.5: one update (the 5-day forecast, then the next 12 hours; 2 calls). Skipped if another
+ * update was tried in the last [WeatherTokens.Data.UPDATE_SKIP_MIN] minutes, unless forced, so an
+ * opening or a failed key can't spend extra calls.
+ */
+class UpdateWorker(context: Context, params: WorkerParameters) : Worker(context, params) {
     override fun doWork(): Result {
         val app = applicationContext as App
-        if (app.secret.get() != null) {
-            app.updater().daily(System.currentTimeMillis(), LocalDate.now())
+        val nowMs = System.currentTimeMillis()
+        if (app.secret.get() != null && (inputData.getBoolean(FORCE, false) || Updater.due(app.store.attemptAt, nowMs))) {
+            app.updater().update(nowMs, LocalDate.now())
             app.notifyTile()
         }
-        // The next slot (never "now" again: a failure waits for the next slot or a refresh, so a
-        // bad key can't spend calls).
-        val zNow = ZonedDateTime.now()
-        val req = OneTimeWorkRequestBuilder<DailyWorker>()
-            .setConstraints(Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build())
-            .setInitialDelay(Duration.between(zNow, Updater.nextSlot(zNow)).toMillis().coerceAtLeast(60_000L), TimeUnit.MILLISECONDS)
-            .build()
-        WorkManager.getInstance(applicationContext).enqueueUniqueWork(App.WORK, ExistingWorkPolicy.APPEND_OR_REPLACE, req)
         return Result.success()
     }
+
+    companion object { const val FORCE = "force" }
 }

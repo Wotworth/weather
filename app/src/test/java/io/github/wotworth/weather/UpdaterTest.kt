@@ -11,8 +11,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.time.LocalDate
-import java.time.ZoneId
-import java.time.ZonedDateTime
 
 /** WX-2.5, WX-2.7, WX-2.8: updates, call counting, and failures. */
 @RunWith(AndroidJUnit4::class)
@@ -103,18 +101,32 @@ class UpdaterTest {
         assertEquals(1, calls.size)
     }
 
-    @Test fun slots() {
-        val z = ZoneId.of("America/New_York")
-        fun t(h: Int, m: Int) = ZonedDateTime.of(2026, 11, 8, h, m, 0, 0, z)
-        assertEquals(t(0, 0), Updater.lastSlot(t(5, 59)))
-        assertEquals(t(6, 0), Updater.lastSlot(t(6, 0)))
-        assertEquals(t(18, 0), Updater.lastSlot(t(23, 59)))
-        assertEquals(t(12, 0), Updater.nextSlot(t(6, 0)))
-        assertEquals(ZonedDateTime.of(2026, 11, 9, 0, 0, 0, 0, z), Updater.nextSlot(t(18, 1)))
-        assertTrue(Updater.due(t(11, 59).toInstant().toEpochMilli(), t(12, 1)))
-        assertFalse(Updater.due(t(12, 0).toInstant().toEpochMilli(), t(17, 59)))
-        assertTrue(Updater.hourlyDue(0L, WeatherTokens.Data.HOURLY_FRESH_MS))
-        assertFalse(Updater.hourlyDue(1L, WeatherTokens.Data.HOURLY_FRESH_MS))
+    /** WX-2.5 (Chris, 9 Nov): every 30 minutes; nothing within 20 minutes of the last try. */
+    @Test fun dueEvery30Minutes() {
+        val min = 60_000L
+        assertTrue(Updater.due(0L, 1_000_000_000L))
+        assertFalse(Updater.due(100 * min, 119 * min))
+        assertTrue(Updater.due(100 * min, 120 * min))
+        assertEquals(30L, WeatherTokens.Data.UPDATE_EVERY_MIN)
+        // 2 calls every 30 minutes stays well under the app's cap and the plan's 500.
+        assertTrue(2 * 24 * 60 / WeatherTokens.Data.UPDATE_EVERY_MIN < WeatherTokens.Data.DAILY_CALL_CAP)
+    }
+
+    @Test fun oneUpdateIsTheDaysAndTheHours() {
+        updater().update(1000L, today)
+        assertEquals(3, calls.size) // the default town's one-off lookup, 5 days, 12 hours
+        assertEquals(5, store.days.size)
+        assertEquals(12, store.hours.size)
+        assertEquals(1000L, store.attemptAt)
+        updater().update(2000L, today)
+        assertEquals(5, calls.size)
+    }
+
+    @Test fun dayAndNightPartsStored() {
+        store.days = Accu.parseDaily(Fixtures.read("real-daily-5day.json"))!!
+        val d = store.days[0]
+        assertEquals(Forecast.Part(Forecast.Kind.PARTLY_CLOUDY, "Breezy at times with decreasing clouds", 0, 34, 57), d.day)
+        assertEquals(Forecast.Part(Forecast.Kind.SUNNY, "Partly cloudy and breezy", 2, 25, 60), d.night)
     }
 
     @Test fun storedFormsRoundTrip() {

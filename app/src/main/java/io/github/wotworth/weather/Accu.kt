@@ -112,10 +112,24 @@ object Accu {
                 chance = chance,
                 humidity = avg(day.int("RelativeHumidity", "Average"), night.int("RelativeHumidity", "Average")),
                 cloud = avg(day.int("CloudCover"), night.int("CloudCover")),
-                phrase = day.optString("LongPhrase").ifBlank { day.optString("IconPhrase") }.trim().take(120).ifBlank { null },
+                phrase = phrase(day),
+                day = part(day), night = part(night),
             )
         }.takeIf { it.isNotEmpty() }
     } catch (e: Exception) { null }
+
+    private fun phrase(o: JSONObject) = o.optString("LongPhrase").ifBlank { o.optString("IconPhrase") }.trim().take(120).ifBlank { null }
+
+    /** WX-6.7: one half of a day; null if the reply has no such half. */
+    private fun part(o: JSONObject): Forecast.Part? {
+        if (o.length() == 0) return null
+        val chance = o.int("PrecipitationProbability")
+        val cloud = o.int("CloudCover")
+        return Forecast.Part(
+            Forecast.classifyHour(chance, o.optBoolean("HasPrecipitation"), o.optString("PrecipitationType").takeIf { o.has("PrecipitationType") }, cloud),
+            phrase(o), chance, cloud, o.int("RelativeHumidity", "Average"),
+        )
+    }
 
     /** WX-2.6: hours from the 12-hour reply. */
     fun parseHourly(json: String): List<Forecast.Hour>? = try {

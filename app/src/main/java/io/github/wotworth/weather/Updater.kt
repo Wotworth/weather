@@ -1,7 +1,6 @@
 package io.github.wotworth.weather
 
 import java.time.LocalDate
-import java.time.ZonedDateTime
 
 /**
  * One update, as pure as it can be: every request goes through [get] (AccuNet in the app, recorded
@@ -36,6 +35,12 @@ class Updater(private val store: Store, private val apiKey: () -> String?, priva
         val days = Accu.parseDaily(call(Accu.dailyUrl(p.key!!), today)) ?: throw IllegalStateException("reply unreadable")
         store.days = days
         store.fetchedAt = now
+    }
+
+    /** WX-2.5 (Chris, 9 Nov): one background update, the 5 days then the next 12 hours. */
+    fun update(now: Long, today: LocalDate) {
+        daily(now, today)
+        hourly(now, today)
     }
 
     /** WX-2.6: the next 12 hours. True if they were stored. */
@@ -76,19 +81,10 @@ class Updater(private val store: Store, private val apiKey: () -> String?, priva
             else -> e.message ?: e.javaClass.simpleName
         }
 
-        /** WX-2.5: the latest midnight, 6 AM, noon or 6 PM at or before [now] (the launcher's lastSlot). */
-        fun lastSlot(now: ZonedDateTime): ZonedDateTime =
-            now.toLocalDate().atTime(now.hour / WeatherTokens.Data.EVERY_HOURS * WeatherTokens.Data.EVERY_HOURS, 0).atZone(now.zone)
-
-        /** The next slot after [now] (the launcher's nextSlot). */
-        fun nextSlot(now: ZonedDateTime): ZonedDateTime {
-            val h = now.hour / WeatherTokens.Data.EVERY_HOURS * WeatherTokens.Data.EVERY_HOURS + WeatherTokens.Data.EVERY_HOURS
-            return if (h >= 24) now.toLocalDate().plusDays(1).atStartOfDay(now.zone) else now.toLocalDate().atTime(h, 0).atZone(now.zone)
-        }
-
-        /** A new daily forecast is due if the last one is older than the latest slot. */
-        fun due(fetchedAtMillis: Long, now: ZonedDateTime) = fetchedAtMillis < lastSlot(now).toInstant().toEpochMilli()
-
-        fun hourlyDue(hoursAt: Long, now: Long) = now - hoursAt >= WeatherTokens.Data.HOURLY_FRESH_MS
+        /**
+         * An update is due if none was tried in the last [WeatherTokens.Data.UPDATE_SKIP_MIN]
+         * minutes (a failure waits too, so a bad key can't spend calls).
+         */
+        fun due(attemptAt: Long, now: Long) = now - attemptAt >= WeatherTokens.Data.UPDATE_SKIP_MIN * 60_000L
     }
 }

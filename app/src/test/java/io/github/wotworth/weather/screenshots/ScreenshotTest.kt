@@ -1,19 +1,27 @@
 package io.github.wotworth.weather.screenshots
 
+import android.app.Activity
 import android.content.Intent
+import android.os.Looper
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.takahirom.roborazzi.captureRoboImage
 import io.github.wotworth.weather.Accu
 import io.github.wotworth.weather.App
+import io.github.wotworth.weather.Blocks
+import io.github.wotworth.weather.DayActivity
+import io.github.wotworth.weather.Forecast
 import io.github.wotworth.weather.Fixtures
 import io.github.wotworth.weather.MainActivity
 import io.github.wotworth.weather.MemorySecret
 import io.github.wotworth.weather.SettingsActivity
+import io.github.wotworth.weather.Ui
+import io.github.wotworth.weather.WeatherTokens
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
+import org.robolectric.Shadows
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 import java.time.Instant
@@ -83,6 +91,44 @@ class ScreenshotTest {
         app.secret = MemorySecret(null)
         app.store.days = emptyList(); app.store.hours = emptyList(); app.store.fetchedAt = 0
         shoot("no-key", MainActivity::class.java)
+    }
+
+    /** Chris, 9 Nov: the town and the top temperature were cut at the phone's text size. Chris's phone is 412 dp wide; text 30% larger. */
+    @Test @Config(qualifiers = "w412dp-h915dp-xxhdpi", fontScale = 1.3f)
+    fun forecastLargeText() { withForecast(); shoot("forecast-large-text", MainActivity::class.java) }
+
+    /** WX-6.7: tapping a day. Today has its remaining hours; later days their day and night. */
+    @Test fun dayToday() { withRealDays(); shootDay("day-today", 0) }
+
+    @Test fun dayLater() { withRealDays(); shootDay("day-later", 2) }
+
+    private fun withRealDays() {
+        withForecast()
+        val today = LocalDate.now(ZoneId.of("America/New_York"))
+        app.store.days = Accu.parseDaily(Fixtures.read("real-daily-5day.json"))!!.mapIndexed { i, d -> d.copy(date = today.plusDays(i.toLong())) }
+    }
+
+    private fun shootDay(name: String, offset: Long) {
+        val date = LocalDate.now(ZoneId.of("America/New_York")).plusDays(offset)
+        val i = Intent(app, DayActivity::class.java).putExtra(DayActivity.DATE, date.toString())
+        val a = Robolectric.buildActivity(DayActivity::class.java, i).setup().get()
+        a.window.decorView.captureRoboImage("build/outputs/roborazzi/$name.png")
+    }
+
+    /** Chris, 9 Nov: each condition's background (the tile's gradients), in °F. */
+    @Test @Config(qualifiers = "w412dp-h1500dp-xxhdpi")
+    fun backgrounds() {
+        val a = Robolectric.buildActivity(Activity::class.java).setup().get()
+        val col = Ui.column(a).apply { setBackgroundColor(WeatherTokens.Colors.BACKGROUND); setPadding(Ui.dp(a, 16f), Ui.dp(a, 16f), Ui.dp(a, 16f), 0) }
+        val names = mapOf(Forecast.Kind.SUNNY to "Sunny", Forecast.Kind.PARTLY_CLOUDY to "Partly cloudy", Forecast.Kind.CLOUDY to "Cloudy", Forecast.Kind.RAIN to "Rain", Forecast.Kind.SNOW to "Snow")
+        names.forEach { (k, n) ->
+            val d = Forecast.Day(LocalDate.now(), k, 12.0, 4.0, chance = 40, humidity = 60, cloud = 50, phrase = n)
+            col.addView(Blocks.hero(a, d, true), Ui.fill())
+            col.addView(Ui.gap(a, 12f))
+        }
+        a.setContentView(col)
+        Shadows.shadowOf(Looper.getMainLooper()).idle()
+        a.window.decorView.captureRoboImage("build/outputs/roborazzi/backgrounds.png")
     }
 
     @Test fun settings() { withForecast(); shoot("settings", SettingsActivity::class.java) }

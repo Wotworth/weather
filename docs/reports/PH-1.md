@@ -26,3 +26,21 @@ Everything in docs/REQUIREMENTS.md v1.0: the launcher's handoff (WX-1 to WX-5) a
 7. Switch °F/°C: the page changes.
 8. Turn on airplane mode and tap refresh: the forecast stays, and settings shows "no connection".
 9. Next morning, check the forecast updated by itself (settings → last forecast after 6 AM).
+
+## Round 2: Chris's feedback (9 Nov)
+
+| Chris asked | Done | Req |
+|---|---|---|
+| Current temperature cut off | High and low are one line that shrinks to fit; checked at 412 dp with text 30% larger than standard | WX-6.6 |
+| Capitalise towns, days, months | "Hastings-on-Hudson", "Today", "Mon", "Nov 10", "November 10" | WX-6.6 |
+| Remove ", …" by the town | The town's name only, shrinking to fit | WX-6.6 |
+| Cloud cover everywhere, clearly labelled | "precip" and "cloud" on each hour, day and half day; PRECIPITATION, HUMIDITY, CLOUD COVER on the top block | WX-6.8 |
+| Tap a day for its hours | Tapping a day opens it. Your plan ("starter") has only the next 12 hours: AccuWeather refused 24-, 72- and 120-hour forecasts. So each day shows its daytime and overnight halves, plus whichever of the next 12 hours fall on it | WX-6.7, Q5 |
+| Update at least every 30 minutes | Every 30 minutes, 5 days + 12 hours together: 96 calls a day | WX-2.5 |
+| Backgrounds for each condition | Below (the same gradients as the tile) | WX-6.1 |
+
+CI: 44 unit and screenshot tests, permission, network and host checks.
+
+| Larger text, 412 dp | Today, tapped | A later day, tapped | Each condition's background |
+|---|---|---|---|
+| ![](ph-1/forecast-large-text.png) | ![](ph-1/day-today.png) | ![](ph-1/day-later.png) | ![](ph-1/backgrounds.png) |

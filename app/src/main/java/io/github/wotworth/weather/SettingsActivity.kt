@@ -108,7 +108,7 @@ class SettingsActivity : Activity() {
         fun at(ms: Long) = fmt.format(Instant.ofEpochMilli(ms).atZone(ZoneId.systemDefault()))
         body("Calls today: ${s.callsOn(LocalDate.now())} (the app stops at ${WeatherTokens.Data.DAILY_CALL_CAP})")
         body(if (s.fetchedAt > 0) "Last forecast: ${at(s.fetchedAt)}" else "No forecast yet")
-        body("The forecast updates at midnight, 6 AM, noon and 6 PM, and the next 12 hours when you open the app.", Colors.SECONDARY)
+        body("The forecast and the next 12 hours update every ${WeatherTokens.Data.UPDATE_EVERY_MIN} minutes (2 calls), and when you open the app if the last update is older.", Colors.SECONDARY)
         s.error?.let { body("Last error: $it" + if (s.errorAt > 0) " (${at(s.errorAt)})" else "", Colors.ERROR) }
         s.hourError?.let { body("Hourly: $it", Colors.ERROR) }
         gap()

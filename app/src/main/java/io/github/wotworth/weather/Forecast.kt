@@ -88,7 +88,14 @@ object Forecast {
     data class Day(
         val date: LocalDate, val kind: Kind, val highC: Double?, val lowC: Double?,
         val chance: Int? = null, val humidity: Int? = null, val cloud: Int? = null, val phrase: String? = null,
+        val day: Part? = null, val night: Part? = null,
     )
+
+    /**
+     * WX-6.7 (Chris, 9 Nov): the daytime or overnight half of a day, from the 5-day reply's Day and
+     * Night. [kind] by [classifyHour]'s rules on the half's own figures.
+     */
+    data class Part(val kind: Kind, val phrase: String?, val chance: Int?, val cloud: Int?, val humidity: Int?)
 
     /** One hour: [epochMs], [localHour] (0–23 where the town is), exact °C and the rest as in [Day]; [daylight] is AccuWeather's IsDaylight. */
     data class Hour(
