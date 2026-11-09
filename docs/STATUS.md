@@ -12,6 +12,7 @@
 - 9 Nov, round 2 (Chris's feedback): shrink-to-fit town and temperature, capitalised names, cloud cover labelled everywhere, a day page on tap (daytime/overnight + hours), updates every 30 minutes, condition backgrounds image. Spec WX-2.5, 2.6, 6.6–6.8.
 - 9 Nov, round 3: refresh icon turns, pull to refresh, festive snow block with Fluent snowflakes (WX-6.9 to 6.11).
 - 9 Nov, round 4: seasonal cards, 20 designs (WX-6.12), second pass bolder; snow festive all year (Q6).
+- 9 Nov, round 5: corner scenes and decorated eggs (WX-6.13).
 - In the session: 57 unit and screenshot tests pass; signed release builds; permission, network and host checks pass and reject their test cases.
 
 ## Next

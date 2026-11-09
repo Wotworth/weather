@@ -1,6 +1,8 @@
+# Generates the corner scenes and decorated eggs (WX-6.12, WX-6.13) as vector drawables.
+# Run from the repo root with the Fluent icons at fluent-icons/. Output: app/src/main/res/drawable/.
 import random, re, math
-OUT='/home/user/weather/app/src/main/res/drawable/'
-ICONS='/tmp/claude-0/-home-user/6cf92671-71af-5976-af7d-0fa58f98d9db/scratchpad/fluent/x/package/icons/'
+OUT='app/src/main/res/drawable/'
+ICONS='fluent-icons/'  # the unpacked @fluentui/svg-icons 1.1.345 package/icons folder
 def fluent(n): return re.search(r'<path[^>]*\sd="([^"]+)"', open(ICONS+n+'_24_filled.svg').read()).group(1)
 HDR='<?xml version="1.0" encoding="utf-8"?>\n'
 def vec(name, w, h, body, note):

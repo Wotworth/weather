@@ -66,3 +66,7 @@ Every card has a version per season (WX-6.12), by the day's date. Columns: winte
 Full size: [winter](ph-1/season-winter.png), [spring](ph-1/season-spring.png), [summer](ph-1/season-summer.png), [fall](ph-1/season-fall.png).
 
 CI: 57 unit and screenshot tests, including text contrast on all 20 cards and no decoration behind text (standard and 130% text).
+
+## Round 5: corner scenes (9 Nov)
+
+Chris: more festive. Each season's cards get a bottom-right scene (WX-6.13): a snow-covered pine (winter, and the festive snow card), decorated Easter eggs in young grass (spring), a maple and a cedar (summer), a pile of leaves (fall). Spring's scattered eggs are decorated. The seasons sheet above shows them.
