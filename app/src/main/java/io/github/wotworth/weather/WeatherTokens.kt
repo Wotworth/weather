@@ -183,7 +183,8 @@ object WeatherTokens {
 
         val TONE: Map<Forecast.Kind, Tone> = mapOf(
             Forecast.Kind.SUNNY to Tone(0xFF000000.toInt(), 0f, 0f, 1f),
-            Forecast.Kind.PARTLY_CLOUDY to Tone(0xFF3A4A5A.toInt(), 0.15f, 0f, 0.7f),
+            // Partly cloudy keeps the sky and the sun's full light (Chris, 9 Nov: "more sunshine").
+            Forecast.Kind.PARTLY_CLOUDY to Tone(0xFF3A4A5A.toInt(), 0.05f, 0f, 1f),
             Forecast.Kind.CLOUDY to Tone(0xFF4A5260.toInt(), 0.45f, 0.08f, 0.3f),
             Forecast.Kind.RAIN to Tone(0xFF22405E.toInt(), 0.40f, 0.10f, 0.3f),
             Forecast.Kind.SNOW to Tone(0xFF000000.toInt(), 0f, 0f, 1f),
@@ -200,9 +201,9 @@ object WeatherTokens {
         val WEATHER: Map<Forecast.Kind, Weather> = mapOf(
             // Sun: gold sparkles.
             Forecast.Kind.SUNNY to Weather(intArrayOf(R.drawable.season_sparkle), intArrayOf(0xFFFFE07A.toInt()), 0.55f, 8, 0.8f, 40f, 0.3f),
-            // Sun and cloud: soft white clouds and a few sparkles.
-            Forecast.Kind.PARTLY_CLOUDY to Weather(intArrayOf(R.drawable.season_cloud, R.drawable.season_cloud, R.drawable.season_sparkle),
-                intArrayOf(0xFFFFFFFF.toInt(), 0xFFFFFFFF.toInt(), 0xFFFFE07A.toInt()), 0.35f, 9, 1.1f, 56f, 0f),
+            // Sun and cloud: more gold sparkles than soft white clouds (Chris, 9 Nov: "more sunshine").
+            Forecast.Kind.PARTLY_CLOUDY to Weather(intArrayOf(R.drawable.season_sparkle, R.drawable.season_cloud, R.drawable.season_sparkle),
+                intArrayOf(0xFFFFE07A.toInt(), 0xFFFFFFFF.toInt(), 0xFFFFE07A.toInt()), 0.5f, 11, 0.9f, 48f, 0.3f),
             // Cloud: soft white clouds.
             Forecast.Kind.CLOUDY to Weather(intArrayOf(R.drawable.season_cloud), intArrayOf(0xFFFFFFFF.toInt()), 0.3f, 10, 1.2f, 64f, 0f),
             // Rain: falling drops, upright.

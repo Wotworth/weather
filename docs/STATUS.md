@@ -15,6 +15,7 @@
 - 9 Nov, round 5: corner scenes and decorated eggs (WX-6.13).
 - 9 Nov, round 6: weather-only decorations, maple leaves, snow-coated scenes, brighter spring.
 - 9 Nov, round 7: blue skies on sunny cards, season horizons.
+- 9 Nov, round 8: sunnier partly cloudy; snow fitted to the corner scenes.
 - In the session: 57 unit and screenshot tests pass; signed release builds; permission, network and host checks pass and reject their test cases.
 
 ## Next
@@ -25,6 +26,8 @@
 - Launcher v0.9.184 released 9 Nov (CI passed, from main 3bfac17): tile rounding and the Weather app's tile. https://github.com/Wotworth/wp-launcher/releases/tag/v0.9.184
 
 ## Open questions
+
+- Forecast discussion (Chris, 9 Nov): needs a second network host (api.weather.gov), against WX-2.3. Asked Chris: allow it (recommended) or not. Not started.
 
 - Q5: hourly forecasts for every day need AccuWeather's "elite" plan (Chris has "starter"). Default: no upgrade; later days show daytime and overnight.
 - More Fluent conditions (thunderstorm, fog, sleet, showers) would need AccuWeather's own icon numbers on the app's screens (WX-3.3). Not done; asked Chris.

@@ -78,3 +78,7 @@ Decorations across each card now show only the weather (sparkles, clouds, drops,
 ## Round 7: blue skies (9 Nov)
 
 Sunny cards are now a blue sky in every season, fading to the season's horizon colour; summer is a bright summer blue. See the seasons sheet above.
+
+## Round 8: sunnier partly cloudy, snow that rests on the scenes (9 Nov)
+
+Partly cloudy keeps the blue sky and full sunlight, with gold sparkles and a few soft clouds. On snowy days the snow now sits on the eggs, the maple's crown, the cedar's tiers and over the leaf pile. Bottom row of the seasons sheet above.
