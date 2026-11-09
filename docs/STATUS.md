@@ -16,8 +16,7 @@
 - 9 Nov: Chris has the signing secrets as a file (sent in chat, never committed). Q1 answered: 500 calls a day; the app stops at 450.
 
 - Chris tests v0.1.4 on the phone (steps in PH-1.md). Secrets saved by Chris on 9 Nov; the release's key fingerprint matches docs/LAUNCHER-CHANGES.md.
-- Launcher (Chris, 9 Nov: release it): tile rounding (2c5c3e7) and the Weather app's tile (a81105b) on wp-launcher main, merged with the other session's branch; release run with checkpoint `weather-app`.
-- The launcher session reads docs/LAUNCHER-CHANGES.md and builds its side.
+- Launcher v0.9.184 released 9 Nov (CI passed, from main 3bfac17): tile rounding and the Weather app's tile. https://github.com/Wotworth/wp-launcher/releases/tag/v0.9.184
 
 ## Open questions
 
