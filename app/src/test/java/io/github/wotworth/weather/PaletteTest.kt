@@ -25,6 +25,18 @@ class PaletteTest {
         }
     }
 
+    /** WX-6.11: the festive snow, at full glow everywhere (worse than it ever is). */
+    @Test fun textReadsOnFestiveSnow() {
+        val s = Palette.FESTIVE_SNOW
+        val glow = WeatherTokens.Festive.GLOW
+        for (i in 0..200) {
+            val t = i / 200.0 * 2
+            val bg = mix(if (t <= 1) mix(s[0], s[1], t) else mix(s[1], s[2], t - 1), glow, WeatherTokens.Festive.GLOW_ALPHA.toDouble())
+            assertTrue("festive white", contrast(WeatherTokens.Colors.PRIMARY, bg) >= 4.5)
+            assertTrue("festive low", contrast(mix(bg, WeatherTokens.Colors.PRIMARY, 0.75), bg) >= 4.5)
+        }
+    }
+
     @Test fun accentTextReadsOnBlack() {
         assertTrue(contrast(WeatherTokens.Colors.ACCENT_TEXT, WeatherTokens.Colors.BACKGROUND) >= 4.5)
         assertTrue(contrast(WeatherTokens.Colors.SECONDARY.let { mix(0xFF000000.toInt(), 0xFFFFFFFF.toInt(), 0.6) }, WeatherTokens.Colors.BACKGROUND) >= 4.5)

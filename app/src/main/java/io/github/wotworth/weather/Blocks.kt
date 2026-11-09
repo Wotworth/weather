@@ -1,7 +1,6 @@
 package io.github.wotworth.weather
 
 import android.content.Context
-import android.graphics.drawable.GradientDrawable
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.TextUtils
@@ -61,7 +60,7 @@ object Blocks {
      */
     fun hero(c: Context, d: Forecast.Day, f: Boolean, title: String? = null): View {
         val box = Ui.column(c).apply {
-            background = GradientDrawable(GradientDrawable.Orientation.TL_BR, Palette.STOPS[d.kind] ?: Palette.NONE)
+            background = Palette.background(c, d.kind)
             val pad = Ui.dp(c, Layout.HERO_PAD)
             setPadding(pad, pad, pad, pad)
         }

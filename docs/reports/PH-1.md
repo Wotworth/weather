@@ -44,3 +44,15 @@ CI: 44 unit and screenshot tests, permission, network and host checks.
 | Larger text, 412 dp | Today, tapped | A later day, tapped | Each condition's background |
 |---|---|---|---|
 | ![](ph-1/forecast-large-text.png) | ![](ph-1/day-today.png) | ![](ph-1/day-later.png) | ![](ph-1/backgrounds.png) |
+
+## Round 3: refresh feedback and festive snow (9 Nov)
+
+Chris accepted round 2 except for these:
+
+- Refresh turns the icon until the update comes back (WX-6.9).
+- Pull the page down from the top and let go to refresh (WX-6.10).
+- The snow block is slightly festive: evergreen to midnight, a faint warm glow, light snowfall (WX-6.11). Snow is the last block below.
+
+CI: 50 unit and screenshot tests (refresh, pull, and the festive snow's text contrast among them).
+
+![](ph-1/backgrounds.png)

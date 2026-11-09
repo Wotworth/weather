@@ -87,6 +87,38 @@ object WeatherTokens {
         const val BUTTON_PAD = 18f
         const val INPUT_HEIGHT = 44f
         const val ROW_GAP = 10f
+        /** The pull-to-refresh hint, below the status bar. */
+        const val PULL_HINT_TOP = 16f
+    }
+
+    /** WX-6.9, WX-6.10 (Chris, 9 Nov): refresh feedback and pull to refresh. */
+    object Motion {
+        /** One turn of the refresh icon while an update runs. */
+        const val SPIN_MS = 900L
+        /** The icon stops after this long if no update has come back (no network: it waits). */
+        const val SPIN_TIMEOUT_MS = 30_000L
+        /** Pull: the page moves this share of the finger's travel, at most [PULL_MAX_DP]. */
+        const val PULL_RESISTANCE = 0.5f
+        const val PULL_MAX_DP = 140f
+        /** Letting go past this refreshes. */
+        const val PULL_TRIGGER_DP = 72f
+        const val PULL_BACK_MS = 200L
+    }
+
+    /** WX-6.11 (Chris, 9 Nov): the festive snow block (SnowDrawable). */
+    object Festive {
+        /** Warm candlelight from the bottom-right corner, at this opacity at its centre. */
+        const val GLOW = 0xFFF2A23C.toInt()
+        const val GLOW_ALPHA = 0.28f
+        /** The glow fades out over this share of the block's longer side. */
+        const val GLOW_RADIUS = 0.75f
+        /** Still snowfall: this many soft dots, sizes and opacities in these ranges. */
+        const val FLAKES = 34
+        const val FLAKE_SEED = 1225
+        const val FLAKE_MIN_DP = 0.8f
+        const val FLAKE_MAX_DP = 2.2f
+        const val FLAKE_MIN_ALPHA = 0.12f
+        const val FLAKE_MAX_ALPHA = 0.45f
     }
 
     object Data {

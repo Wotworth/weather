@@ -1,5 +1,7 @@
 package io.github.wotworth.weather
 
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.app.Activity
 import android.content.Intent
 import android.database.ContentObserver
@@ -10,10 +12,10 @@ import android.os.Looper
 import android.view.Gravity
 import android.view.View
 import android.view.WindowInsets
+import android.view.animation.LinearInterpolator
 import android.widget.FrameLayout
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
-import android.widget.ScrollView
 import io.github.wotworth.weather.Ui.Font
 import io.github.wotworth.weather.WeatherTokens.Colors
 import io.github.wotworth.weather.WeatherTokens.Layout
@@ -29,13 +31,27 @@ class MainActivity : Activity() {
     private val app get() = application as App
     private lateinit var content: LinearLayout
     private val main = Handler(Looper.getMainLooper())
-    private val observer = object : ContentObserver(main) { override fun onChange(selfChange: Boolean) { render() } }
+    private lateinit var hint: android.widget.TextView
+    private lateinit var spinner: View
+    private var spin: ObjectAnimator? = null
+    private val stopSpin = Runnable { stopSpinning() }
+    private val observer = object : ContentObserver(main) { override fun onChange(selfChange: Boolean) { stopSpinning(); render() } }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val root = FrameLayout(this).apply { setBackgroundColor(Colors.BACKGROUND) }
         content = Ui.column(this)
-        val scroll = ScrollView(this).apply { isVerticalScrollBarEnabled = false; overScrollMode = View.OVER_SCROLL_NEVER; addView(content) }
+        // WX-6.10: the hint behind the page, shown as it is pulled down.
+        hint = Ui.text(this, "PULL TO REFRESH", Type.FOOTER, Font.Semibold, Colors.SECONDARY, Type.APP_TITLE_SPACING).apply { alpha = 0f; gravity = Gravity.CENTER_HORIZONTAL }
+        root.addView(hint, FrameLayout.LayoutParams(-1, -2, Gravity.TOP))
+        val scroll = PullScrollView(this).apply {
+            isVerticalScrollBarEnabled = false; overScrollMode = View.OVER_SCROLL_NEVER; addView(content)
+            onPull = { refresh() }
+            onProgress = { p ->
+                hint.alpha = p
+                hint.text = if (p >= 1f) "RELEASE TO REFRESH" else "PULL TO REFRESH"
+            }
+        }
         root.addView(scroll, FrameLayout.LayoutParams(-1, -1))
         val bar = appBar()
         root.addView(bar, FrameLayout.LayoutParams(-1, -2, Gravity.BOTTOM))
@@ -43,6 +59,7 @@ class MainActivity : Activity() {
             val sys = insets.getInsets(WindowInsets.Type.systemBars())
             content.setPadding(Ui.dp(this, Layout.SIDE), sys.top + Ui.dp(this, Layout.TOP), Ui.dp(this, Layout.SIDE), sys.bottom + Ui.dp(this, Layout.BOTTOM))
             bar.setPadding(0, 0, 0, sys.bottom)
+            hint.setPadding(0, sys.top + Ui.dp(this, Layout.PULL_HINT_TOP), 0, 0)
             insets
         }
         setContentView(root)
@@ -61,11 +78,42 @@ class MainActivity : Activity() {
         super.onPause()
     }
 
-    private fun refresh() {
+    override fun onDestroy() {
+        main.removeCallbacks(stopSpin)
+        spin?.cancel()
+        super.onDestroy()
+    }
+
+    /** Refresh (the button or a pull): the icon turns until the update comes back (WX-6.9). */
+    fun refresh() {
         if (app.secret.get() == null) { openSettings(); return }
+        startSpinning()
         App.schedule(this, now = true)
         render()
     }
+
+    /** WX-6.9 (Chris, 9 Nov): the refresh icon turns so the press visibly registered. */
+    private fun startSpinning() {
+        main.removeCallbacks(stopSpin)
+        if (spin?.isRunning != true) {
+            spin = ObjectAnimator.ofFloat(spinner, View.ROTATION, 0f, 360f).apply {
+                duration = WeatherTokens.Motion.SPIN_MS
+                interpolator = LinearInterpolator()
+                repeatCount = ValueAnimator.INFINITE
+                start()
+            }
+        }
+        main.postDelayed(stopSpin, WeatherTokens.Motion.SPIN_TIMEOUT_MS)
+    }
+
+    /** Stops at the end of the current turn, so the icon never stops crooked. */
+    private fun stopSpinning() {
+        main.removeCallbacks(stopSpin)
+        spin?.let { if (it.isRunning) it.repeatCount = 0 }
+    }
+
+    /** Tests: whether the refresh icon is turning. */
+    val spinning get() = spin?.isRunning == true
 
     private fun openDay(d: LocalDate) = startActivity(Intent(this, DayActivity::class.java).putExtra(DayActivity.DATE, d.toString()))
 
@@ -75,7 +123,9 @@ class MainActivity : Activity() {
         val bar = Ui.row(this).apply { setBackgroundColor(Colors.APP_BAR); gravity = Gravity.CENTER }
         fun item(icon: Int, desc: String, onClick: () -> Unit) = FrameLayout(this).apply {
             contentDescription = desc
-            addView(Ui.icon(this@MainActivity, icon, Layout.APP_BAR_ICON), FrameLayout.LayoutParams(Ui.dp(this@MainActivity, Layout.APP_BAR_ICON), Ui.dp(this@MainActivity, Layout.APP_BAR_ICON), Gravity.CENTER))
+            val img = Ui.icon(this@MainActivity, icon, Layout.APP_BAR_ICON)
+            if (icon == R.drawable.fluent_arrow_sync) spinner = img
+            addView(img, FrameLayout.LayoutParams(Ui.dp(this@MainActivity, Layout.APP_BAR_ICON), Ui.dp(this@MainActivity, Layout.APP_BAR_ICON), Gravity.CENTER))
             Ui.pressable(this, onClick)
         }
         val size = LinearLayout.LayoutParams(Ui.dp(this, Layout.APP_BAR_BUTTON), Ui.dp(this, Layout.APP_BAR_HEIGHT))
