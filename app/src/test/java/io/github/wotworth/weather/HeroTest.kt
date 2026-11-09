@@ -31,6 +31,10 @@ class HeroTest {
             val card = box.background as CardDrawable
             val text = Blocks.textRects(box)
             if (text.size < 8 || card.avoid.size != text.size) { bad += "$season $kind: text not passed to the card"; continue }
+            card.sceneRect()?.let { r -> if (text.any { RectF.intersects(it, r) }) bad += "$season $kind $title: scene behind text" }
+            val full = CardLook.of(kind, date).sceneDp * a.resources.displayMetrics.density
+            val sr = card.sceneRect()
+            if (sr == null || sr.width() < full * 0.99f) bad += "$season $kind $title: corner scene not at full size"
             for (m in CardLook.of(kind, date).motifs) {
                 if (!m.avoidText || card.alphaOf(m) <= WeatherTokens.Seasons.FAINT_ALPHA) continue
                 val r = card.motifRect(m)

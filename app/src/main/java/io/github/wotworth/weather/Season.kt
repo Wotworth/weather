@@ -26,6 +26,8 @@ data class CardLook(
     /** Motifs: drawable, tint, opacity, and its place (x, y share, size dp, turn degrees). */
     val motifs: List<Motif>,
     val dots: Boolean,
+    /** The bottom-right scene: drawable and full width in dp (0: none). */
+    val scene: Int = 0, val sceneDp: Float = 0f,
 ) {
     /** [avoidText]: left out where it would sit behind text (the festive snow's faint flakes are not). */
     data class Motif(val res: Int, val tint: Int, val alpha: Float, val x: Float, val y: Float, val sizeDp: Float, val turn: Float, val avoidText: Boolean = true)
@@ -44,7 +46,8 @@ data class CardLook(
             if (kind == Forecast.Kind.SNOW) {
                 val F = WeatherTokens.Festive
                 return CardLook(Palette.FESTIVE_SNOW, F.GLOW, F.GLOW_ALPHA, S.CORNER_BR,
-                    F.SNOWFLAKES.map { Motif(R.drawable.festive_snowflake, 0xFFFFFFFF.toInt(), it[4], it[0], it[1], it[2], it[3], avoidText = false) }, dots = true)
+                    F.SNOWFLAKES.map { Motif(R.drawable.festive_snowflake, 0xFFFFFFFF.toInt(), it[4], it[0], it[1], it[2], it[3], avoidText = false) }, dots = true,
+                    scene = R.drawable.scene_winter, sceneDp = S.SNOW_SCENE_DP)
             }
             val st = S.STYLE.getValue(season)
             val k = S.TONE.getValue(kind)
@@ -60,7 +63,7 @@ data class CardLook(
                 val p = S.PLACES[S.PLACES.size - 1 - i]
                 motifs += Motif(R.drawable.season_drop, S.DROP_TINT, S.DROP_ALPHA, (p[0] + 0.05f).coerceAtMost(0.98f), (p[1] + 0.08f).coerceAtMost(0.97f), S.DROP_DP, 0f)
             }
-            return CardLook(stops, st.glow, st.glowAlpha * k.glowFactor, st.corner, motifs, st.dots)
+            return CardLook(stops, st.glow, st.glowAlpha * k.glowFactor, st.corner, motifs, st.dots, st.scene, st.sceneDp)
         }
     }
 }

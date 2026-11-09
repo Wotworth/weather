@@ -58,7 +58,7 @@ class PaletteTest {
             val look = CardLook.of(kind, season)
             val s = look.stops
             // Behind text, a motif is at most FAINT_ALPHA (the card fades it; HeroTest checks that).
-            val tints = look.motifs.map { it.tint to minOf(it.alpha, WeatherTokens.Seasons.FAINT_ALPHA) }.distinct()
+            val tints = look.motifs.filter { it.tint != 0 }.map { it.tint to minOf(it.alpha, WeatherTokens.Seasons.FAINT_ALPHA) }.distinct()
             for (i in 0..100) {
                 val t = i / 100.0 * (s.size - 1)
                 val seg = minOf(t.toInt(), s.size - 2)

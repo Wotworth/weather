@@ -1,6 +1,7 @@
 package io.github.wotworth.weather
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.ColorFilter
 import android.graphics.LinearGradient
@@ -29,10 +30,35 @@ class CardDrawable(private val c: Context, private val look: CardLook) : Drawabl
     private val glow = Paint(Paint.ANTI_ALIAS_FLAG)
     private val dot = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0xFFFFFFFF.toInt() }
     private val icons = HashMap<Int, Drawable?>()
+    private val flats = HashMap<Long, Bitmap>()
+    private val bitmapPaint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG)
+
+    /** A multi-colour drawable drawn once, as it is (a fresh copy, never tinted), at [w] × [h] px. */
+    private fun flat(res: Int, w: Int, h: Int): Bitmap = flats.getOrPut((res.toLong() shl 32) or (w.toLong() shl 16) or h.toLong()) {
+        Bitmap.createBitmap(w.coerceAtLeast(1), h.coerceAtLeast(1), Bitmap.Config.ARGB_8888).also { b ->
+            c.getDrawable(res)?.let { d -> d.setBounds(0, 0, b.width, b.height); d.draw(Canvas(b)) }
+        }
+    }
 
     /** Where the card's text and icon are (in the card's own coordinates): motifs there are faded. */
     var avoid: List<RectF> = emptyList()
         set(v) { field = v; invalidateSelf() }
+
+    val hasScene get() = look.scene != 0
+
+    /** Where the corner scene is drawn, at its largest size clear of text; null if none fits. */
+    fun sceneRect(b: Rect = bounds): RectF? {
+        if (look.scene == 0) return null
+        val d = icons.getOrPut(look.scene) { c.getDrawable(look.scene)?.mutate() } ?: return null
+        val margin = Seasons.TEXT_MARGIN_DP * density
+        for (s in Seasons.SCENE_SCALES) {
+            val w = look.sceneDp * density * s
+            val h = w * d.intrinsicHeight / d.intrinsicWidth.coerceAtLeast(1)
+            val r = RectF(b.right - w, b.bottom - h, b.right.toFloat(), b.bottom.toFloat())
+            if (avoid.none { RectF.intersects(RectF(it.left - margin, it.top - margin, it.right + margin, it.bottom + margin), r) }) return r
+        }
+        return null
+    }
 
     /** Where a motif is drawn (its square, turned or not, inside [b]). */
     fun motifRect(m: CardLook.Motif, b: Rect = bounds): RectF {
@@ -87,13 +113,33 @@ class CardDrawable(private val c: Context, private val look: CardLook) : Drawabl
             val cx = b.left + m.x * w; val cy = b.top + m.y * h
             canvas.save()
             canvas.rotate(m.turn, cx, cy)
-            d.colorFilter = PorterDuffColorFilter(m.tint or 0xFF000000.toInt(), PorterDuff.Mode.SRC_IN)
             val a = alphaOf(m, b)
             if (a <= 0f) { canvas.restore(); continue }
-            d.alpha = Math.round(a * 255)
-            d.setBounds((cx - half).toInt(), (cy - half).toInt(), (cx + half).toInt(), (cy + half).toInt())
-            d.draw(canvas)
+            val aspect = d.intrinsicWidth.toFloat() / d.intrinsicHeight.coerceAtLeast(1)
+            val hw = if (aspect < 1f) half * aspect else half
+            val hh = if (aspect > 1f) half / aspect else half
+            val box = Rect((cx - hw).toInt(), (cy - hh).toInt(), (cx + hw).toInt(), (cy + hh).toInt())
+            if (m.tint == 0) {
+                // Tint 0: the drawable keeps its own colours (the decorated eggs). Drawn flat once,
+                // then turned as a picture, so its clipped bands draw correctly at any angle.
+                bitmapPaint.alpha = Math.round(a * 255)
+                canvas.drawBitmap(flat(m.res, box.width(), box.height()), null, box, bitmapPaint)
+            } else {
+                d.colorFilter = PorterDuffColorFilter(m.tint or 0xFF000000.toInt(), PorterDuff.Mode.SRC_IN)
+                d.alpha = Math.round(a * 255)
+                d.bounds = box
+                d.draw(canvas)
+            }
             canvas.restore()
+        }
+        // The corner scene (Chris, 9 Nov), over the motifs, never behind text.
+        sceneRect(b)?.let { r ->
+            icons[look.scene]?.let { d ->
+                d.alpha = 255
+                d.colorFilter = null
+                d.setBounds(r.left.toInt(), r.top.toInt(), r.right.toInt(), r.bottom.toInt())
+                d.draw(canvas)
+            }
         }
         canvas.restore()
     }

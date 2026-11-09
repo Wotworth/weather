@@ -71,10 +71,13 @@ object Blocks {
         top.addView(Ui.gap(c, 1f).apply { layoutParams = LinearLayout.LayoutParams(Ui.dp(c, Layout.HERO_ICON_GAP), 1) })
         top.addView(temps(c, d, f), Ui.weight())
         box.addView(top)
-        box.addView(Ui.text(c, d.phrase ?: d.kind.words, Type.HERO_PHRASE, Font.Semilight).apply { setPadding(0, Ui.dp(c, 2f), 0, 0) })
-        val stats = Ui.row(c).apply { setPadding(0, Ui.dp(c, Layout.STAT_GAP), 0, 0); gravity = Gravity.TOP }
-        stats.addView(stat(c, "PRECIPITATION", Shown.pct(d.chance)), Ui.weight())
-        stats.addView(stat(c, "HUMIDITY", Shown.pct(d.humidity)), Ui.weight())
+        // The corner scene's room: the phrase and figures stop short of the bottom-right corner.
+        val room = if (card.hasScene) Ui.dp(c, WeatherTokens.Seasons.SCENE_ROOM_DP) else 0
+        box.addView(Ui.text(c, d.phrase ?: d.kind.words, Type.HERO_PHRASE, Font.Semilight).apply { setPadding(0, Ui.dp(c, 2f), room, 0) })
+        val stats = Ui.row(c).apply { setPadding(0, Ui.dp(c, Layout.STAT_GAP), room, 0); gravity = Gravity.TOP }
+        val gap = Ui.dp(c, Layout.STAT_COLUMN_GAP)
+        stats.addView(stat(c, "PRECIPITATION", Shown.pct(d.chance)), Ui.weight().apply { marginEnd = gap })
+        stats.addView(stat(c, "HUMIDITY", Shown.pct(d.humidity)), Ui.weight().apply { marginEnd = gap })
         stats.addView(stat(c, "CLOUD COVER", Shown.pct(d.cloud)), Ui.weight())
         box.addView(stats)
         // WX-6.12: bold motifs never sit behind text: the card fades any that would.

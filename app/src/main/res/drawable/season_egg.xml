@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- WX-6.12: a plain egg outline (no pattern), tinted pastel in code: spring's slight Easter touch.
-     Drawn for this app: Fluent UI System Icons have no Easter egg (their food_egg is a fried egg). -->
-<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24">
-    <path android:fillColor="#FFFFFFFF" android:pathData="M12,2C8,2 5.5,8.6 5.5,13.6C5.5,18.4 8.4,22 12,22C15.6,22 18.5,18.4 18.5,13.6C18.5,8.6 16,2 12,2Z" />
-</vector>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- WX-6.12: a decorated Easter egg, drawn for this app (Fluent has none). Not tinted. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="24dp" android:height="30dp" android:viewportWidth="24" android:viewportHeight="30">
+    <group android:translateX="0" android:translateY="0" android:rotation="0" android:scaleX="1" android:scaleY="1" android:pivotX="0" android:pivotY="0">
+        <clip-path android:pathData="M12,1C6.5,1 2.5,10 2.5,17.5C2.5,24 6.8,29 12,29C17.2,29 21.5,24 21.5,17.5C21.5,10 17.5,1 12,1Z" />
+    <path android:fillColor="#FFE38A" android:pathData="M12,1C6.5,1 2.5,10 2.5,17.5C2.5,24 6.8,29 12,29C17.2,29 21.5,24 21.5,17.5C21.5,10 17.5,1 12,1Z" />
+    <path android:fillColor="#FF9EC4" android:pathData="M-2,13h28v6h-28z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M2.9,16a1.1,1.1 0 1,0 2.2,0a1.1,1.1 0 1,0 -2.2,0z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M7.9,16a1.1,1.1 0 1,0 2.2,0a1.1,1.1 0 1,0 -2.2,0z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M12.9,16a1.1,1.1 0 1,0 2.2,0a1.1,1.1 0 1,0 -2.2,0z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M17.9,16a1.1,1.1 0 1,0 2.2,0a1.1,1.1 0 1,0 -2.2,0z" />
+    <path android:fillColor="#8EDDB5" android:pathData="M-2,23h28v2h-28z" />
+    <path android:fillColor="#8EDDB5" android:pathData="M-2,7h28v1.8h-28z" />
+    <path android:fillColor="#FFFFFF" android:fillAlpha="0.45" android:pathData="M7,6C5,9.5 4.2,13 4.4,16C5.5,12 7,9 9.5,6.8C8.8,6 7.8,5.6 7,6Z" />
+    <path android:fillColor="#000000" android:fillAlpha="0.12" android:pathData="M21.5,17.5C21.5,24 17.2,29 12,29C15.5,27 18.5,23 19,17.5C19,13 18,9.5 16.5,6C19.5,9 21.5,13.5 21.5,17.5Z" />
+    </group>
+</vector>

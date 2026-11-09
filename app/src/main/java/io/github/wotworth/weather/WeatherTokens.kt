@@ -64,6 +64,8 @@ object WeatherTokens {
         const val HERO_ICON = 84f
         const val HERO_ICON_GAP = 12f
         const val STAT_GAP = 14f
+        /** Space between the top block's three figures. */
+        const val STAT_COLUMN_GAP = 10f
         const val SECTION_TOP = 28f
         const val SECTION_BOTTOM = 8f
         /** Narrowest hour in the strip, and the space after each. */
@@ -160,6 +162,8 @@ object WeatherTokens {
             val icons: IntArray, val tints: IntArray, val alpha: Float, val count: Int,
             val sizeScale: Float, val maxSizeDp: Float, val turnScale: Float,
             val dots: Boolean,
+            /** The corner scene (Chris, 9 Nov) and its width in dp at full size. */
+            val scene: Int, val sceneDp: Float,
         )
 
         /** How a condition changes the sunny card: mix toward [toward] by [share], darken by [darken]. */
@@ -169,24 +173,29 @@ object WeatherTokens {
             // Winter: crisp ice blue, cool pale light from the top-left, white snowflakes and snowfall.
             Season.WINTER to Style(intArrayOf(0xFF15304F.toInt(), 0xFF1B4066.toInt(), 0xFF24507A.toInt()),
                 0xFFE6F2FF.toInt(), 0.10f, CORNER_TL,
-                intArrayOf(R.drawable.festive_snowflake), intArrayOf(0xFFFFFFFF.toInt()), 0.35f, 14, 1f, 64f, 1f, dots = true),
+                intArrayOf(R.drawable.festive_snowflake), intArrayOf(0xFFFFFFFF.toInt()), 0.35f, 14, 1f, 64f, 1f, dots = true,
+                scene = R.drawable.scene_winter, sceneDp = 100f),
             // Spring, Easter: violet to rose, butter-yellow light, pastel eggs in five colours, clover.
             Season.SPRING to Style(intArrayOf(0xFF5C3590.toInt(), 0xFF7A3584.toInt(), 0xFF8E3A6C.toInt()),
                 0xFFFFE08A.toInt(), 0.12f, CORNER_TR,
-                intArrayOf(R.drawable.season_egg, R.drawable.season_egg, R.drawable.season_clover, R.drawable.season_egg),
-                intArrayOf(0xFFFFB3CF.toInt(), 0xFFB5F0CF.toInt(), 0xFFFFE699.toInt(), 0xFFB9D9FF.toInt(), 0xFFE0C2FF.toInt()),
-                0.75f, 16, 0.9f, 48f, 0.35f, dots = false),
+                // Decorated eggs keep their own colours (tint 0); the clover is tinted mint.
+                intArrayOf(R.drawable.season_egg_1, R.drawable.season_egg_2, R.drawable.season_clover, R.drawable.season_egg_3, R.drawable.season_egg_4),
+                intArrayOf(0, 0, 0xFFB5F0CF.toInt(), 0, 0),
+                1f, 16, 0.9f, 40f, 0.35f, dots = false,
+                scene = R.drawable.scene_spring, sceneDp = 104f),
             // Summer: deep summer green, a strong golden sun from the top-right, gold sparkles.
             Season.SUMMER to Style(intArrayOf(0xFF0F4D2A.toInt(), 0xFF165C33.toInt(), 0xFF186445.toInt()),
                 0xFFFFC94A.toInt(), 0.15f, CORNER_TR,
                 intArrayOf(R.drawable.season_sparkle, R.drawable.season_leaf_two), intArrayOf(0xFFFFD978.toInt(), 0xFF7FD48A.toInt()),
-                0.5f, 12, 0.85f, 48f, 0.5f, dots = false),
+                0.5f, 12, 0.85f, 48f, 0.5f, dots = false,
+                scene = R.drawable.scene_summer, sceneDp = 104f),
             // Fall: burnt orange to russet, amber light, a fall of leaves in orange, red, gold and brown.
             Season.FALL to Style(intArrayOf(0xFF7C330C.toInt(), 0xFF8C3610.toInt(), 0xFF6E2513.toInt()),
                 0xFFFFB347.toInt(), 0.13f, CORNER_BR,
                 intArrayOf(R.drawable.season_leaf_one, R.drawable.season_leaf_two, R.drawable.season_leaf_three),
                 intArrayOf(0xFFFFC24D.toInt(), 0xFFC0392B.toInt(), 0xFF5A2A0E.toInt(), 0xFFFFE2A8.toInt(), 0xFFFF8A3D.toInt()),
-                0.7f, 18, 1f, 64f, 1f, dots = false),
+                0.7f, 18, 1f, 64f, 1f, dots = false,
+                scene = R.drawable.scene_fall, sceneDp = 104f),
         )
 
         val TONE: Map<Forecast.Kind, Tone> = mapOf(
@@ -216,6 +225,13 @@ object WeatherTokens {
         const val ICON_FILL = 0.85f
         /** Text is kept this clear of bold motifs. */
         const val TEXT_MARGIN_DP = 3f
+
+        /** On cards with a scene, the phrase and the three figures leave this much room on the right. */
+        const val SCENE_ROOM_DP = 84f
+        /** A corner scene steps down to these sizes if text would reach it, else is left out. */
+        val SCENE_SCALES = floatArrayOf(1f, 0.85f, 0.7f)
+        /** The festive snow card's corner scene (a snow-covered pine). */
+        const val SNOW_SCENE_DP = 100f
 
         /** Rain in any season adds pale raindrops. */
         const val DROPS = 6
