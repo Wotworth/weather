@@ -74,3 +74,7 @@ Chris: more festive. Each season's cards get a bottom-right scene (WX-6.13): a s
 ## Round 6: weather decorations, maple leaves, snowy scenes (9 Nov)
 
 Decorations across each card now show only the weather (sparkles, clouds, drops, snowflakes); the season shows in the colours and the corner scene. Fall's pile is maple leaves. On snowy days the season's scene has a light coat of snow (bottom row of the seasons sheet). Spring is brighter.
+
+## Round 7: blue skies (9 Nov)
+
+Sunny cards are now a blue sky in every season, fading to the season's horizon colour; summer is a bright summer blue. See the seasons sheet above.

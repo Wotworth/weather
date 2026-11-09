@@ -147,7 +147,7 @@ object WeatherTokens {
     /**
      * WX-6.12, WX-6.13 (Chris, 9 Nov, third pass): the season sets the card's colours, its light and
      * the scene in the bottom-right corner; the decorations across the card show only the weather
-     * ([WEATHER]). [Style.stops] is the sunny card; [TONE] turns it into the other conditions. A
+     * ([WEATHER]). [Style.stops] is the sunny card: a blue sky with the season's horizon (Chris, 9 Nov); [TONE] turns it into the other conditions. A
      * snowy day uses the festive snow card (WX-6.11) with the season's scene under snow.
      */
     object Seasons {
@@ -167,19 +167,18 @@ object WeatherTokens {
         class Tone(val toward: Int, val share: Float, val darken: Float, val glowFactor: Float)
 
         val STYLE: Map<Season, Style> = mapOf(
-            // Winter: crisp ice blue, cool pale light from the top-left; snow-covered pines.
-            Season.WINTER to Style(intArrayOf(0xFF15304F.toInt(), 0xFF1B4066.toInt(), 0xFF24507A.toInt()),
+            // Winter: a crisp, pale winter sky (steel to ice blue), cool light from the top-left; snowy pines.
+            Season.WINTER to Style(intArrayOf(0xFF224873.toInt(), 0xFF2C5273.toInt(), 0xFF395B73.toInt()),
                 0xFFE6F2FF.toInt(), 0.10f, CORNER_TL, R.drawable.scene_winter, R.drawable.scene_winter, 100f),
-            // Spring, cheery: vivid violet to magenta to raspberry, sunny yellow light; Easter eggs in grass.
-            // As bright as white text allows (4.5:1).
-            Season.SPRING to Style(intArrayOf(0xFF5F2496.toInt(), 0xFF962496.toInt(), 0xFF96245F.toInt()),
-                0xFFFFE680.toInt(), 0.14f, CORNER_TR, R.drawable.scene_spring, R.drawable.scene_spring_snow, 104f),
-            // Summer: deep summer green, a strong golden sun from the top-right; a maple and a cedar.
-            Season.SUMMER to Style(intArrayOf(0xFF0F4D2A.toInt(), 0xFF165C33.toInt(), 0xFF186445.toInt()),
-                0xFFFFC94A.toInt(), 0.15f, CORNER_TR, R.drawable.scene_summer, R.drawable.scene_summer_snow, 104f),
-            // Fall: burnt orange to russet, amber light; a pile of maple leaves.
-            Season.FALL to Style(intArrayOf(0xFF7C330C.toInt(), 0xFF8C3610.toInt(), 0xFF6E2513.toInt()),
-                0xFFFFB347.toInt(), 0.13f, CORNER_BR, R.drawable.scene_fall, R.drawable.scene_fall_snow, 104f),
+            // Spring, cheery: blue sky to a pink-and-raspberry horizon, sunny yellow light; Easter eggs in grass.
+            Season.SPRING to Style(intArrayOf(0xFF27599C.toInt(), 0xFF4E3E9C.toInt(), 0xFF9C2F65.toInt()),
+                0xFFFFE680.toInt(), 0.12f, CORNER_TR, R.drawable.scene_spring, R.drawable.scene_spring_snow, 104f),
+            // Summer: a bright summer-blue sky (Chris, 9 Nov), golden sun from the top-right; a maple and a cedar.
+            Season.SUMMER to Style(intArrayOf(0xFF1247B2.toInt(), 0xFF1554B2.toInt(), 0xFF1961B2.toInt()),
+                0xFFFFD54F.toInt(), 0.08f, CORNER_TR, R.drawable.scene_summer, R.drawable.scene_summer_snow, 104f),
+            // Fall: a clear autumn-blue sky to an amber-rust horizon, amber light; a pile of maple leaves.
+            Season.FALL to Style(intArrayOf(0xFF1D5391.toInt(), 0xFF3A5E91.toInt(), 0xFF914316.toInt()),
+                0xFFFFB347.toInt(), 0.12f, CORNER_BR, R.drawable.scene_fall, R.drawable.scene_fall_snow, 104f),
         )
 
         val TONE: Map<Forecast.Kind, Tone> = mapOf(
