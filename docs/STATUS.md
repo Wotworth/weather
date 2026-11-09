@@ -18,6 +18,7 @@
 - 9 Nov, round 8: sunnier partly cloudy; snow fitted to the corner scenes.
 - 9 Nov, round 9: forecast discussion from weather.gov (WX-10, WX-2.3 amended by Chris); night cards (WX-6.14).
 - 9 Nov, round 10: snow cards by season, discussion numbers rounded (WX-10.4), five-pointed night stars.
+- 9 Nov: the app's snow icon shows snowflakes under the cloud.
 - In the session: 68 unit and screenshot tests pass; signed release builds; permission, network and host checks pass and reject their test cases.
 
 ## Next

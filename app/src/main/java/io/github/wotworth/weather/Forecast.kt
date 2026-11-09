@@ -21,7 +21,7 @@ object Forecast {
         PARTLY_CLOUDY(R.drawable.wx_partly_cloudy, R.drawable.wx_partly_cloudy_night, "partly cloudy", "partly cloudy"),
         CLOUDY(R.drawable.wx_cloudy, R.drawable.wx_cloudy, "cloudy", "cloudy"),
         RAIN(R.drawable.wx_rain, R.drawable.wx_rain, "rain", "rain"),
-        SNOW(R.drawable.wx_snow, R.drawable.wx_snow, "snow", "snow"),
+        SNOW(R.drawable.wx_snow_flakes, R.drawable.wx_snow_flakes, "snow", "snow"),
     }
 
     /** WX-3.2: the launcher's thresholds, unchanged. Every threshold for picking a day's icon, in one place. */
