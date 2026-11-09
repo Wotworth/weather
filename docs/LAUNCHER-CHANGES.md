@@ -22,6 +22,10 @@ Everything the launcher needs from the Weather app (handoff section 7). Chris pa
 
 The tile rounds like the app (WX-6.2): nearest 5, except between −10 and 10, where it is the nearest odd number or 0, ties up. Done in wp-launcher main as `Weather.roundShown` (used by `shownTemp`), 9 Nov. The provider still sends exact °C.
 
+## Done in the launcher (9 Nov)
+
+wp-launcher main a81105b: `WeatherAppTile.kt` reads `/state` and `/days`, accepts only this key, redraws on notifyChange, and stops the launcher's own requests while the tile is live (handoff section 7).
+
 ## Stand-in for the launcher's CI (WX-4.6)
 
 `fakeweather/` in this repo is a tiny app with the same package and authority, serving fixed days (one of each condition from today; Hastings-on-Hudson, NY; °F; one missing low) and no caller check, so it works signed with CI's debug key. Build it with:

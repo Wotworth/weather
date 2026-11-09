@@ -16,7 +16,7 @@
 - 9 Nov: Chris has the signing secrets as a file (sent in chat, never committed). Q1 answered: 500 calls a day; the app stops at 450.
 
 - Chris tests v0.1.4 on the phone (steps in PH-1.md). Secrets saved by Chris on 9 Nov; the release's key fingerprint matches docs/LAUNCHER-CHANGES.md.
-- Launcher: the tile rounding change is on wp-launcher main (2c5c3e7), not released; waiting for Chris's go-ahead.
+- Launcher (Chris, 9 Nov: release it): tile rounding (2c5c3e7) and the Weather app's tile (a81105b) on wp-launcher main, merged with the other session's branch; release run with checkpoint `weather-app`.
 - The launcher session reads docs/LAUNCHER-CHANGES.md and builds its side.
 
 ## Open questions
