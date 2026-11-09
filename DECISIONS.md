@@ -4,7 +4,8 @@
 |---|---|---|---|
 | 2026-11-08 | WX-2.2 | The key goes in an `Authorization: Bearer` header only, to `dataservice.accuweather.com`. | AccuWeather's Authentication page (developer.accuweather.com/documentation/authentication, read 8 Nov 2026): "Every request to the API must include a valid API key in the Authorization header", bearer format. |
 | 2026-11-08 | WX-2.6 | No current-conditions call. The page's top block shows today's high, low and figures from the daily forecast; the hours come from the 12-hour forecast. | One call fewer per opening; the 12-hour forecast starts within the hour. |
-| 2026-11-08 | WX-2.7 | The app stops at 100 calls a day (WeatherTokens). | AccuWeather's Free tier allows 500 a day and Starter 15,000 a month (≈500 a day; pricing page, 8 Nov 2026). Normal use is about 4 + one per opening. Q1 (Chris's plan) is still open. |
+| 2026-11-08 | WX-2.7 | The app stops at 100 calls a day (WeatherTokens). | Q1 (Chris's plan) was open. |
+| 2026-11-09 | WX-2.7 | The app stops at 450 calls a day. | Q1 (Chris, 9 Nov): the paid plan allows 500 a day; 50 spare for refreshes from a second install or a test session. |
 | 2026-11-08 | WX-2.5 | A failed daily update isn't retried until the next slot or a manual refresh, including when the app restarts. | The launcher starts the app's process each time it reads the tile; retrying on each start could spend calls with a bad key. |
 | 2026-11-08 | WX-2.4 | The default town's location key is found with one city search ("Hastings-on-Hudson", matched to NY, US) on the first update, then kept. | No key was available to look it up in advance. |
 | 2026-11-08 | WX-6.2 | Rounding ties go up: 72.5 → 75, 4 → 5, 8 → 9, −2 → −1. | The launcher's roundTo5 rounds halves up. |

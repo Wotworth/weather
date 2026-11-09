@@ -13,15 +13,16 @@
 
 ## Next
 
+- 9 Nov: Chris has the signing secrets as a file (sent in chat, never committed). Q1 answered: 500 calls a day; the app stops at 450.
+
 - Chris saves the three signing secrets and runs the workflow (steps in PH-1.md), then tests on the phone.
 - The launcher session reads docs/LAUNCHER-CHANGES.md and builds its side.
 
 ## Open questions
 
-- The signing secrets: Claude was stopped from showing the key in chat (credential safety check). Chris to choose how to get it.
 - More Fluent conditions (thunderstorm, fog, sleet, showers) would need AccuWeather's own icon numbers on the app's screens (WX-3.3). Not done; asked Chris.
 
-- Q1: Which AccuWeather plan, and its limit? The app stops at 100 calls a day meanwhile.
+- Q1: 500 calls a day (Chris, 9 Nov).
 - Q2–Q4: defaults used (no location, tile unchanged without alerts, hourly only when opened).
 
 ## Known issues

@@ -95,10 +95,10 @@ object WeatherTokens {
         const val HOURLY_FRESH_MS = 30 * 60_000L
         /**
          * WX-2.7: the most calls the app makes in a day (the phone's date), whatever happens.
-         * AccuWeather's Free tier and Starter plan both allow about 500 a day (Starter: 15,000 a
-         * month). Normal use is about 4 + one per opening. Q1 is still open: Chris's plan.
+         * Q1 (Chris, 9 Nov): the plan allows 500 calls a day; 50 are left spare. Normal use is
+         * about 4 + one per opening.
          */
-        const val DAILY_CALL_CAP = 100
+        const val DAILY_CALL_CAP = 450
         const val TIMEOUT_MS = 15_000
         const val MAX_REPLY_BYTES = 512 * 1024
         /** Errors shown in settings are cut to this length. */
