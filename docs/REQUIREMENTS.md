@@ -118,8 +118,8 @@ digit. Focus should be simplicity."
 | ID | Requirement |
 |---|---|
 | WX-6.1 | MUST: Metro-inspired, after the Tennis app (black page, Selawik, small all-caps app title, large lowercase headers, flat square blocks), but the forecast is the page. Simple. |
-| WX-6.2 | MUST: every number shown is rounded to the nearest 5; values between −10 and 10 (exclusive) to the nearest odd number. In the unit shown. Ties go up (DECISIONS.md). |
-| WX-6.3 | MUST: only the live tile's five icons (`wx_*`) for conditions, on every screen, hours included. |
+| WX-6.2 | MUST: every number shown is rounded to the nearest 5; values between −10 and 10 (exclusive) to the nearest odd number, or 0 (Chris, 9 Nov: "0 should equal 0"). In the unit shown. Ties go up (DECISIONS.md). The launcher's tile uses the same rule (Chris, 9 Nov; replaces WX-5.2's nearest 5 for single digits). |
+| WX-6.3 | MUST: the live tile's five icons (`wx_*`) for conditions, on every screen; at night (AccuWeather's IsDaylight), the Fluent moon for clear hours and the Fluent partly cloudy night icon (Chris, 9 Nov). Fluent UI System Icons, Filled, white. |
 | WX-6.4 | SHOULD: the forecast page shows today (icon, high, low, phrase, chance of rain, humidity, cloud cover), the next 12 hours, and 5 days. |
 | WX-6.5 | SHOULD: settings hold the key, town, units, calls today, the last error, a manual update and the crash log. |
 

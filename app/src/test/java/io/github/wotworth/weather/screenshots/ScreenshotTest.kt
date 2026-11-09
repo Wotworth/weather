@@ -56,6 +56,19 @@ class ScreenshotTest {
 
     @Test fun forecastF() { withForecast(); shoot("forecast-f", MainActivity::class.java) }
 
+    /** The real reply from 9 Nov: evening hours show the moon. */
+    @Test fun forecastRealNight() {
+        withForecast()
+        val s = app.store
+        val today = LocalDate.now(ZoneId.of("America/New_York"))
+        s.days = Accu.parseDaily(Fixtures.read("real-daily-5day.json"))!!.mapIndexed { i, d -> d.copy(date = today.plusDays(i.toLong())) }
+        val hours = Accu.parseHourly(Fixtures.read("real-hourly-12hour.json"))!!
+        val start = Instant.now().toEpochMilli() - hours[0].epochMs + 3_600_000L
+        s.hours = hours.map { it.copy(epochMs = it.epochMs + start) }
+        s.fahrenheit = false
+        shoot("forecast-real-night-c", MainActivity::class.java)
+    }
+
     @Test fun forecastC() { withForecast(); app.store.fahrenheit = false; shoot("forecast-c", MainActivity::class.java) }
 
     @Test fun forecastRainyToday() {

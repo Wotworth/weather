@@ -18,9 +18,9 @@ Everything the launcher needs from the Weather app (handoff section 7). Chris pa
 - `notifyChange` on `content://io.github.wotworth.weather.tile` after every successful daily update, a town change and a units change. (A failed update also changes `/state`'s `error` and `version`; it notifies too.)
 - `version` is a CRC-32 of town, units, fetched_at, error and the days: it changes whenever any of them does.
 
-## Note on rounding
+## Rounding (Chris, 9 Nov)
 
-The app's own screens round with Chris's rule (nearest 5, and nearest odd number between −10 and 10, WX-6.2). The handoff's WX-5.2 has the launcher round the tile to the nearest 5 only, so a 7° day reads 7° in the app and 5° on the tile. Open question for Chris (docs/STATUS.md); no launcher change until he answers.
+The tile rounds like the app (WX-6.2): nearest 5, except between −10 and 10, where it is the nearest odd number or 0, ties up. Done in wp-launcher main as `Weather.roundShown` (used by `shownTemp`), 9 Nov. The provider still sends exact °C.
 
 ## Stand-in for the launcher's CI (WX-4.6)
 

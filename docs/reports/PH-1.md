@@ -11,16 +11,16 @@ Everything in docs/REQUIREMENTS.md v1.0: the launcher's handoff (WX-1 to WX-5) a
 
 ## Screens (from the screenshot tests; the forecast is test data)
 
-| Forecast, °F | Rainy day, failed update | No key | Settings |
-|---|---|---|---|
-| ![](ph-1/forecast-f.png) | ![](ph-1/forecast-rain-error.png) | ![](ph-1/no-key.png) | ![](ph-1/settings.png) |
+| Real reply (9 Nov), °C, night hours | Forecast, °F | Rainy day, failed update | No key | Settings |
+|---|---|---|---|---|
+| ![](ph-1/forecast-real-night-c.png) | ![](ph-1/forecast-f.png) | ![](ph-1/forecast-rain-error.png) | ![](ph-1/no-key.png) | ![](ph-1/settings.png) |
 
 ## What only the phone can show
 
 1. Install the release APK. Open **Weather**: it asks for the key.
 2. Tap **…** → paste the AccuWeather key → **save key**. Settings shows "Saved: •••• " and the key's last 4 characters.
 3. Go back. Within a minute the forecast for Hastings-on-Hudson, NY appears (pull-free: it fills in by itself). Check the 12 hours and 5 days look right against AccuWeather's own app or site.
-4. Every number should end in 0 or 5, or be odd between −9 and 9.
+4. Every number should end in 0 or 5, or be 0 or odd between −9 and 9. Evening hours show a moon when clear.
 5. Settings → **calls today** should read about 3 (town lookup, 5 days, 12 hours).
 6. Search for another town, pick it: the forecast changes. Switch back with the recent towns list.
 7. Switch °F/°C: the page changes.

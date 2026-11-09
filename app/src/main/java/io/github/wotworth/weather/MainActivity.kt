@@ -178,7 +178,7 @@ class MainActivity : Activity() {
         gravity = Gravity.CENTER_HORIZONTAL
         val label = when (val x = h.localHour % 12) { 0 -> if (h.localHour == 0) "12 AM" else "12 PM"; else -> "$x ${if (h.localHour < 12) "AM" else "PM"}" }
         addView(Ui.text(context, label, Type.HOUR_TIME, color = Colors.SECONDARY))
-        addView(Ui.icon(context, h.kind.icon, Layout.HOUR_ICON).apply { contentDescription = h.kind.words; (layoutParams as LinearLayout.LayoutParams).setMargins(0, Ui.dp(context, 6f), 0, Ui.dp(context, 4f)) })
+        addView(Ui.icon(context, h.icon, Layout.HOUR_ICON).apply { contentDescription = h.words; (layoutParams as LinearLayout.LayoutParams).setMargins(0, Ui.dp(context, 6f), 0, Ui.dp(context, 4f)) })
         addView(Ui.text(context, Shown.temp(h.tempC, f) ?: "–", Type.HOUR_TEMP, Font.Light))
         addView(Ui.text(context, Shown.pct(h.chance) ?: "", Type.HOUR_RAIN, color = Colors.SECONDARY).apply { setPadding(0, Ui.dp(context, 2f), 0, 0) })
     }

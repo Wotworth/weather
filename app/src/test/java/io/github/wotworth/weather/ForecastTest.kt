@@ -2,6 +2,8 @@ package io.github.wotworth.weather
 
 import io.github.wotworth.weather.Forecast.Kind
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Assert.assertNull
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -65,6 +67,34 @@ class ForecastTest {
         assertEquals(Kind.CLOUDY, h[4].kind)        // 70% cloud
         assertEquals(Kind.RAIN, h[8].kind)
         assertEquals(0, h[5].localHour)
+    }
+
+    /** Replies recorded from AccuWeather on 9 Nov 2026 (Hastings-on-Hudson, key 344606). */
+    @Test fun realReplies() {
+        val town = Accu.parseCities(Fixtures.read("real-cities-hastings.json"))
+        assertEquals("344606", Accu.pickDefault(town)!!.key)
+        assertEquals("Hastings-on-Hudson, NY", town[0].label)
+        val days = Accu.parseDaily(Fixtures.read("real-daily-5day.json"))!!
+        assertEquals(5, days.size)
+        // 6.1 of 10.2 h of sun, 6.1/10.1, 9.2/10.1, 5.7/10.05, 2.4/10.0 ("Intermittent clouds", "Partly sunny", "Sunny", "Times of sun and clouds", "Cloudy").
+        assertEquals(listOf(Kind.PARTLY_CLOUDY, Kind.PARTLY_CLOUDY, Kind.SUNNY, Kind.PARTLY_CLOUDY, Kind.CLOUDY), days.map { it.kind })
+        assertEquals(15.5, days[0].highC!!, 1e-9)
+        assertEquals(7.9, days[0].lowC!!, 1e-9)
+        assertEquals(59, days[0].humidity)   // day 57, night 61
+        val hours = Accu.parseHourly(Fixtures.read("real-hourly-12hour.json"))!!
+        assertEquals(12, hours.size)
+        assertEquals(20, hours[0].localHour)
+        assertFalse(hours[0].daylight)
+        assertEquals(R.drawable.wx_moon, hours[0].icon)                  // 16% cloud at 8 PM
+        assertEquals(R.drawable.wx_partly_cloudy_night, hours[1].icon)   // 26%
+        assertTrue(hours[11].daylight)                                   // 7 AM
+        assertEquals(R.drawable.wx_partly_cloudy, hours[11].icon)
+    }
+
+    @Test fun nightIcons() {
+        assertEquals(R.drawable.wx_moon, Kind.SUNNY.nightIcon)
+        assertEquals(R.drawable.wx_partly_cloudy_night, Kind.PARTLY_CLOUDY.nightIcon)
+        for (k in listOf(Kind.CLOUDY, Kind.RAIN, Kind.SNOW)) assertEquals(k.icon, k.nightIcon)
     }
 
     @Test fun hourIcons() {

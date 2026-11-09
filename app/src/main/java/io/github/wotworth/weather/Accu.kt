@@ -129,6 +129,7 @@ object Accu {
                 epochMs = t.toInstant().toEpochMilli(), localHour = t.hour,
                 kind = Forecast.classifyHour(chance, h.optBoolean("HasPrecipitation"), h.optString("PrecipitationType").takeIf { h.has("PrecipitationType") }, cloud),
                 tempC = h.num("Temperature", "Value"), chance = chance, humidity = h.int("RelativeHumidity"), cloud = cloud,
+                daylight = h.optBoolean("IsDaylight", true),
             )
         }.takeIf { it.isNotEmpty() }
     } catch (e: Exception) { null }

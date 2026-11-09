@@ -109,7 +109,7 @@ class Store(private val p: SharedPreferences) {
 
         fun encodeHours(hours: List<Forecast.Hour>): String = JSONArray(hours.map {
             JSONObject().put("t", it.epochMs).put("h", it.localHour).put("kind", it.kind.name).put("temp", d(it.tempC))
-                .put("chance", i(it.chance)).put("humidity", i(it.humidity)).put("cloud", i(it.cloud))
+                .put("chance", i(it.chance)).put("humidity", i(it.humidity)).put("cloud", i(it.cloud)).put("day", it.daylight)
         }).toString()
 
         fun decodeHours(s: String?): List<Forecast.Hour> = try {
@@ -118,7 +118,7 @@ class Store(private val p: SharedPreferences) {
                 val o = a.getJSONObject(k)
                 try {
                     Forecast.Hour(o.getLong("t"), o.getInt("h"), Forecast.Kind.valueOf(o.getString("kind")), o.optString("temp").toDoubleOrNull(),
-                        o.optString("chance").toIntOrNull(), o.optString("humidity").toIntOrNull(), o.optString("cloud").toIntOrNull())
+                        o.optString("chance").toIntOrNull(), o.optString("humidity").toIntOrNull(), o.optString("cloud").toIntOrNull(), o.optBoolean("day", true))
                 } catch (e: Exception) { null }
             }
         } catch (e: Exception) { emptyList() }

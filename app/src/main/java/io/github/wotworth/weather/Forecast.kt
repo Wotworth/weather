@@ -11,13 +11,17 @@ import java.util.Locale
  * commit a444997452257f0bfc9b9e339f77a2243a3ac81e, unchanged in their rules (WX-3.2, WX-3.4).
  */
 object Forecast {
-    /** WX-3.2: the five conditions (names fixed: the tile interface sends them), with the launcher's icons. */
-    enum class Kind(val icon: Int, val words: String) {
-        SUNNY(R.drawable.wx_sunny, "sunny"),
-        PARTLY_CLOUDY(R.drawable.wx_partly_cloudy, "partly cloudy"),
-        CLOUDY(R.drawable.wx_cloudy, "cloudy"),
-        RAIN(R.drawable.wx_rain, "rain"),
-        SNOW(R.drawable.wx_snow, "snow"),
+    /**
+     * WX-3.2: the five conditions (names fixed: the tile interface sends them), with the launcher's
+     * icons. WX-6.3 (Chris, 9 Nov): at night the app's screens show the Fluent moon for a clear
+     * hour and the partly cloudy night icon; cloudy, rain and snow look the same day and night.
+     */
+    enum class Kind(val icon: Int, val nightIcon: Int, val words: String, val nightWords: String) {
+        SUNNY(R.drawable.wx_sunny, R.drawable.wx_moon, "sunny", "clear"),
+        PARTLY_CLOUDY(R.drawable.wx_partly_cloudy, R.drawable.wx_partly_cloudy_night, "partly cloudy", "partly cloudy"),
+        CLOUDY(R.drawable.wx_cloudy, R.drawable.wx_cloudy, "cloudy", "cloudy"),
+        RAIN(R.drawable.wx_rain, R.drawable.wx_rain, "rain", "rain"),
+        SNOW(R.drawable.wx_snow, R.drawable.wx_snow, "snow", "snow"),
     }
 
     /** WX-3.2: the launcher's thresholds, unchanged. Every threshold for picking a day's icon, in one place. */
@@ -86,11 +90,14 @@ object Forecast {
         val chance: Int? = null, val humidity: Int? = null, val cloud: Int? = null, val phrase: String? = null,
     )
 
-    /** One hour: [epochMs], [localHour] (0–23 where the town is), exact °C and the rest as in [Day]. */
+    /** One hour: [epochMs], [localHour] (0–23 where the town is), exact °C and the rest as in [Day]; [daylight] is AccuWeather's IsDaylight. */
     data class Hour(
         val epochMs: Long, val localHour: Int, val kind: Kind, val tempC: Double?,
-        val chance: Int?, val humidity: Int?, val cloud: Int?,
-    )
+        val chance: Int?, val humidity: Int?, val cloud: Int?, val daylight: Boolean = true,
+    ) {
+        val icon get() = if (daylight) kind.icon else kind.nightIcon
+        val words get() = if (daylight) kind.words else kind.nightWords
+    }
 
     /**
      * A town from AccuWeather's city search. [key] is AccuWeather's location key (null only for

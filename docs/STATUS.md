@@ -8,7 +8,8 @@
 - AccuWeather client (WX-2): Bearer key in the Keystore-encrypted store, one allowlisted host and three paths, call counter and a 100/day stop, errors kept for settings, four daily updates with WorkManager, the next 12 hours on opening.
 - Days classified by the launcher's rules (WX-3), tile provider with the launcher's key check (WX-4), stand-in `fakeweather` (WX-4.6), docs/LAUNCHER-CHANGES.md.
 - Forecast and settings pages (WX-6), with Chris's rounding everywhere.
-- In the session: 35 unit and screenshot tests pass; signed release builds; permission, network and host checks pass and reject their test cases.
+- 9 Nov (Chris): 0 stays 0 in the rounding; night hours show the Fluent moon and partly cloudy night icons; the launcher's tile uses the same rounding (wp-launcher main, not released). Real AccuWeather replies recorded as fixtures (3 calls with Chris's key).
+- In the session: 38 unit and screenshot tests pass; signed release builds; permission, network and host checks pass and reject their test cases.
 
 ## Next
 
@@ -17,13 +18,12 @@
 
 ## Open questions
 
+- The signing secrets: Claude was stopped from showing the key in chat (credential safety check). Chris to choose how to get it.
+- More Fluent conditions (thunderstorm, fog, sleet, showers) would need AccuWeather's own icon numbers on the app's screens (WX-3.3). Not done; asked Chris.
+
 - Q1: Which AccuWeather plan, and its limit? The app stops at 100 calls a day meanwhile.
-- Rounding: 0% shows as 1% (ties go up). Keep, or show 0?
-- Rounding: the tile (launcher, WX-5.2) rounds to the nearest 5 only, so 7° shows 7° in the app and 5° on the tile. Should the launcher use the odd-number rule too?
-- Clear nights show the sun in the hourly strip (only the tile's five icons). OK?
-- The test replies were written from AccuWeather's schemas, not recorded. Replace with a real reply once the app has one.
 - Q2–Q4: defaults used (no location, tile unchanged without alerts, hourly only when opened).
 
 ## Known issues
 
-- Nothing has run on the phone yet. No real AccuWeather call has been made (no key in the session).
+- Nothing has run on the phone yet. The app itself hasn't called AccuWeather yet; the session made 3 calls with curl to record fixtures.
