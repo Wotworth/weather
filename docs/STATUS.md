@@ -22,11 +22,11 @@
 
 ## Open questions
 
-- Q6: festive snow all year (default) or only the Christmas season.
 - Q5: hourly forecasts for every day need AccuWeather's "elite" plan (Chris has "starter"). Default: no upgrade; later days show daytime and overnight.
 - More Fluent conditions (thunderstorm, fog, sleet, showers) would need AccuWeather's own icon numbers on the app's screens (WX-3.3). Not done; asked Chris.
 
 - Q1: 500 calls a day (Chris, 9 Nov).
+- Q6: festive snow all year (Chris, 9 Nov).
 - Q2–Q3: defaults used (no location, tile unchanged without alerts). Q4: every 30 minutes (Chris, 9 Nov).
 
 ## Known issues

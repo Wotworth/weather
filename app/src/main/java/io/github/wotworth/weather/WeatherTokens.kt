@@ -131,6 +131,12 @@ object WeatherTokens {
             floatArrayOf(0.82f, 0.58f, 26f, 6f, 0.12f),
             floatArrayOf(0.285f, 0.86f, 16f, 38f, 0.11f),
             floatArrayOf(0.97f, 0.88f, 14f, -22f, 0.14f),
+            // Chris, 9 Nov: "add a few more".
+            floatArrayOf(0.17f, 0.08f, 22f, -8f, 0.12f),
+            floatArrayOf(0.42f, 0.05f, 14f, 18f, 0.13f),
+            floatArrayOf(0.33f, 0.60f, 18f, 24f, 0.12f),
+            floatArrayOf(0.88f, 0.36f, 16f, -30f, 0.12f),
+            floatArrayOf(0.555f, 0.88f, 14f, 10f, 0.11f),
         )
         /** The most opaque snowflake (for the contrast test). */
         const val SNOWFLAKE_MAX_ALPHA = 0.14f
